@@ -1,0 +1,428 @@
+*{
+    -webkit-box-sizing: border-box; /*The width and height properties (and min/max properties) includes content, padding and border*/
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    list-style-type: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+/*Navigation Sidebar*/
+
+.content{
+    display: flex;
+    position: relative;
+}
+
+.content .side-nav{
+    width: 200px;
+    height: 100%;
+    background: #F5F5F5;
+    padding: 50px 0 30px 0;
+    position: fixed;
+}
+
+.content ul{
+    margin: 0;
+    padding: 0;
+}
+
+.content .side-nav ul li{
+    display: flex;
+    padding: 15px 0 15px 25px;
+    justify-content: center;
+    border-bottom: 1px solid #bdb8d7;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.content .side-nav ul li a{
+    display: flex;
+    color: #4d4d4d;
+    width: 100%;
+    text-decoration: none;
+    font-family: 'Dosis', sans-serif;
+}
+
+.content .side-nav ul li:hover{
+    background: #EDE6D6;
+}
+
+.content .side-nav ul li:hover a{
+    color: #8c8c8c;
+}
+
+/*End of Navigation Sidebar*/
+
+.home-title-bar{
+    display: flex;
+    width: 100%;
+    height: 10vh;
+    margin: 0;
+    background-color: #F5F5F5;
+    align-items: center;
+    border-bottom: 1px solid #e6e6e6;
+    font-family: 'Dosis', sans-serif;
+}
+
+.home-title-bar #title{
+    display: flex;
+    align-items: center;
+    width: 20%;
+    margin-left: 20px;
+    font-weight: 500;
+}
+
+#home-title-bar-menu{
+    display: flex;
+    width: 40%;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.home-title-bar #title{
+    justify-self: flex-start;
+}
+
+.home-title-bar-options{
+    display: flex;
+    margin-right: 5em;
+}
+
+.home-title-bar-buttons{
+    background-color: #EDE6D6;
+    border: none;
+    color: #8c8c8c;
+    font-weight: 500;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.nav-search-bar{
+    display: flex;
+    width: 40%;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.nav-search-bar input{
+    border-radius: 10px;
+    padding: 5px 25px;
+}
+
+.online-friends-list-container{
+    display: flex;
+    flex-direction: column;
+    margin-right: 0;
+    height: 100vh;
+    width: 250px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.online-friends-list-container h5{
+    margin-top: 20px;
+}
+
+.outer-container-for-images{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*width: 100%;*/
+    background-color: #ffefcc;
+    padding: 0 0 20px 10px;
+    justify-content: space-around;
+    margin: 10px;
+}
+
+#logout-btn{
+    margin-left: 10px;
+}
+
+.main-content{
+    width: 100%;
+    height: 100vh;
+    margin-left: 200px;
+    background-color: #FFFAEF;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container{
+    display: block;
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+    flex-grow: 1;
+    cursor: pointer;
+    /*margin-top: 20px;*/
+    /*margin-left: 20px;*/
+    /*max-width: 25%;*/
+    /*max-height: 15em;*/
+    /*width: auto;*/
+    /*height: auto;*/
+    flex-basis: 30%;
+    margin-top: 20px;
+    margin-right: 10px;
+    transition: 0.25s display;
+}
+
+/*.image-container:nth-child(2n+1){*/
+/*    flex-basis: 25%;*/
+/*}*/
+
+.image-container:first-child{
+    margin-left: 0;
+}
+
+.display-image{
+    display: block;
+    width: 100%;
+    height: 100%;
+    /*max-width: 25%;*/
+    /*max-height: 15em;*/
+    /*width: auto;*/
+    /*height: auto;*/
+    transition: 0.4s transform;
+    object-fit: cover;
+    background-size: cover;
+}
+
+.display-image:hover{
+    transform: scale(1.05);
+}
+
+.test-image{
+    width: 25%;
+    height: 15em;
+}
+
+.image-menu-top{
+    position: absolute;
+    top:10px;
+    right: 15px;
+    color: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 7px;
+}
+
+.image-menu-top a{
+    color: white;
+    -webkit-transition: color .35s ease-in-out .0s;
+    transition: color .35s ease-in-out .0s;
+    text-decoration: none;
+}
+
+.image-menu-top-element{
+    font-size: 25px;
+}
+
+.image-menu-top-element:first-child{
+    margin-bottom: 5px;
+}
+
+.image-menu-top-element:hover,
+.image-bottom-menu a:hover{
+    color: lightseagreen;
+    -webkit-transition: color .35s ease-in-out .0s;
+    transition: color .35s ease-in-out .0s;
+}
+
+.image-bottom-menu{
+    width: 100%;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    bottom:0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    -webkit-transition: opacity .35s ease-in-out .0s;
+    transition: opacity .35s ease-in-out .0s;
+}
+
+.image-bottom-menu:hover{
+    opacity: 1;
+    -webkit-transition: opacity .25s ease-in-out .0s;
+    transition: opacity .25s ease-in-out .0s;
+}
+
+.image-bottom-menu a{
+    text-decoration: none;
+    color: white;
+    -webkit-transition: background-color .35s ease-in-out .0s;
+    transition: background-color .35s ease-in-out .0s;
+}
+
+
+/*LIGHTBOX*/
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+}
+
+/* You define the style of our previews here, you are using flex to display the images
+   "responsively". */
+
+.preview {
+    width: 100%;
+}
+
+/*.row {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    justify-content: space-between;*/
+/*}*/
+
+.row > .col {
+    padding: 0 8px;
+}
+
+.col {
+    float: left;
+    width: 25%;
+}
+
+/* Now you want to define what the lightbox will look like. Note that you have the display
+   as none. You don't want it to show until the user clicks on one of the previews.
+   You will change this display property with JavaScript below. */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background:rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    padding: 0 0 0 0;
+    width: 60%;
+    max-width: 1000px;
+    height: auto;
+    max-height: 100vh;
+}
+
+/* Same with your slides, you set the display to none, because you want to choose which
+   one is shown at a time. */
+
+.slide {
+    display: none;
+}
+
+.image-slide {
+    width: 100%;
+}
+
+.modal-preview {
+    width: 100%;
+    object-fit: cover;
+    height: 130px;
+}
+
+.dots {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* You want the previews a little transparent to show that they are "inactive".
+   You then add an .active or :hover class to animate the selections for your user when
+   they interact with your controls and clickable content.
+ */
+
+img.preview, img.modal-preview {
+    opacity: 0.6;
+}
+
+img.active,
+.preview:hover,
+.modal-preview:hover {
+    opacity: 1;
+}
+
+img.hover-shadow {
+    transition: 0.3s;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.previous,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.previous:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
