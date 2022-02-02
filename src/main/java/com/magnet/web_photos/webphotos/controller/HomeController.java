@@ -43,10 +43,11 @@ public class HomeController {
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));
+        model.addAttribute("user",foundUser);
         return "home";
     }
 
-    @PostMapping("/upload-image")
+    @PostMapping("/home/upload-image")
     public String uploadFile(@ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws IOException, SQLException {
         String uploadError = "";
         String successNote = "File has been successfully uploaded.";
@@ -58,10 +59,10 @@ public class HomeController {
             imageService.addImage(imageModel, authentication);
         }
         model.addAttribute("images",imageService.getAllImages(authentication));
-        return "home";
+        return "redirect:/home";
     }
 
-    @GetMapping("/image/{imageId}")
+    @GetMapping("/home/image/{imageId}")
     public void displayImage(@PathVariable("imageId") Long imageId, HttpServletResponse httpServletResponse) throws IOException {
         Img image = imageService.getImageById(imageId);
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");
@@ -69,24 +70,24 @@ public class HomeController {
         httpServletResponse.getOutputStream().close();
     }
 
-    @GetMapping("/image/displayImages")
+    @GetMapping("/home/image/displayImages")
     public String displayImages(Model model,Authentication authentication){
         List<Img> images = imageService.getAllImages(authentication);
         model.addAttribute("images",images);
         return "home";
     }
 
-    @GetMapping("/delete-image")
+    @GetMapping("/home/delete-image")
     public String deleteImage(@RequestParam(value = "imageId") Long imageId, @RequestParam(value = "imageName") String imageName,
                             Model model, Authentication authentication, @ModelAttribute("imageModel")ImageModel imageModel){
         User user = userService.getUser(authentication.getName());
         Img img = imageService.getImageById(imageId);
         imageService.deleteImage(user,img);
         model.addAttribute("images",imageService.getAllImages(authentication));
-        return "home";
+        return "redirect:/home";
     }
 
-    @GetMapping("/download-image")
+    @GetMapping("/home/download-image")
     public ResponseEntity<?> downloadImage(@RequestParam(value = "imageId") Long imageId){
         Img image = imageService.downloadImage(imageId);
         return ResponseEntity.ok()

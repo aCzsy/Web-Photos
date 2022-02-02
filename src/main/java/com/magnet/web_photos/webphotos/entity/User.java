@@ -3,6 +3,7 @@ package com.magnet.web_photos.webphotos.entity;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,9 @@ public class User {
     private String password;
     private String firstname;
     private String lastname;
+    private LocalDate date;
+    @Lob //Stored in the DB as BLOB
+    private byte [] user_image;
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Img> images = new ArrayList<>();
 
@@ -25,13 +29,14 @@ public class User {
 
     }
 
-    public User(Long id, String username, String salt, String password, String firstname, String lastname) {
+    public User(Long id, String username, String salt, String password, String firstname, String lastname, LocalDate date) {
         this.id = id;
         this.username = username;
         this.salt = salt;
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.date = date;
     }
 
     public void addImage(Img img){
@@ -98,6 +103,22 @@ public class User {
 
     public void setImages(List<Img> images) {
         this.images = images;
+    }
+
+    public byte[] getUser_image() {
+        return user_image;
+    }
+
+    public void setUser_image(byte[] user_image) {
+        this.user_image = user_image;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override

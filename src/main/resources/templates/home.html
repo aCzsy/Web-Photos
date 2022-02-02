@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&family=Sora:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
@@ -21,103 +24,202 @@
 </head>
 
 <body onload="document.body.style.opacity='1'">
-    <nav class="home-title-bar sticky-top">
-        <div id="title">
-            <h2>Photos</h2>
-        </div>
-        <div class="nav-search-bar">
-            <label>
-                <input type="search" name="search_student" placeholder="Search people">
-            </label>
-            <button type="submit" class="btn search-btn text-dark border-0 ml-n5">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-        <div id="home-title-bar-menu">
-            <form action="#" th:action="@{/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
-                <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
-                <div class="home-title-bar-options">
-                    <div>
-                        <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>
-                        <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">
-                        <button class="home-title-bar-buttons" type="submit">Upload</button>
+<div class="image-modal fade" style="z-index: 9999;" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="image-name" class="col-form-label">Image Name</label>
+                        <input type="text" class="form-control" disabled="disabled" name= "image-name" id="image-name" maxlength="20">
                     </div>
-                    <!--                                    <div class="alert alert-success" style="margin-top: 1em" th:if="${successUpload}">-->
-                    <!--                                        <span th:text="${successUpload}"></span>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="alert alert-danger" style="margin-top: 1em" th:if="${uploadError}">-->
-                    <!--                                        <span th:text="${uploadError}"></span>-->
-                    <!--                                    </div>-->
-                </div>
-            </form>
-            <h4 class="" th:text="${users_name}">Username</h4>
-            <form action="#" th:action="@{/logout}" method="POST">
-                <button class="home-title-bar-buttons" type="submit" id="logout-btn">Logout</button>
-            </form>
+                    <div class="form-group">
+                        <label for="image-size" class="col-form-label">File Size</label>
+                        <input type="text" class="form-control" disabled="disabled" name="image-size" id="image-size">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
-    </nav>
+    </div>
+</div>
 
     <div class="content">
         <div class="side-nav">
+            <div class="side-nav-title">
+                <h2>Photos</h2>
+            </div>
+            <div class="nav-user-info">
+                <div class="image-outer-area-top-bar">
+                    <div class="image-inner-area-top-bar">
+                        <img th:if="${user.getUser_image() != null}" class="profile-image"
+                             th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">
+                        <img th:unless="${user.getUser_image() != null}" class="profile-image"
+                             src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                    </div>
+                </div>
+                <div class="nav-user-details">
+                    <p class="nav-greeting">Hello <span th:text="${user.firstname}"></span></p>
+                    <p class="nav-user-id-color">User #<span class="nav-user-id" th:text="${user.id}"></span></p>
+                </div>
+            </div>
             <ul>
-                <li><a href="home.html">Photos</a></li>
-                <li><a href="albums.html">Albums</a></li>
-                <li><a href="#">Received files</a></li>
-                <li><a href="#">Friends</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+                <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+                <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i>Received files</a></li>
+                <li><a href="#"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+                <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+                <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
             </ul>
         </div>
         <div class="main-content">
-            <div class="outer-container-for-images">
+            <div class="home-title-bar sticky-top">
+<!--                <div class="nav-search-bar">-->
+<!--                    <label>-->
+<!--                        <input type="search" name="search_student" placeholder="Search people">-->
+<!--                    </label>-->
+<!--                    <button type="submit" class="btn search-btn text-dark border-0 ml-n5">-->
+<!--                        <i class="fa fa-search"></i>-->
+<!--                    </button>-->
+<!--                </div>-->
+                <div id="home-title-bar-menu">
+                    <form action="#" th:action="@{/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                        <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
+                        <div class="home-title-bar-options">
+                            <div>
+                                <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>
+                                <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">
+                                <button class="home-title-bar-buttons" type="submit">Upload</button>
+                            </div>
+                            <!--                                    <div class="alert alert-success" style="margin-top: 1em" th:if="${successUpload}">-->
+                            <!--                                        <span th:text="${successUpload}"></span>-->
+                            <!--                                    </div>-->
+                            <!--                                    <div class="alert alert-danger" style="margin-top: 1em" th:if="${uploadError}">-->
+                            <!--                                        <span th:text="${uploadError}"></span>-->
+                            <!--                                    </div>-->
+                        </div>
+                    </form>
+<!--                    <div class="image-outer-area-top-bar">-->
+<!--                        <div class="image-inner-area-top-bar">-->
+<!--                            <img th:if="${user.getUser_image() != null}" class="profile-image"-->
+<!--                                 th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">-->
+<!--                            <img th:unless="${user.getUser_image() != null}" class="profile-image"-->
+<!--                                 src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <form action="#" th:action="@{/logout}" method="POST">
+                        <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </div>
+            <div id="main-content-placeholder" th:if="${#lists.size(images)==0}">
+                <i class="far fa-images fa-3x placeholder-icon"></i>
+                <h6>Gallery is empty</h6>
+            </div>
+            <div class="title-outer-container" th:unless="${#lists.size(images) == 0}">
+                <div class="user-list-title">
+                    <h2 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h2>
+                </div>
+            </div>
+            <div th:unless="${#lists.size(images) == 0}" class="outer-container-for-images">
                 <div class="image-container" th:each="img : ${images}">
                     <div class="image-menu-top">
-                        <a class="image-menu-top-element" href="">
+                        <button th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" onclick="showImageInfoModal(this.getAttribute('imageName'), this.getAttribute('imageSize'))">OPEN</button>
+                        <a class="image-menu-top-element" href="#">
                             <i class="fas fa-info-circle"></i>
                         </a>
-                        <a class="image-menu-top-element" th:href="@{/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
+                        <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </div>
                     <div class="image-bottom-menu">
                         <a><i class="far fa-edit fa-2x"></i></a>
                         <a><i class="fas fa-share-alt fa-2x"></i></a>
-                        <a th:href="@{/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
+                        <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
                     </div>
-                    <img class="display-image" th:src="@{${'/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
+                    <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
                 </div>
             </div>
+
+
+<!--            <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileModalLabel" aria-hidden="true">-->
+<!--                <div class="modal-dialog" role="document">-->
+<!--                    <div class="modal-content">-->
+<!--                        <div class="modal-header">-->
+<!--                            <h5 class="modal-title" id="fileModalLabel">File</h5>-->
+<!--                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                <span aria-hidden="true">&times;</span>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="modal-body">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="file-name" class="col-form-label">File Name</label>-->
+<!--                                <input type="text" disabled="disabled" name= "file-name" class="form-control" id="file-name" maxlength="20">-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="file-size" class="col-form-label">File Size</label>-->
+<!--                                <input class="form-control" disabled="disabled" name="file-size" id="file-size">-->
+<!--                            </div>-->
+<!--                            <button id="fileDownload" type="submit" class="d-none"></button>-->
+<!--                        </div>-->
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
         </div>
-        <div class="online-friends-list-container">
-            <h5>Friends online</h5>
-            <div class="online-friends-list">
-                <p>Friend 1</p>
-            </div>
-        </div>
+<!--        <div class="online-friends-list-container">-->
+<!--            <h5>Friends online</h5>-->
+<!--            <div class="online-friends-list">-->
+<!--                <p>Friend 1</p>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
 
-    <div id="Lightbox" class="modal">
+    <div id="Lightbox" class="image-modal">
         <a class="close pointer" onclick="closeLightbox()">
             <i class="fas fa-times fa-1x"></i>
         </a>
         <div class="modal-content">
             <div class="slide" th:each="img : ${images}">
-                <img th:src="@{${'/image/' + img.getImageId()}}" class="image-slide" alt="Image" />
+                <img th:src="@{${'/home/image/' + img.getImageId()}}" class="image-slide" alt="Image" />
             </div>
 
             <a class="previous" onclick="changeSlide(-1)"><i class="fas fa-caret-left fa-2x"></i></a>
             <a class="next" onclick="changeSlide(1)"><i class="fas fa-caret-right fa-2x"></i></a>
 
-            <div class="dots">
-                <div class="col" th:each="img : ${images}">
-                    <img th:src="@{${'/image/' + img.getImageId()}}" class="modal-preview hover-shadow" th:onclick="'toSlide(' + ${img.getImageId()} + ')'" alt="Image" />
-                </div>
-            </div>
+<!--            <div class="dots">-->
+<!--                <div class="col" th:each="img : ${images}">-->
+<!--                    <img th:src="@{${'/home/image/' + img.getImageId()}}" class="modal-preview hover-shadow" th:onclick="'toSlide(' + ${img.getImageId()} + ')'" alt="Image" />-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
+
+    <script th:src="@{/js/jquery-slim.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-<script>
+
+<script type="text/javascript">
+
+    function showImageInfoModal(imageName, imageSize) {
+        $('#image-name').val(imageName ? imageName : '');
+        $('#image-size').val(imageSize ? imageSize : '');
+        $('#imageModal').modal('show');
+    }
+
     function revealMenu(imageId){
         const el = document.getElementsByClassName("image-menu")[imageId-1];
         if(el.style.visibility === "hidden"){
@@ -140,17 +242,17 @@
 
     function closeLightbox() {
         document.getElementById('Lightbox').style.display = 'none';
-    };
+    }
 
     // New values are assigned to slideIndex.
 
     function changeSlide(n) {
         showSlide(slideIndex += n);
-    };
+    }
 
     function toSlide(n) {
         showSlide(slideIndex = n);
-    };
+    }
 
     //Lightbox logic. Decides which image to show and which bottom image is active
 
@@ -159,24 +261,25 @@
         let modalPreviews = document.getElementsByClassName('modal-preview');
 
         if (n > slides.length) {
-            slideIndex = 1;
-        };
+            slideIndex = slides.length % n;
+            //slideIndex = 1;
+        }
 
         if (n < 1) {
             slideIndex = slides.length;
-        };
+        }
 
         for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
-        };
+        }
 
         for (let i = 0; i < modalPreviews.length; i++) {
             modalPreviews[i].className = modalPreviews[i].className.replace(' active', '');
-        };
+        }
 
         slides[slideIndex - 1].style.display = 'block';
         modalPreviews[slideIndex - 1].className += ' active';
-    };
+    }
 </script>
 </body>
 </html>

@@ -55,6 +55,10 @@ public class ImageService {
         return userRepository.getUser(authentication.getName()).getImages();
     }
 
+    public List<Img> getAllImagesByUserId(Long userId){
+        return userRepository.findUserById(userId).getImages();
+    }
+
     public void deleteImage(User owner, Img img){
         imageRepository.delete(img);
         owner.removeImage(img);

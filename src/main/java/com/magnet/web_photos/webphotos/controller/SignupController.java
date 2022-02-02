@@ -1,5 +1,7 @@
 package com.magnet.web_photos.webphotos.controller;
 
+import com.magnet.web_photos.webphotos.DTOconverters.UserConverters;
+import com.magnet.web_photos.webphotos.dto.UserDTO;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,18 @@ public class SignupController {
     }
 
     @PostMapping
-    public String signupUser(@ModelAttribute User user, Model model){
+    public String signupUser(@ModelAttribute UserDTO userDTO, Model model){
         String signupError = null;
         String redirectTo = "signup";
+
+        User user = UserConverters.convertUserDTOtoUser(userDTO);
 
         if(!userService.isUsernameAvailable(user.getUsername())){
             signupError = "Username already exists";
         }
 
         if (signupError == null) {
-            User savedUser = userService.createUser(user);
+            User savedUser = userService.saveUser(user);
             if (savedUser == null ) {
                 signupError = "There was an error signing you up. Please try again.";
             }
@@ -50,4 +54,6 @@ public class SignupController {
 
         return redirectTo;
     }
+
+
 }
