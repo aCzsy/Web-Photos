@@ -22,6 +22,42 @@
     <script src="../static/js/home.js"></script>
 </head>
 <body onload="document.body.style.opacity='1'">
+
+<!--Image information-->
+<!--<div class="pre-upload-image-modal" id="image-info-modal">-->
+<!--    <div class="pre-upload-image-modal-content">-->
+<!--        <form action="#" id="image-info-form" th:action="@{/home/edit-image-details}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">-->
+<!--            <input type="hidden" name="image-info-img-id" id="image-info-img-id" th:field="*{imageId}">-->
+<!--            <div class="pre-upload-image-wrapper">-->
+<!--                <img id="image-info-img" alt="" th:field="*{uploaded_image}"/>-->
+<!--            </div>-->
+<!--            <div class="pre-upload-image-details">-->
+<!--                <h6>File name</h6>-->
+<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-name" id="image-info-img-name">-->
+<!--                <h6>Extension</h6>-->
+<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-extension" id="image-info-img-extension">-->
+<!--                <h6>File size</h6>-->
+<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-size" id="image-info-img-size">-->
+<!--                <br>-->
+<!--                <form action="#">-->
+<!--                    <label for="image-info-img-comment"><h6>Comment</h6></label>-->
+<!--                    <br>-->
+<!--                    <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">-->
+
+<!--                                    </textarea>-->
+<!--                </form>-->
+<!--                <br>-->
+<!--                <h6>Tag friends</h6>-->
+<!--                <br>-->
+<!--                <div class="profile-buttons-container">-->
+<!--                    <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>-->
+<!--                    <button type="button" class="profile-buttons" onclick="closeWindow('image-info-modal')">Close</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="content">
     <div class="side-nav">
         <div class="side-nav-title">
@@ -45,7 +81,7 @@
             <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
             <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
             <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i>Received files</a></li>
-            <li><a href="#"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
             <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
@@ -85,13 +121,12 @@
 
         <div class="title-outer-container" th:unless="${#lists.size(userPhotos) == 0}">
             <div class="user-list-title">
-                <h2 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h2>
+                <h4 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h4>
             </div>
         </div>
         <div th:unless="${#lists.size(userPhotos) == 0}" class="outer-container-for-images">
             <div class="image-container" th:each="img : ${userPhotos}">
                 <div class="image-menu-top">
-                    <button th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" onclick="showImageInfoModal(this.getAttribute('imageName'), this.getAttribute('imageSize'))">OPEN</button>
                     <a class="image-menu-top-element" href="#">
                         <i class="fas fa-info-circle"></i>
                     </a>

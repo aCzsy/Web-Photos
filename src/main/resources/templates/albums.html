@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Albums</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&family=Sora:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
@@ -20,80 +23,81 @@
     <script src="../static/js/home.js"></script>
 </head>
 <body onload="document.body.style.opacity='1'">
-<div class="home-title-bar sticky-top">
-    <div id="title">
-        <h2>Photos</h2>
-    </div>
-    <div class="nav-search-bar">
-        <label>
-            <input type="search" name="search_student" placeholder="Search people">
-        </label>
-        <button type="submit" class="btn search-btn text-dark border-0 ml-n5">
-            <i class="fa fa-search"></i>
-        </button>
-    </div>
-    <div id="home-title-bar-menu">
-        <form action="#" th:action="@{/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
-            <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
-            <div class="home-title-bar-options">
-                <div>
-                    <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>
-                    <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">
-                    <button class="home-title-bar-buttons" type="submit">Upload</button>
-                </div>
-                <!--                                    <div class="alert alert-success" style="margin-top: 1em" th:if="${successUpload}">-->
-                <!--                                        <span th:text="${successUpload}"></span>-->
-                <!--                                    </div>-->
-                <!--                                    <div class="alert alert-danger" style="margin-top: 1em" th:if="${uploadError}">-->
-                <!--                                        <span th:text="${uploadError}"></span>-->
-                <!--                                    </div>-->
-            </div>
-        </form>
-        <h4 class="" th:text="${users_name}">Username</h4>
-        <form action="#" th:action="@{/logout}" method="POST">
-            <button class="home-title-bar-buttons" type="submit" id="logout-btn">Logout</button>
-        </form>
-    </div>
-</div>
 <div class="content">
     <div class="side-nav">
+        <div class="side-nav-title">
+            <h2>Albums</h2>
+        </div>
+        <div class="nav-user-info">
+            <div class="image-outer-area-top-bar">
+                <div class="image-inner-area-top-bar">
+                    <img th:if="${user.getUser_image() != null}" class="profile-image"
+                         th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">
+                    <img th:unless="${user.getUser_image() != null}" class="profile-image"
+                         src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                </div>
+            </div>
+            <div class="nav-user-details">
+                <p class="nav-greeting">Hello <span th:text="${user.firstname}"></span></p>
+                <p class="nav-user-id-color">User #<span class="nav-user-id" th:text="${user.id}"></span></p>
+            </div>
+        </div>
         <ul>
-            <li><a th:href="@{/home}">Photos</a></li>
-            <li><a th:href="@{/albums}">Albums</a></li>
-            <li><a href="#">Received files</a></li>
-            <li><a href="#">Friends</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i>Received files</a></li>
+            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
     <div class="main-content">
-        <div id="main-content-placeholder" th:if="${#lists.size(images)==0}">
-            <i class="far fa-images fa-5x"></i>
-            <h3>Gallery is empty</h3>
-        </div>
-        <div th:unless="${#lists.size(images) == 0}" class="outer-container-for-images">
-            <div class="image-container" th:each="img : ${images}">
-                <div class="image-menu-top">
-                    <a class="image-menu-top-element" href="">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                    <a class="image-menu-top-element" th:href="@{/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                </div>
-                <div class="image-bottom-menu">
-                    <a><i class="far fa-edit fa-2x"></i></a>
-                    <a><i class="fas fa-share-alt fa-2x"></i></a>
-                    <a th:href="@{/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
-                </div>
-                <img class="display-image" th:src="@{${'/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
+        <div class="home-title-bar sticky-top">
+            <div id="home-title-bar-menu">
+<!--                <form action="#" th:action="@{/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">-->
+<!--                    <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">-->
+<!--                    <div class="home-title-bar-options">-->
+<!--                        <div>-->
+<!--                            <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>-->
+<!--                            <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">-->
+<!--                            <button class="home-title-bar-buttons" type="submit">Upload</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+                <form action="#" th:action="@{/logout}" method="POST">
+                    <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
+                </form>
             </div>
         </div>
-    </div>
-    <div class="online-friends-list-container">
-        <h5>Friends online</h5>
-        <div class="online-friends-list">
-            <p>Friend 1</p>
-        </div>
+<!--        <div id="main-content-placeholder" th:if="${#lists.size(images)==0}">-->
+<!--            <i class="far fa-images fa-3x placeholder-icon"></i>-->
+<!--            <h6>Gallery is empty</h6>-->
+<!--        </div>-->
+<!--        <div class="title-outer-container" th:unless="${#lists.size(images) == 0}">-->
+<!--            <div class="user-list-title">-->
+<!--                <h4 th:text="${user.getFirstname() + ' albums'}">Users albums</h4>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div th:unless="${#lists.size(images) == 0}" class="outer-container-for-images">-->
+<!--            <div class="image-container" th:each="img : ${images}">-->
+<!--                <div class="image-menu-top">-->
+<!--                    <button th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" onclick="showImageInfoModal(this.getAttribute('imageName'), this.getAttribute('imageSize'))">OPEN</button>-->
+<!--                    <a class="image-menu-top-element" href="#">-->
+<!--                        <i class="fas fa-info-circle"></i>-->
+<!--                    </a>-->
+<!--                    <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">-->
+<!--                        <i class="far fa-trash-alt"></i>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="image-bottom-menu">-->
+<!--                    <a><i class="far fa-edit fa-2x"></i></a>-->
+<!--                    <a><i class="fas fa-share-alt fa-2x"></i></a>-->
+<!--                    <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>-->
+<!--                </div>-->
+<!--                <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">-->
+<!--            </div>-->
+<!--        </div>-->
+
     </div>
 </div>
 

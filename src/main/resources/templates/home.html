@@ -24,34 +24,90 @@
 </head>
 
 <body onload="document.body.style.opacity='1'">
-<div class="image-modal fade" style="z-index: 9999;" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">Image details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+
+<!--Image preview wrapper-->
+    <div class="pre-upload-image-modal" id="pre-upload-image-modal">
+        <div class="pre-upload-image-modal-content">
+            <div class="pre-upload-image-wrapper">
+                <img id="pre-upload-image" alt=""/>
             </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="image-name" class="col-form-label">Image Name</label>
-                        <input type="text" class="form-control" disabled="disabled" name= "image-name" id="image-name" maxlength="20">
-                    </div>
-                    <div class="form-group">
-                        <label for="image-size" class="col-form-label">File Size</label>
-                        <input type="text" class="form-control" disabled="disabled" name="image-size" id="image-size">
-                    </div>
+            <div class="pre-upload-image-details">
+                <h6>File name</h6>
+                <p id="pre-upload-image-title"></p>
+                <h6>Extension</h6>
+                <p id="pre-upload-image-extension"></p>
+                <h6>File size</h6>
+                <p id="pre-upload-image-size"></p>
+                <form action="#">
+                    <label for="image-comment"><h6>Comment</h6></label>
+                    <br>
+                    <textarea id="image-comment" name="image-comment" rows="2" cols="50" placeholder="Type comment...">
+
+                    </textarea>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <br>
+                <h6>Tag friends</h6>
+                <br>
+                <div class="profile-buttons-container">
+                    <button type="button" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;" onclick="uploadFile('uploaded_image','image-upload-form')">Save</button>
+                    <button type="button" class="profile-buttons" onclick="closeWindow('pre-upload-image-modal')">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!--Image information/edit wrapper-->
+    <div class="pre-upload-image-modal" id="image-info-modal">
+        <div class="pre-upload-image-modal-content">
+            <form action="#" id="image-info-form" th:action="@{/home/edit-image-details}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                <input type="hidden" name="image-info-img-id" id="image-info-img-id" th:field="*{imageId}">
+                <div class="pre-upload-image-wrapper">
+                    <img id="image-info-img" alt="" th:field="*{uploaded_image}"/>
+                </div>
+                <div class="pre-upload-image-details">
+                    <h6>File name</h6>
+                    <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-name" id="image-info-img-name">
+                    <h6>Extension</h6>
+                    <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-extension" id="image-info-img-extension">
+                    <h6>File size</h6>
+                    <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-size" id="image-info-img-size">
+                    <br>
+                    <form action="#">
+                        <label for="image-info-img-comment"><h6>Comment</h6></label>
+                        <br>
+                        <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">
+
+                                    </textarea>
+                    </form>
+                    <br>
+                    <h6>Tag friends</h6>
+                    <br>
+                    <div class="profile-buttons-container">
+                        <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>
+                        <button type="button" class="profile-buttons" onclick="closeWindow('image-info-modal')">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="friend-online-container" id="friends_online">
+        <div class="friends-online-title">Friends online</div>
+        <a id="close_friends_online_div" href="#">CLOSE</a>
+<!--        <span id="close-friends-online"><i class="fas fa-times"></i></span>-->
+        <div class="friends-online-content">
+            <h6>FRIEND 1</h6>
+            <h6>FRIEND 2</h6>
+            <h6>FRIEND 3</h6>
+            <h6>FRIEND 4</h6>
+            <h6>FRIEND 5</h6>
+        </div>
+    </div>
+
+<!--    <div class="success-message" id="successMsg" th:if="${successMessage}">-->
+<!--            <i class="far fa-check-circle fa-4x" style="color: #7ce604;"></i>-->
+<!--            <p th:text="${successMessage}">SUCCESS MESSAGE</p>-->
+<!--    </div>-->
 
     <div class="content">
         <div class="side-nav">
@@ -76,7 +132,7 @@
                 <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
                 <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
                 <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i>Received files</a></li>
-                <li><a href="#"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+                <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
                 <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
                 <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
             </ul>
@@ -92,20 +148,15 @@
 <!--                    </button>-->
 <!--                </div>-->
                 <div id="home-title-bar-menu">
-                    <form action="#" th:action="@{/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                    <form id="image-upload-form" action="#" th:action="@{/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                         <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
                         <div class="home-title-bar-options">
                             <div>
-                                <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>
-                                <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">
-                                <button class="home-title-bar-buttons" type="submit">Upload</button>
+                                <label class="home-title-bar-buttons" for="uploaded_image"><i class="fas fa-upload"></i>&nbsp;&nbsp;Upload image</label>
+                                <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}"  >
+                                <input type="hidden" name="imageComment" id="imageComment" th:field="*{imageComment}">
+<!--                                <button class="home-title-bar-buttons" type="submit">Upload</button>-->
                             </div>
-                            <!--                                    <div class="alert alert-success" style="margin-top: 1em" th:if="${successUpload}">-->
-                            <!--                                        <span th:text="${successUpload}"></span>-->
-                            <!--                                    </div>-->
-                            <!--                                    <div class="alert alert-danger" style="margin-top: 1em" th:if="${uploadError}">-->
-                            <!--                                        <span th:text="${uploadError}"></span>-->
-                            <!--                                    </div>-->
                         </div>
                     </form>
 <!--                    <div class="image-outer-area-top-bar">-->
@@ -127,14 +178,15 @@
             </div>
             <div class="title-outer-container" th:unless="${#lists.size(images) == 0}">
                 <div class="user-list-title">
-                    <h2 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h2>
+                    <h4 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h4>
                 </div>
             </div>
             <div th:unless="${#lists.size(images) == 0}" class="outer-container-for-images">
                 <div class="image-container" th:each="img : ${images}">
                     <div class="image-menu-top">
-                        <button th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" onclick="showImageInfoModal(this.getAttribute('imageName'), this.getAttribute('imageSize'))">OPEN</button>
-                        <a class="image-menu-top-element" href="#">
+<!--                        <button th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" onclick="showImageInfoModal(this.getAttribute('imageName'), this.getAttribute('imageSize'))">OPEN</button>-->
+                        <a class="image-menu-top-element" href="#" th:imageId="${img.getImageId()}" th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" th:imageExt="${img.getContent_type()}" th:imgComment="${img.getComment()}"
+                           onclick="showImageInfoModal(this.getAttribute('imageId'),this.getAttribute('imageName'), this.getAttribute('imageSize'), this.getAttribute('imageExt'),this.getAttribute('imgComment'))">
                             <i class="fas fa-info-circle"></i>
                         </a>
                         <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
@@ -149,42 +201,7 @@
                     <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
                 </div>
             </div>
-
-
-<!--            <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileModalLabel" aria-hidden="true">-->
-<!--                <div class="modal-dialog" role="document">-->
-<!--                    <div class="modal-content">-->
-<!--                        <div class="modal-header">-->
-<!--                            <h5 class="modal-title" id="fileModalLabel">File</h5>-->
-<!--                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                                <span aria-hidden="true">&times;</span>-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                        <div class="modal-body">-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="file-name" class="col-form-label">File Name</label>-->
-<!--                                <input type="text" disabled="disabled" name= "file-name" class="form-control" id="file-name" maxlength="20">-->
-<!--                            </div>-->
-<!--                            <div class="form-group">-->
-<!--                                <label for="file-size" class="col-form-label">File Size</label>-->
-<!--                                <input class="form-control" disabled="disabled" name="file-size" id="file-size">-->
-<!--                            </div>-->
-<!--                            <button id="fileDownload" type="submit" class="d-none"></button>-->
-<!--                        </div>-->
-<!--                        <div class="modal-footer">-->
-<!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
         </div>
-<!--        <div class="online-friends-list-container">-->
-<!--            <h5>Friends online</h5>-->
-<!--            <div class="online-friends-list">-->
-<!--                <p>Friend 1</p>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 
 
@@ -212,12 +229,111 @@
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
 
+<script>
+    let friendsDiv = document.getElementById("friends_online");
+
+    friendsDiv.addEventListener('click', function (){
+        if(friendsDiv.style.bottom !== "15px"){
+            friendsDiv.style.bottom = "15px";
+        } else{
+            friendsDiv.style.bottom = "-30%";
+        }
+    })
+
+    // document.getElementById("close_friends_online_div").addEventListener('click', function (){
+    //     document.getElementById("close_friends_online_div").style.visibility = "hidden";
+    // })
+</script>
+
 <script type="text/javascript">
 
-    function showImageInfoModal(imageName, imageSize) {
-        $('#image-name').val(imageName ? imageName : '');
-        $('#image-size').val(imageSize ? imageSize : '');
-        $('#imageModal').modal('show');
+    // let friendsDiv = document.getElementById("friends_online");
+    //
+    // // closeFriendsOnline.addEventListener('click', function (){
+    // //     if(closeFriendsOnline.style.display === "block"){
+    // //         closeFriendsOnline.style.display = "none";
+    // //         friendsDiv.style.bottom = "-30%";
+    // //     }
+    // //     // closeFriendsOnline.style.display = "none";
+    // //     // friendsDiv.style.bottom = "-30%";
+    // // })
+    //
+    // friendsDiv.addEventListener('click', function (){
+    //     friendsDiv.style.bottom = "15px";
+    //     document.getElementById("close_friends_online_div").style.visibility = "visible";
+    // })
+
+    // let successMsg = document.getElementById("successMsg");
+    //
+    // function showMsg(){
+    //     let res = window.getComputedStyle(successMsg,'').display;
+    //     if(res === 'none'){
+    //         successMsg.style.display = "none";
+    //     }
+    // }
+
+
+    let pre_upload = document.getElementById("pre-upload-image-modal");
+
+    function closeWindow(elementId){
+        document.getElementById(elementId).style.display = "none";
+    }
+
+    const upl_img = document.getElementById("uploaded_image");
+    upl_img.addEventListener("change",function (event){
+        const output = document.getElementById('pre-upload-image');
+        let pre_upload = document.getElementById("pre-upload-image-modal");
+        let pre_upload_title = document.getElementById("pre-upload-image-title");
+        let pre_upload_ext = document.getElementById("pre-upload-image-extension");
+        let pre_upload_size = document.getElementById("pre-upload-image-size");
+        pre_upload.style.display = "flex";
+        pre_upload.style.justifyContent = "center";
+        pre_upload.style.alignItems = "center";
+        output.src = URL.createObjectURL(event.target.files[0]);
+        pre_upload_title.innerText = event.target.files[0].name
+        pre_upload_ext.innerText = event.target.files[0].type
+        pre_upload_size.innerText = event.target.files[0].size + " kb"
+        output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    })
+
+
+    // const previewImage = function (event){
+    //     const output = document.getElementById('pre-upload-image');
+    //     let pre_upload = document.getElementById("pre-upload-image-modal")
+    //     pre_upload.style.display = "block";
+    //     output.src = URL.createObjectURL(event.target.files[0]);
+    //     output.onload = function() {
+    //         URL.revokeObjectURL(output.src) // free memory
+    //     }
+    // };
+
+    function uploadFile(inputId,formId){
+        let input = document.getElementById(inputId);
+        let preview_comment = document.getElementById("image-comment");
+        let temp = document.getElementById("temp")
+        let image_comment = document.getElementById("imageComment");
+        image_comment.value = preview_comment.value;
+        //function called when file gets selected
+        let selected_item = input.files[0];
+        let upload_form = document.getElementById(formId);
+        //submit a form if an image has a name, meaning file exists
+        if(selected_item.name !== ""){
+            upload_form.submit();
+        }
+        pre_upload.style.display = "none";
+    }
+
+    function showImageInfoModal(imageId, imageName, imageSize, imageExt, imgComment) {
+        $('#image-info-img-id').val(imageId ? imageId : '');
+        $('#image-info-img').attr("src", "/home/image/" + imageId);
+        $('#image-info-img-name').val(imageName ? imageName : '');
+        $('#image-info-img-size').val(imageSize ? imageSize + " kb" : '');
+        $('#image-info-img-extension').val(imageExt ? imageExt : '');
+        $('#image-info-img-comment').val(imgComment ? imgComment : '');
+        // $('#image-info-modal').modal('show');
+        $('#image-info-modal').css({"display": "flex","justify-content":"center","aligh-items":"center"});
     }
 
     function revealMenu(imageId){

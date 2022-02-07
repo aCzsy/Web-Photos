@@ -6,6 +6,7 @@ public class UserDTO {
     private String password;
     private String firstname;
     private String lastname;
+    private byte [] user_image;
 
     public UserDTO(){
 
@@ -57,5 +58,13 @@ public class UserDTO {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public byte[] getUser_image() {
+        return user_image;
+    }
+
+    public void setUser_image(byte[] user_image) {
+        this.user_image = user_image;
     }
 }

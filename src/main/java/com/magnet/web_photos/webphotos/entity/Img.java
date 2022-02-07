@@ -16,6 +16,8 @@ public class Img {
     private String content_type;
     private String image_size;
     private LocalDate date_uploaded;
+    @Column(length = 25)
+    private String comment;
     //private Long userId;
     @ManyToMany(mappedBy = "images")
     private List<User> image_owners = new ArrayList<>();
@@ -89,6 +91,14 @@ public class Img {
 
     public void setFile_data(byte[] file_data) {
         this.file_data = file_data;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override

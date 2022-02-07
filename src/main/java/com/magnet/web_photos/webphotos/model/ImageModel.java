@@ -4,7 +4,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ImageModel {
     private Long imageId;
+    private String imageComment;
     private MultipartFile uploaded_image;
+
+    public String getImageComment() {
+        return imageComment;
+    }
+
+    public void setImageComment(String imageComment) {
+        this.imageComment = imageComment;
+    }
 
     public Long getImageId() {
         return imageId;

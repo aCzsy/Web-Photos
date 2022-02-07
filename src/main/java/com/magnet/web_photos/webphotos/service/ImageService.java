@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,8 +38,18 @@ public class ImageService {
         image.setFile_data(imageModel.getUploaded_image().getBytes());
         //image.setUserId(userRepository.getUser(authentication.getName()).getId());
         image.setDate_uploaded(LocalDate.now());
+        if(!imageModel.getImageComment().equals("")){
+            String trimmerComment = imageModel.getImageComment().trim();
+            image.setComment(trimmerComment);
+        }
         User user = userRepository.getUser(authentication.getName());
         user.addImage(image);
+        imageRepository.save(image);
+    }
+
+    public void editImageDetails(ImageModel imageModel, Authentication authentication){
+        Img image = Optional.ofNullable(imageRepository.findImageById(imageModel.getImageId())).orElseThrow();
+        image.setComment(imageModel.getImageComment());
         imageRepository.save(image);
     }
 

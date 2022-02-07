@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,19 +33,13 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-//        if(user.getId() != null){
-//            return userRepository.findById(user.getId())
-//                    .map(existingUser -> {
-//                        existingUser.setUser_image(user.getUser_image());
-//                       return userRepository.save(existingUser);
-//                    }).orElseThrow(UserNotFoundException::new);
-//        }
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
         LocalDate date = LocalDate.now();
+
         return userRepository.save(new User(null,user.getUsername(), encodedSalt, hashedPassword, user.getFirstname(), user.getLastname(), date));
     }
 
@@ -57,5 +54,14 @@ public class UserService {
         User currentUser = getUser(user.getUsername());
         currentUser.setUser_image(imageModel.getUploaded_image().getBytes());
         userRepository.save(currentUser);
+    }
+
+    public List<User> getListOfPeople(Long userId){
+        List<User> allPeople = userRepository.findAll();
+
+        return allPeople
+                .stream()
+                .filter(user -> !user.getId().equals(userId))
+                .collect(Collectors.toList());
     }
 }

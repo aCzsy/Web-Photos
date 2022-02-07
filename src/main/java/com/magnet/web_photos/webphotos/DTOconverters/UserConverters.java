@@ -10,4 +10,10 @@ public class UserConverters {
         BeanUtils.copyProperties(userDTO,user);
         return user;
     }
+
+    public static UserDTO convertUserToUserDTO(User user){
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user,userDTO);
+        return userDTO;
+    }
 }

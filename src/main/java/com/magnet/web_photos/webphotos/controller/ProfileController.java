@@ -3,6 +3,7 @@ package com.magnet.web_photos.webphotos.controller;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.model.ImageModel;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
+import com.magnet.web_photos.webphotos.service.FriendRequestService;
 import com.magnet.web_photos.webphotos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,17 +26,20 @@ public class ProfileController {
 
     private UserRepository userRepository;
     private UserService userService;
+    private FriendRequestService friendRequestService;
 
     @Autowired
-    public ProfileController(UserRepository userRepository, UserService userService) {
+    public ProfileController(UserRepository userRepository, UserService userService, FriendRequestService friendRequestService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.friendRequestService = friendRequestService;
     }
 
     @GetMapping("/profile")
     public String getProfilePage(@ModelAttribute("imageModel") ImageModel imageModel, Model model, Authentication authentication){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         model.addAttribute("user",foundUser);
+        model.addAttribute("number_of_friends",friendRequestService.getAllAcceptedRequests(foundUser.getId()).size());
         return "profile";
     }
 

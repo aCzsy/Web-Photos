@@ -12,10 +12,12 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,6 +32,8 @@ public class HomeController {
     private UserService userService;
     private ImageService imageService;
 
+    String successNote = null;
+
     @Autowired
     public HomeController(UserRepository userRepository, UserService userService, ImageService imageService) {
         this.userRepository = userRepository;
@@ -38,12 +42,15 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel,Authentication authentication, Model model){
+    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));
         model.addAttribute("user",foundUser);
+        if(successNote != null){
+            model.addAttribute("successMessage",successNote);
+        }
         return "home";
     }
 
@@ -95,4 +102,12 @@ public class HomeController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getImage_name())
                 .body(new ByteArrayResource(image.getFile_data()));
     }
+
+    @PostMapping("/home/edit-image-details")
+    public String editImageDetails(@ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws InterruptedException {
+        successNote = "Image has been successfully updated.";
+        imageService.editImageDetails(imageModel,authentication);
+        return "redirect:/home";
+    }
+
 }

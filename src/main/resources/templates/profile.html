@@ -46,7 +46,7 @@
             <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
             <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
             <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i>Received files</a></li>
-            <li><a href="#"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
             <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
@@ -89,11 +89,11 @@
                                  src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
                         </div>
                     </div>
-                    <form action="#" th:action="@{/profile/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                    <form id="avatar-upload-form" action="#" th:action="@{/profile/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                         <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
-                        <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>
-                        <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">
-                        <button class="home-title-bar-buttons" type="submit">Upload</button>
+                        <label class="home-title-bar-buttons" for="uploaded_avatar"><i class="fas fa-upload"></i>&nbsp;&nbsp;Choose avatar</label>
+                        <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_avatar" name="uploaded_avatar" th:field="*{uploaded_image}" onclick="uploadFile('uploaded_avatar','avatar-upload-form')">
+<!--                        <button class="home-title-bar-buttons" type="submit">Upload</button>-->
                     </form>
                 </div>
                 <div class="profile-info">
@@ -111,7 +111,7 @@
                                 <p>0 albums</p>
                             </div>
                             <div class="user-stats-container">
-                                <p>0 friends</p>
+                                <p th:text="${number_of_friends + ' friends'}">0 friends</p>
                             </div>
                         </div>
                         <h5 th:text="'About ' + ${user.firstname}">About user</h5>
@@ -146,5 +146,23 @@
 <!--        </div>-->
 <!--    </div>-->
 </div>
+<script th:src="@{/js/jquery-slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    function uploadFile(inputId,formId){
+        let input = document.getElementById(inputId);
+        //function called when file gets selected
+        input.addEventListener('change', function () {
+            //selected file
+            const selected_item = input.files[0];
+            let upload_form = document.getElementById(formId);
+            //submit a form if an image has a name, meaning file exists
+            if(selected_item.name !== ""){
+                upload_form.submit();
+            }
+        }, false);
+    }
+</script>
 </body>
 </html>

@@ -11,9 +11,10 @@ import java.util.Objects;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Nationalized
+    @Column(length = 20)
     private String username;
     private String salt;
     private String password;
@@ -24,6 +25,8 @@ public class User {
     private byte [] user_image;
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Img> images = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private List<Album> albums = new ArrayList<>();
 
     public User(){
 
@@ -119,6 +122,14 @@ public class User {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 
     @Override
