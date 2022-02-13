@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Img {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imageId;
     private String image_name;
     private String content_type;
@@ -68,7 +68,7 @@ public class Img {
         this.date_uploaded = date_uploaded;
     }
 
-//    public Long getUserId() {
+    //    public Long getUserId() {
 //        return userId;
 //    }
 //

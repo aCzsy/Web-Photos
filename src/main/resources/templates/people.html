@@ -80,9 +80,9 @@
                 </form>
             </div>
         </div>
-        <div id="main-content-placeholder" th:if="${#lists.size(users)==0}">
+        <div class="main-content-placeholder" th:if="${#lists.size(users)==0}">
             <i class="far fa-images fa-3x"></i>
-            <h3>List is empty</h3>
+            <p>There are no more registered users</p>
         </div>
 
         <div class="success-message" id="successMsg" th:if="${successMessage}">

@@ -47,6 +47,21 @@ public class ImageService {
         imageRepository.save(image);
     }
 
+    public Img imageModelToImg(ImageModel imageModel) throws IOException {
+        Img image = new Img();
+        image.setImage_name(imageModel.getUploaded_image().getOriginalFilename());
+        image.setImage_size(String.valueOf(imageModel.getUploaded_image().getSize()));
+        image.setContent_type(imageModel.getUploaded_image().getContentType());
+        image.setFile_data(imageModel.getUploaded_image().getBytes());
+        image.setDate_uploaded(LocalDate.now());
+        if(!imageModel.getImageComment().equals("")){
+            String trimmerComment = imageModel.getImageComment().trim();
+            image.setComment(trimmerComment);
+        }
+
+        return image;
+    }
+
     public void editImageDetails(ImageModel imageModel, Authentication authentication){
         Img image = Optional.ofNullable(imageRepository.findImageById(imageModel.getImageId())).orElseThrow();
         image.setComment(imageModel.getImageComment());

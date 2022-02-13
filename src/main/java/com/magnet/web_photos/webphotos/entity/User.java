@@ -52,6 +52,16 @@ public class User {
         img.getImage_owners().remove(this);
     }
 
+    public void addAlbum(Album album){
+        albums.add(album);
+        album.getOwners().add(this);
+    }
+
+    public void removeAlbum(Album album){
+        albums.remove(album);
+        album.getOwners().remove(this);
+    }
+
     public Long getId() {
         return id;
     }

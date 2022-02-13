@@ -64,9 +64,9 @@
             <p th:text="${successMessage}">SUCCESS MESSAGE</p>
         </div>
 
-        <div id="main-content-placeholder" th:if="${#lists.size(friends)==0}">
+        <div class="main-content-placeholder" th:if="${#lists.size(friends)==0}">
             <i class="far fa-images fa-3x"></i>
-            <h3>List is empty</h3>
+            <p>You don't have any friends just yet</p>
         </div>
 
         <div class="title-outer-container" style="width: 90%;">

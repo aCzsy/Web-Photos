@@ -27,7 +27,7 @@
 
 <!--Image preview wrapper-->
     <div class="pre-upload-image-modal" id="pre-upload-image-modal">
-        <div class="pre-upload-image-modal-content">
+        <div class="pre-upload-image-modal-content" id="pre-upload-content">
             <div class="pre-upload-image-wrapper">
                 <img id="pre-upload-image" alt=""/>
             </div>
@@ -152,7 +152,7 @@
                         <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
                         <div class="home-title-bar-options">
                             <div>
-                                <label class="home-title-bar-buttons" for="uploaded_image"><i class="fas fa-upload"></i>&nbsp;&nbsp;Upload image</label>
+                                <label class="home-title-bar-buttons" for="uploaded_image"><i class="fas fa-upload icons"></i>&nbsp;&nbsp;Upload image</label>
                                 <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}"  >
                                 <input type="hidden" name="imageComment" id="imageComment" th:field="*{imageComment}">
 <!--                                <button class="home-title-bar-buttons" type="submit">Upload</button>-->
@@ -172,9 +172,9 @@
                     </form>
                 </div>
             </div>
-            <div id="main-content-placeholder" th:if="${#lists.size(images)==0}">
+            <div class="main-content-placeholder" th:if="${#lists.size(images)==0}">
                 <i class="far fa-images fa-3x placeholder-icon"></i>
-                <h6>Gallery is empty</h6>
+                <p>You gallery is empty</p>
             </div>
             <div class="title-outer-container" th:unless="${#lists.size(images) == 0}">
                 <div class="user-list-title">

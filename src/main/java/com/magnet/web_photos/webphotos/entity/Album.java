@@ -3,19 +3,22 @@ package com.magnet.web_photos.webphotos.entity;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Album {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Nationalized
     private String name;
     private String comment;
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private List<User> users = new ArrayList<>();
+    private String album_size;
+    private LocalDate date_created;
+    @ManyToMany(mappedBy = "albums")
+    private List<User> owners = new ArrayList<>();
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Img> images = new ArrayList<>();
 
@@ -29,6 +32,22 @@ public class Album {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAlbum_size() {
+        return album_size;
+    }
+
+    public void setAlbum_size(String album_size) {
+        this.album_size = album_size;
+    }
+
+    public LocalDate getDate_created() {
+        return date_created;
+    }
+
+    public void setDate_created(LocalDate date_created) {
+        this.date_created = date_created;
     }
 
     public String getName() {
@@ -47,12 +66,12 @@ public class Album {
         this.comment = comment;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getOwners() {
+        return owners;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setOwners(List<User> owners) {
+        this.owners = owners;
     }
 
     public List<Img> getImages() {

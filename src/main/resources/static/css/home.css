@@ -184,7 +184,7 @@ body {
     padding: 20px;
     border: 2px solid #7ce604;
     border-radius: 5px;
-    animation-name: slideFromLeft;
+    animation-name: showSmoothly;
     animation-duration: 0.4s;
     transition: display 0.5s ease-out;
 }
@@ -197,11 +197,27 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-    animation-name: slideFromLeft;
-    animation-duration: 0.4s;
-    transition: background-color 0.4s, display 0.4s;
+    /*background-color: rgb(0,0,0);*/
+    /*background-color: rgba(0,0,0,0.4);*/
+    /*animation-name: slideFromLeft;*/
+    /*animation-duration: 0.4s;*/
+    /*transition: background-color 0.4s, display 0.4s;*/
+    transition: 1s;
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    .pre-upload-image-modal,
+    #album-create-select-gallery-images-container{
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        /*background-color: rgba(255, 255, 255, 0.5);*/
+        background-color: rgba(217, 217, 217, 0.5);
+    }
+}
+
+@keyframes showSmoothly {
+    from {left: 0; opacity: 0}
+    to {left: 0; opacity: 1}
 }
 
 @keyframes slideFromLeft {
@@ -216,10 +232,12 @@ body {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
     width: 80%;
     height: 70%;
-    border-radius: 5px;
+    border-radius: 10px;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    transition: 0.4s;
 }
 
 .pre-upload-image-wrapper{
@@ -231,6 +249,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 #image-info-img-name{
@@ -238,6 +257,9 @@ body {
 }
 
 .pre-upload-image-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 20px;
     overflow: auto;
     width: 50%;
@@ -363,7 +385,7 @@ body {
     margin-left: 10px;
 }
 
-#main-content-placeholder{
+.main-content-placeholder{
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -379,8 +401,9 @@ body {
     color: #cccccc;
 }
 
-#main-content-placeholder h6{
+.main-content-placeholder p{
     color: #737373;
+    font-size: 14px;
 }
 
 .main-content{
@@ -769,7 +792,7 @@ img.hover-shadow {
     padding: 10px 15px;
     align-self: flex-end;
     font-size: 14px;
-    color: #737373;
+    color: #ffffff;
     border-radius: 3px;
     font-weight:600;
 }
@@ -883,6 +906,178 @@ img.hover-shadow {
     display: flex;
     gap: 15px;
 }
+
+.create-album-details-wrapper{
+    position: relative;
+    padding: 10px 20px;
+    overflow: visible;
+    overflow-x: hidden;
+}
+
+.create-album-details-wrapper form{
+    position: absolute;
+    width: 95%;
+    height: 50%;
+    left: 20px;
+    transition: 0.5s;
+}
+
+.create-album-details-wrapper form input{
+    width: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    margin: 5px 0;
+    padding: 10px 5px;
+    border-bottom: 2px solid #7ce604;
+}
+
+.album-create-btns{
+    display: flex;
+    height: 100%;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+#album-create-form-images{
+    left: 700px;
+}
+
+#album-create-form-comment{
+    left:700px;
+}
+
+#album-create-form-access-type{
+    left: 700px;
+}
+
+.form-steps{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: auto;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+    /*box-shadow: 0 -1px 5px -1px #000;*/
+}
+
+.step{
+    width: 25%;
+    text-align: center;
+    position: relative;
+}
+
+.step p{
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#progress-step{
+    position: absolute;
+    height: 100%;
+    width: 25%;
+    border-radius: 10px;
+    background: rgb(109,201,3);
+    background: linear-gradient(90deg, rgba(109,201,3,1) 0%, rgba(124,230,4,1) 59%);
+    transition: 1s;
+}
+
+#album-create-form-title-next{
+    cursor: pointer;
+}
+
+.placeholder-create-btn{
+    padding: 10px 25px;
+    align-self: center;
+    border: none;
+    cursor: pointer;
+}
+
+.icons{
+    color: #7ce604;
+}
+
+.paragraph-color{
+    color: #737373;
+}
+
+.album-image-select-buttons-container{
+    display: flex;
+    gap: 20px;
+    position: relative;
+}
+
+#album-create-selected-images-preview-container{
+    display: none;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.album-image-preview-container{
+    display: block;
+    position: relative;
+    overflow: hidden;
+    height: 120px;
+    flex-basis: 32%;
+    transition: 0.25s display;
+    border-radius: 5px;
+}
+
+.album-image-preview{
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: 0.4s transform;
+    object-fit: cover;
+}
+
+.album-image-preview:hover{
+    transform: scale(1.05);
+}
+
+#album-create-select-gallery-images-container{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 102;
+    justify-content: center;
+    align-items: center;
+    transition: 1s;
+}
+
+#album-create-gallery-images{
+    display: none;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    width: 60%;
+    max-height: 70%;
+    overflow: auto;
+    border-radius: 10px;
+    justify-content: space-between;
+    margin: 0;
+    padding: 2rem;
+    gap: 10px;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+}
+
+#album-create-gallery-image-wrapper{
+    display: block;
+    height: 150px;
+    flex-grow: unset;
+    flex-basis: 30%;
+    transition: 0.25s display;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 
 
