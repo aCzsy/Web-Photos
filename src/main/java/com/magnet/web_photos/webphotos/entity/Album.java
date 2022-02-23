@@ -3,6 +3,7 @@ package com.magnet.web_photos.webphotos.entity;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +17,15 @@ public class Album {
     private String name;
     private String comment;
     private String album_size;
-    private LocalDate date_created;
+    private LocalDate date_created = LocalDate.now(Clock.systemUTC());;
+    @Column(name = "access_type")
+    private String albumAccessType;
     @ManyToMany(mappedBy = "albums")
     private List<User> owners = new ArrayList<>();
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Img> images = new ArrayList<>();
 
     public Album(){
-
     }
 
     public Long getId() {
@@ -64,6 +66,14 @@ public class Album {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getAlbumAccessType() {
+        return albumAccessType;
+    }
+
+    public void setAlbumAccessType(String albumAccessType) {
+        this.albumAccessType = albumAccessType;
     }
 
     public List<User> getOwners() {

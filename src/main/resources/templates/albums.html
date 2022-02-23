@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&family=Sora:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap" rel="stylesheet">
     <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
     <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
@@ -29,15 +30,13 @@
 </head>
 <body onload="document.body.style.opacity='1'">
 
+<!--ALBUM CREATE MODAL-->
 <div class="pre-upload-image-modal" id="create-album-modal">
     <div class="pre-upload-image-modal-content" id="pre-upload-content">
         <div class="pre-upload-image-wrapper">
             <img id="pre-upload-image" th:src="@{/images/album.jpg}" src="../static/images/album.jpg" alt=""/>
         </div>
         <div class="pre-upload-image-details create-album-details-wrapper">
-<!--            th:object="${albumModel}" th:action="@{/albums/create-album}"-->
-<!--            th:field="*{albumId}"-->
-<!--            th:field="*{albumName}"-->
             <form id="album-create-form-title">
                 <input type="hidden" name="albumId" id="album-id">
                 <h3>Title</h3>
@@ -50,19 +49,14 @@
             </form>
 
             <form id="album-create-form-images" enctype="multipart/form-data">
-<!--                <input type="hidden" name="albumId">-->
                 <h3>Select Images</h3>
                 <p class="paragraph-color">Select images you want to add right now</p>
-<!--                <input type="text" name="added_images" placeholder="Album images" required>-->
                 <div class="album-image-select-buttons-container">
                     <button type="button" class="edit-cred-btn placeholder-create-btn" id="album-create-gallery-select">Select from gallery</button>
-<!--                    <button type="button" class="edit-cred-btn placeholder-create-btn">Select from gallery</button>-->
                     <input type="hidden" name="imageId" id="image-id">
                         <div>
                             <label class="edit-cred-btn placeholder-create-btn" for="uploaded_image_to_album"><i class="fas fa-upload"></i>&nbsp;&nbsp;Browse computer</label>
                             <input style="display: none" type="file" multiple accept="image/*" class="form-control-file" id="uploaded_image_to_album" name="uploaded_image[]">
-<!--                            <input type="hidden" name="imageComment" id="imageComment">-->
-                            <!--                                <button class="home-title-bar-buttons" type="submit">Upload</button>-->
                         </div>
                 </div>
                 <div id="album-create-selected-images-preview-container"></div>
@@ -75,11 +69,7 @@
                     </button>
                 </div>
             </form>
-
-<!--            th:object="${albumModel}" th:action="@{/albums/create-album}"-->
-<!--            th:field="*{albumComment}"-->
             <form id="album-create-form-comment">
-                <!--                <input type="hidden" name="albumId">-->
                 <h3>Add Comment</h3>
                 <input type="text" name="albumComment" id="album-comment" placeholder="What's so special about this album?" required>
                 <div class="album-create-btns">
@@ -93,9 +83,7 @@
             </form>
 
             <form id="album-create-form-access-type">
-<!--                <input type="hidden" name="albumId">-->
                 <h3>Access type</h3>
-<!--                <input type="text" name="albumAccessType" placeholder="Album access type" required>-->
                 <select id="accessType">
                     <option
                             th:each="type : ${accessTypes}"
@@ -108,7 +96,7 @@
                     <button type="button" class="home-title-bar-buttons" id="album-create-form-access-type-back">
                         Back
                     </button>
-                    <button type="submit" class="home-title-bar-buttons" id="album-create-form-access-type-submit">
+                    <button type="button" class="home-title-bar-buttons" id="album-create-form-access-type-submit">
                         Create album
                     </button>
                 </div>
@@ -121,34 +109,56 @@
                 <div class="step"><p>Comment</p></div>
                 <div class="step"><p>Access type</p></div>
             </div>
-<!--            <h6>File name</h6>-->
-<!--            <p id="pre-upload-image-title"></p>-->
-<!--            <h6>Extension</h6>-->
-<!--            <p id="pre-upload-image-extension"></p>-->
-<!--            <h6>File size</h6>-->
-<!--            <p id="pre-upload-image-size"></p>-->
-<!--            <form action="#">-->
-<!--                <label for="image-comment"><h6>Comment</h6></label>-->
-<!--                <br>-->
-<!--                <textarea id="image-comment" name="image-comment" rows="2" cols="50" placeholder="Type comment...">-->
-
-<!--                    </textarea>-->
-<!--            </form>-->
-<!--            <br>-->
-<!--            <h6>Tag friends</h6>-->
-<!--            <br>-->
-<!--            <div class="profile-buttons-container">-->
-<!--                <button type="button" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;" onclick="uploadFile('uploaded_image','image-upload-form')">Save</button>-->
-<!--                <button type="button" class="profile-buttons" onclick="closeWindow('pre-upload-image-modal')">Close</button>-->
-<!--            </div>-->
         </div>
     </div>
 </div>
 
+<!--ALBUM EDIT MODAL-->
+<div class="pre-upload-image-modal" id="album-details-edit-modal">
+    <div class="edit-details-container">
+        <div class="edit-modal-title">
+            <h5>Album details</h5>
+        </div>
+        <form action="#" id="album-info-edit-form" th:action="@{/albums/edit-album-details}" th:object="${albumModel}" method="POST">
+            <input type="hidden" name="album_id" id="album_id" th:field="*{albumId}">
+            <h6><i class="fas fa-heading edit-form-icons"></i>Album name</h6>
+            <input type="text" class="image-info-labels" name="album_name" id="album_name" th:field="*{albumName}">
+            <h6><i class="fas fa-fingerprint edit-form-icons"></i>Access type</h6>
+            <select id="album_access_type" th:field="*{albumAccessType}">
+                <option
+                        th:each="type : ${accessTypes}"
+                        th:value="${type}"
+                        th:text="${type}"
+                >
+                </option>
+            </select>
+            <h6><i class="fas fa-calendar-day edit-form-icons"></i>Date created</h6>
+            <input type="text" class="image-info-labels" disabled="disabled" name="album_date_created" id="album_date_created">
+            <br>
+            <form action="#">
+                <label for="album_comment"><h6><i class="fas fa-comment-dots edit-form-icons"></i>Comment</h6></label>
+                <br>
+                <textarea id="album_comment" name="album_comment" placeholder="Type comment..." th:field="*{albumComment}">
+
+                </textarea>
+            </form>
+            <br>
+            <div class="profile-buttons-container edit-details-buttons-container">
+                <button type="submit" class="profile-buttons edit-cred-btn" id="album-info-edit-btn" style="padding: 10px 25px;">Save changes</button>
+                <button type="button" class="profile-buttons" onclick="closeWindow('album-details-edit-modal')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="album-create-select-gallery-images-container">
+    <div id="album-create-gallery-images-add-btn-container"><button type="submit" class="edit-cred-btn placeholder-create-btn" id="add-gallery-images-btn-album-create">Add selected images</button></div>
     <div th:unless="${#lists.size(images) == 0}" id="album-create-gallery-images">
         <div id="album-create-gallery-image-wrapper" th:each="img : ${images}">
-            <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" alt="">
+            <label class="tickLabel" for="tick">
+                <input type="checkbox" class="tick" id="tick" name="tick">
+            </label>
+            <img class="display-image gallery-select-image" th:src="@{${'/home/image/' + img.getImageId()}}" onclick="albumCreateImageCheck(this)" alt="">
         </div>
     </div>
 </div>
@@ -156,7 +166,7 @@
 <div class="content">
     <div class="side-nav">
         <div class="side-nav-title">
-            <h2>Albums</h2>
+            <h3>Albums</h3>
         </div>
         <div class="nav-user-info">
             <div class="image-outer-area-top-bar">
@@ -212,15 +222,59 @@
                 <h4 th:text="${user.getFirstname() + ' albums'}">Users albums</h4>
             </div>
         </div>
-        <div th:unless="${#lists.size(albums) == 0}" class="outer-container-for-images">
-            <div th:each="album : ${albums}">
-                <h5 th:text="${'ALBUM NAME' + album.getName()}"></h5>
-                <h5 th:text="${'DATE CREATED' + album.getDateCreated()}"></h5>
-                <h5 th:text="${'COMMENT' + album.getComment()}"></h5>
+
+        <div th:unless="${#lists.size(albums) == 0}" class="outer-album-container">
+            <div class="album-item" th:each="album : ${albums}">
+                <div class="album-cover" th:if="${#lists.size(album.getImages()) < 3}">
+                    <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getImages()) == 0}">
+                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}" th:unless="${#lists.size(album.getImages()) == 0}">
+                </div>
+                <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getImages()) >= 3}">
+                    <div class="album-cover-main-img-container">
+                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}">
+                    </div>
+                    <div class="album-cover-multiple-imgs">
+                        <div class="album-cover-small-img">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(1).getImageId()}}">
+                        </div>
+                        <div class="album-cover-small-img">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(2).getImageId()}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="album-short-info">
+                    <div class="album-menu-options" id="t">
+                        <ul>
+                            <li><a href=""><i class="far fa-eye"></i>View</a></li>
+                            <li><a href=""><i class="fas fa-share"></i>Share</a></li>
+                            <li><a href=""><i class="far fa-trash-alt"></i>Delete</a></li>
+                        </ul>
+                    </div>
+                    <div class="album-short-info-div1">
+                        <div class="album-short-info-details">
+                            <p th:text="${'Title: ' + album.getName()}">Title: Wedding album</p>
+                            <p th:text="${'Date created: ' + album.getDate_created()}">Date created: 02/09/2020</p>
+                            <p th:text="${album.getImages().size() + ' images'}">0 images</p>
+                        </div>
+                        <div class="album-short-info-details">
+                            <i class="fas fa-ellipsis-v album-item-dot-icon" onclick ="showMenu(this);"></i>
+                        </div>
+                    </div>
+                    <div class="album-short-info-div2">
+                        <span th:text="${album.getAlbumAccessType()}">Public</span>
+                        <div class="album-short-info-buttons">
+                            <button type="button">View album</button>
+                            <button type="button" th:albumId="${album.getId()}" th:albumName="${album.getName()}"
+                                    th:albumComment="${album.getComment()}" th:albumAccessType="${album.getAlbumAccessType()}" th:albumDateCreated="${album.getDate_created()}"
+                            onclick="showAlbumDetailsEditModal(this.getAttribute('albumId'),this.getAttribute('albumName'), this.getAttribute('albumComment'), this.getAttribute('albumAccessType'),this.getAttribute('albumDateCreated'))">Edit details</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </div>
 
 <script src="../static/js/jquery-3.6.0.js" th:src="@{/js/jquery-3.6.0.js}"></script>
@@ -231,52 +285,6 @@
     const album_create_gallery_preview_bg = document.getElementById("album-create-select-gallery-images-container");
     const album_create_gallery_open = document.getElementById("album-create-gallery-select");
     const album_create_gallery_images = document.getElementById("album-create-gallery-images");
-
-    album_create_gallery_open.addEventListener('click', function (){
-        album_create_gallery_preview_bg.style.display = "flex";
-        album_create_gallery_images.style.display = "flex";
-    })
-
-    const images_selected_during_album_create = document.getElementById("uploaded_image_to_album");
-    const album_create_images_preview_container = document.getElementById("album-create-selected-images-preview-container")
-
-    images_selected_during_album_create.addEventListener('change', function (event){
-        let fragment = document.createDocumentFragment();
-        for(i = 0;i < event.target.files.length;i++){
-            let img_container = document.createElement('div');
-            let img = document.createElement('img');
-            img.className = 'album-image-preview';
-            img_container.className = 'album-image-preview-container';
-            img_container.appendChild(img);
-            img.src = URL.createObjectURL(event.target.files[i]);
-            fragment.appendChild(img_container);
-        }
-        album_create_images_preview_container.style.display = "flex";
-        album_create_images_preview_container.appendChild(fragment);
-    })
-
-    const create_album_top_nav = document.getElementsByClassName("album-create-btns-nav")[0];
-    const create_album_placeholder = document.getElementsByClassName("album-create-btns-nav")[1];
-    const create_album_modal = document.getElementById("create-album-modal");
-
-    create_album_top_nav.addEventListener('click', function (){
-        create_album_modal.style.display = "flex";
-    })
-
-    create_album_placeholder.addEventListener('click', function (){
-        create_album_modal.style.display = "flex";
-    })
-
-    window.onclick = function(event) {
-        if (event.target === create_album_modal) {
-            // album_create_images_preview_container.style.display = "none";
-            create_album_modal.style.display = "none";
-        }
-        if(event.target === album_create_gallery_preview_bg){
-            album_create_gallery_preview_bg.style.display = "none";
-            album_create_gallery_images.style.display = "none";
-        }
-    }
 
     const form_title = document.getElementById("album-create-form-title");
     const form_images = document.getElementById("album-create-form-images");
@@ -291,39 +299,89 @@
     const form_access_type_back = document.getElementById("album-create-form-access-type-back");
     const form_access_type_submit = document.getElementById("album-create-form-access-type-submit");
 
-    // function createAlbum(){
-    //     const album_name = document.getElementById("album-name").value;
-    //     const album_comment = document.getElementById("album-comment").value;
-    //     const album_id = document.getElementById("album-id").value;
-    //
-    //      const album = {
-    //         'albumId' : album_id,
-    //         'albumName' : album_name,
-    //         'albumComment' : album_comment
-    //     }
-    // }
+    const images_selected_during_album_create = document.getElementById("uploaded_image_to_album");
+    const album_create_images_preview_container = document.getElementById("album-create-selected-images-preview-container")
 
-    function getAlbumName(event){
-        event.preventDefault();
+    let album_image_select = document.getElementsByClassName("gallery-select-image");
+    let album_image_select_checkbox = document.getElementsByClassName("tick");
 
-        const formData = new FormData(event.target);
-        const name = formData.get('albumName');
-        const comment = formData.get('albumComment');
-        // alert("CLICKED")
-        console.log({name});
-        console.log({comment});
+    const add_gallery_images_btn_album_create = document.getElementById("add-gallery-images-btn-album-create");
+
+    //album_create_gallery_open.addEventListener('click', function ()
+
+    $(album_create_gallery_open).on('click', function (){
+        album_create_gallery_preview_bg.style.display = "flex";
+        album_create_gallery_images.style.display = "flex";
+    });
+
+    let selected_gallery_images_on_album_create = [];
+
+    function albumCreateImageCheck(img){
+        for(let i = 0;i < album_image_select.length;i++){
+            if(album_image_select[i] === img){
+                album_image_select_checkbox[i].checked ? album_image_select_checkbox[i].checked = false : album_image_select_checkbox[i].checked = true;
+                if(album_image_select_checkbox[i].checked === true){
+                    selected_gallery_images_on_album_create.push(album_image_select[i]);
+                }
+            }
+        }
     }
 
-    function getAlbumComment(event){
-        event.preventDefault();
+    $(add_gallery_images_btn_album_create).on('click', function (){
+        if(selected_gallery_images_on_album_create.length > 0){
+            $(album_create_images_preview_container).css('display', 'flex');
 
-        const formData = new FormData(event.target);
-        const comment = formData.get('albumComment');
+            for(let i = 0;i < selected_gallery_images_on_album_create.length;i++){
+                let img_container = document.createElement('div');
+                img_container.className = 'album-image-preview-container';
+                selected_gallery_images_on_album_create[i].className = 'album-image-preview';
+                selected_gallery_images_on_album_create[i].removeAttribute("onclick");
+                img_container.appendChild(selected_gallery_images_on_album_create[i]);
+                album_create_images_preview_container.appendChild(img_container);
+            }
+        }
+        album_create_gallery_preview_bg.style.display = "none";
+    });
 
-        console.log({comment});
+    $(images_selected_during_album_create).on('change', function (event){
+        let fragment = document.createDocumentFragment();
+        for(let i = 0;i < event.target.files.length;i++){
+            let img_container = document.createElement('div');
+            let img = document.createElement('img');
+            img.className = 'album-image-preview';
+            img_container.className = 'album-image-preview-container';
+            img_container.appendChild(img);
+            img.src = URL.createObjectURL(event.target.files[i]);
+            fragment.appendChild(img_container);
+        }
+        album_create_images_preview_container.style.display = "flex";
+        album_create_images_preview_container.appendChild(fragment);
+    });
+
+    const create_album_top_nav = document.getElementsByClassName("album-create-btns-nav")[0];
+    const create_album_placeholder = document.getElementsByClassName("album-create-btns-nav")[1];
+    const create_album_modal = document.getElementById("create-album-modal");
+
+
+    $(create_album_top_nav).on('click', function (){
+        create_album_modal.style.display = "flex";
+    });
+
+
+    $(create_album_placeholder).on('click', function (){
+        create_album_modal.style.display = "flex";
+    });
+
+    window.onclick = function(event) {
+        if (event.target === create_album_modal) {
+            // album_create_images_preview_container.style.display = "none";
+            create_album_modal.style.display = "none";
+        }
+        if(event.target === album_create_gallery_preview_bg){
+            album_create_gallery_preview_bg.style.display = "none";
+            album_create_gallery_images.style.display = "none";
+        }
     }
-
-    // form_title.addEventListener('submit', getAlbumName);
 
     const progress_step = document.getElementById("progress-step");
 
@@ -363,13 +421,7 @@
         progress_step.style.width = "75%";
     })
 
-    form_access_type_submit.addEventListener('click',function (event){
-        // for(let i = 0;i < document.forms.length; i++){
-        //     document.forms[0].submit();
-        //     document.forms[2].submit();
-        //     event.preventDefault();
-        // }
-
+    $(form_access_type_submit).on('click', function (event){
         const id = document.getElementById("album-id");
         const name = document.getElementById("album-name");
         const comment = document.getElementById("album-comment");
@@ -385,52 +437,13 @@
         let image = {};
         let albumImagesFormData = new FormData();
 
-
-        // for(let i = 0;i < images.length;i++){
-        //     albumImagesFormData.append('images[' + i + ']',images[i]);
-        //     // image = {
-        //     //     'image_name' : images[i].name,
-        //     //     'content_type' : images[i].type,
-        //     //     'image_size' : images[i].size,
-        //     //     'comment' : ''
-        //     // }
-        //
-        //     //albumImages.push(image);
-        // }
-
-
         const i = id.value;
         const n = name.value;
         const c = comment.value;
         const acc = accessType.value;
 
 
-        // document.forms[0].submit();
-        // event.preventDefault();
-        // document.forms[2].submit();
-        // event.preventDefault();
-
-        // let albumImagesFormData = new FormData();
-
         let AlbumModel = [];
-
-        // let form1 = document.forms[0];
-        // let formData1 = new FormData(form1);
-        // let formValues1 = formData1.entries();
-        //
-        // let form2 = document.forms[2];
-        // let formData2 = new FormData(form2);
-        // let formValues2 = formData2.entries();
-
-        // a.append('albumName', formValues1.next().value[0]);
-        // a.append('albumComment', formValues2.next().value[0]);
-
-        // AlbumModel = {
-        //     'albumId' : '',
-        //     'albumName' : n,
-        //     'albumComment': c,
-        //     'albumAccessType' : acc
-        // }
 
         AlbumModel.push({
                 'albumName' : n,
@@ -443,16 +456,13 @@
 
         for(let i = 0;i < images.length;i++){
             albumImagesFormData.append('uploaded_image[' + i + ']',images[i]);
-            // image = {
-            //     'image_name' : images[i].name,
-            //     'content_type' : images[i].type,
-            //     'image_size' : images[i].size,
-            //     'comment' : ''
-            // }
-
-            //albumImages.push(image);
         }
-        //albumImagesFormData.append('image', images[0]);
+
+        if(selected_gallery_images_on_album_create.length > 0){
+            for(let i = 0;i < selected_gallery_images_on_album_create.length;i++){
+                albumImagesFormData.append('img[' + i + ']',selected_gallery_images_on_album_create[i].src);
+            }
+        }
 
         for (let pair of albumImagesFormData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
@@ -471,17 +481,6 @@
         //         alert("Album created successfully");
         //     }
         //     });
-        //
-        //     $.ajax({
-        //         url: url,
-        //         type:"POST",
-        //         processData:false,
-        //         contentType: false,
-        //         data: formData,
-        //         complete: function(data){
-        //             alert("success");
-        //         }
-        //     });
 
             $.ajax({
                 type: "POST",
@@ -492,81 +491,56 @@
                 data: albumImagesFormData,
                 headers: {"X-CSRF-TOKEN" : token},
                 success: function () {
-                    window.location.reload();
+                    location.reload();
                     //alert("Album created successfully");
                 }
             });
+    });
 
+    let it = document.getElementById("first");
+    let item = document.getElementsByClassName("album-menu-options")[0];
 
-        // $.ajax({
-        //     type: "POST",
-        //     url: '/albums/create-album',//do not put the full url,you need use an absolute url
-        //     enctype: 'multipart/form-data',
-        //     processData: false,
-        //     contentType: false,
-        //     data: albumImagesFormData,
-        //     headers: {"X-CSRF-TOKEN" : token},
-        //     success: function () {
-        //         alert("Album created successfully");
-        //     }
-        // });
+    const outer_container = document.getElementById("main-content-outer-container");
 
-        // $.ajax({
-        //     type: "POST",
-        //     enctype: 'multipart/form-data',
-        //     headers: { "X-CSRF-TOKEN": token },
-        //     data: albumImagesFormData,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function () {
-        //         alert("Album created successfully");
-        //     }
-        // });
+    let dots = document.getElementsByClassName("album-item-dot-icon");
+    let menus = document.getElementsByClassName("album-menu-options");
+    let menu = document.getElementsByClassName("album-menu-options")[-1];
 
-        // username.innerHTML = "a";
-        // pw.innerHTML = "1";
+    function showMenu(img) {
+        for(let i = 0;i < dots.length;i++){
+            menu = menus[i];
+            if(dots[i] === img){
+                $(menu).toggle( "fast", function() {});
+            }
+        }
+    }
 
-        // console.log(a);
-        // console.log(JSON.stringify(albumImages));
-        //
-        // Creating a XHR object
-        // let xhrReq = new XMLHttpRequest();
-        // let endpoint = "/albums/create-album";
-        //
-        // //open a connection
-        // xhrReq.open("POST", endpoint);
-        //
-        // // Set the request header i.e. which type of content you are sending
-        // xhrReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        //
-        // // Create a state change callback
-        // // xhrReq.onreadystatechange = function (){
-        // //     if(xhrReq.readyState === 4 && xhrReq.status === 200){
-        // //         // Print received data from server
-        // //         // result.innerHTML = this.responseText;
-        // //     }
-        // // };
-        //
-        // const dataToSend = JSON.stringify(AlbumModel);
-        // console.log(dataToSend);
-        // xhrReq.send(dataToSend);
+    function showImageInfoModal(imageId, imageName, imageSize, imageExt, imgComment) {
+        $('#image-info-img-id').val(imageId ? imageId : '');
+        $('#image-info-img').attr("src", "/home/image/" + imageId);
+        $('#image-info-img-name').val(imageName ? imageName : '');
+        $('#image-info-img-size').val(imageSize ? imageSize + " kb" : '');
+        $('#image-info-img-extension').val(imageExt ? imageExt : '');
+        $('#image-info-img-comment').val(imgComment ? imgComment : '');
+        $('#image-info-modal').css({"display": "flex","justify-content":"center","align-items":"center"});
+    };
 
-        // for(let i = 0;i < document.forms.length;i++){
-        //     let form = document.forms[i];
-        //     let formData = new FormData(form);
-        //     let formValues = formData.entries();
-        //
-        //     a.append('albumName', formValues.next().value[0]);
-        //     a.append('albumImage', formValues.next().value[1]);
-        //     a.append('albumComment', formValues.next().value[2]);
-        //     a.append('albumAccessType', formValues.next().value[3]);
-        // }
+    function showAlbumDetailsEditModal(albumId,albumName,albumComment,albumAccessType,albumDateCreated){
+        $('#album_id').val(albumId ? albumId : '');
+        $('#album_name').val(albumName? albumName : '');
+        $('#album_comment').val(albumComment ? albumComment : '');
+        $('#album_access_type').val(albumAccessType ? albumAccessType : '');
+        $('#album_date_created').val(albumDateCreated ? albumDateCreated : '');
+        $('#album-details-edit-modal').css({"display": "flex","justify-content":"center","align-items":"center"});
+    };
 
-        // form_title.submit();
-        // form_comment.submit();
-        // getAlbumName(event);
-        // // getAlbumComment(event);
-    })
+    $('#album-info-edit-btn').on('click',function (){
+        $('#album-info-edit-form').trigger("submit");
+    });
+
+    function closeWindow(elementId){
+        document.getElementById(elementId).style.display = "none";
+    }
 
 </script>
 </body>

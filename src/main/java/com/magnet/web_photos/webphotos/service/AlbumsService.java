@@ -18,10 +18,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AlbumsService {
     private AlbumsRepository albumsRepository;
     private UserRepository userRepository;
@@ -33,19 +35,27 @@ public class AlbumsService {
         this.imageRepository = imageRepository;
     }
 
-    public List<AlbumDTO> getAllAlbums(Long userId){
+    public List<AlbumDTO> getUsersAlbums(Long userId){
+        User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
+        return user.getAlbums()
+                .stream()
+                .map(album -> AlbumConverters.convertAlbumToAlbumDTO(album))
+                .collect(Collectors.toList());
+    }
+
+    public List<AlbumDTO> getAllAlbums(){
         return albumsRepository.findAll()
                 .stream()
                 .map(album -> AlbumConverters.convertAlbumToAlbumDTO(album))
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void createAlbum(AlbumModel albumModel, Authentication authentication) throws IOException {
+    public Album createAlbum(AlbumModel albumModel, Authentication authentication) throws IOException {
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Album album = new Album();
         album.setName(albumModel.getAlbumName());
         album.setComment(albumModel.getAlbumComment());
+        album.setAlbumAccessType(albumModel.getAlbumAccessType());
         AtomicReference<Long> album_size = new AtomicReference<>(0L);
         AtomicReference<Long> id = new AtomicReference<>(0L);
         List<Img> images = albumModel.getAdded_images()
@@ -70,8 +80,25 @@ public class AlbumsService {
         user.addAlbum(album);
         album.setImages(images);
         album.setAlbum_size(album_size.toString());
-        album.setDate_created(LocalDate.now());
+        //album.setDate_created(LocalDate.now());
 
         albumsRepository.save(album);
+
+        return album;
     }
+
+    public void addImagesToAlbum(Album album, Set<Img> images){
+        album.getImages().addAll(images);
+    }
+
+    public void editAlbumDetails(AlbumModel albumModel){
+        albumsRepository.findById(albumModel.getAlbumId())
+                .map(album -> {
+                    album.setName(Optional.ofNullable(albumModel.getAlbumName()).orElse(albumModel.getAlbumName()));
+                    album.setComment(Optional.ofNullable(albumModel.getAlbumComment()).orElse(albumModel.getAlbumComment()));
+                    album.setAlbumAccessType(Optional.ofNullable(albumModel.getAlbumAccessType()).orElse(album.getAlbumAccessType()));
+                    return albumsRepository.save(album);
+                });
+    }
+
 }

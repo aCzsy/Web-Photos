@@ -105,7 +105,7 @@ public class HomeController {
 
     @PostMapping("/home/edit-image-details")
     public String editImageDetails(@ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws InterruptedException {
-        successNote = "Image has been successfully updated.";
+        successNote = "Image details have been successfully updated.";
         imageService.editImageDetails(imageModel,authentication);
         return "redirect:/home";
     }

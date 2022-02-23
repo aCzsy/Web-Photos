@@ -9,17 +9,19 @@ public class AlbumDTO {
     private Long id;
     private String name;
     private String comment;
-    private LocalDate dateCreated;
+    private LocalDate date_created;
+    private String albumAccessType;
     private List<Img> images;
 
     public AlbumDTO() {
     }
 
-    public AlbumDTO(Long id, String name, String comment, LocalDate dateCreated, List<Img> images) {
+    public AlbumDTO(Long id, String name, String comment, LocalDate date_created, String albumAccessType, List<Img> images) {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.dateCreated = dateCreated;
+        this.date_created = date_created;
+        this.albumAccessType = albumAccessType;
         this.images = images;
     }
 
@@ -47,12 +49,20 @@ public class AlbumDTO {
         this.comment = comment;
     }
 
-    public LocalDate getDateCreated() {
-        return dateCreated;
+    public LocalDate getDate_created() {
+        return date_created;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setDate_created(LocalDate date_created) {
+        this.date_created = date_created;
+    }
+
+    public String getAlbumAccessType() {
+        return albumAccessType;
+    }
+
+    public void setAlbumAccessType(String albumAccessType) {
+        this.albumAccessType = albumAccessType;
     }
 
     public List<Img> getImages() {

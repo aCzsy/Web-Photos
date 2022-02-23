@@ -2,6 +2,8 @@ package com.magnet.web_photos.webphotos.controller;
 
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.model.ImageModel;
+import com.magnet.web_photos.webphotos.model.UserCredentialsModel;
+import com.magnet.web_photos.webphotos.model.UsersAboutInfo;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.FriendRequestService;
 import com.magnet.web_photos.webphotos.service.UserService;
@@ -36,8 +38,12 @@ public class ProfileController {
     }
 
     @GetMapping("/profile")
-    public String getProfilePage(@ModelAttribute("imageModel") ImageModel imageModel, Model model, Authentication authentication){
+    public String getProfilePage(@ModelAttribute("imageModel") ImageModel imageModel, Model model, Authentication authentication,
+                                 @ModelAttribute("userCredentialsModel") UserCredentialsModel userCredentialsModel, @ModelAttribute("userAboutInfo")UsersAboutInfo usersAboutInfo){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+//        if(userRepository.findUserById(userCredentialsModel.getUserId()) != null){
+//            foundUser = userRepository.findUserById(userCredentialsModel.getUserId());
+//        }
         model.addAttribute("user",foundUser);
         model.addAttribute("number_of_friends",friendRequestService.getAllAcceptedRequests(foundUser.getId()).size());
         return "profile";
@@ -62,6 +68,34 @@ public class ProfileController {
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");
         httpServletResponse.getOutputStream().write(currentUser.getUser_image());
         httpServletResponse.getOutputStream().close();
+    }
+
+    @PostMapping("/profile/edit-user-details")
+    public String editUserDetails(@ModelAttribute("userCredentialsModel") UserCredentialsModel userCredentialsModel, Model model){
+        String userNameError = null;
+        String passwordError = null;
+
+        if(!userService.isUsernameAvailable(userCredentialsModel.getUserName())){
+            userNameError = "Username already exists";
+            model.addAttribute(userNameError, "userNameError");
+        }
+
+        if(!userCredentialsModel.getNewPassword().equals(userCredentialsModel.getRepeatNewPassword())){
+            passwordError = "Passwords don't match";
+            model.addAttribute(passwordError, "passwordError");
+        }
+
+        if(userNameError == null && passwordError == null){
+            userService.editUser(userCredentialsModel);
+        }
+
+        return "profile";
+    }
+
+    @PostMapping("/profile/edit-user-info")
+    public String editUserAboutInfo(@ModelAttribute("userAboutInfo")UsersAboutInfo usersAboutInfo){
+        userService.editUserAboutInfo(usersAboutInfo);
+        return "redirect:/profile";
     }
 
 }

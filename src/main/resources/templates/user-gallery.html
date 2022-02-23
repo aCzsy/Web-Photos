@@ -23,45 +23,10 @@
 </head>
 <body onload="document.body.style.opacity='1'">
 
-<!--Image information-->
-<!--<div class="pre-upload-image-modal" id="image-info-modal">-->
-<!--    <div class="pre-upload-image-modal-content">-->
-<!--        <form action="#" id="image-info-form" th:action="@{/home/edit-image-details}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">-->
-<!--            <input type="hidden" name="image-info-img-id" id="image-info-img-id" th:field="*{imageId}">-->
-<!--            <div class="pre-upload-image-wrapper">-->
-<!--                <img id="image-info-img" alt="" th:field="*{uploaded_image}"/>-->
-<!--            </div>-->
-<!--            <div class="pre-upload-image-details">-->
-<!--                <h6>File name</h6>-->
-<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-name" id="image-info-img-name">-->
-<!--                <h6>Extension</h6>-->
-<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-extension" id="image-info-img-extension">-->
-<!--                <h6>File size</h6>-->
-<!--                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-size" id="image-info-img-size">-->
-<!--                <br>-->
-<!--                <form action="#">-->
-<!--                    <label for="image-info-img-comment"><h6>Comment</h6></label>-->
-<!--                    <br>-->
-<!--                    <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">-->
-
-<!--                                    </textarea>-->
-<!--                </form>-->
-<!--                <br>-->
-<!--                <h6>Tag friends</h6>-->
-<!--                <br>-->
-<!--                <div class="profile-buttons-container">-->
-<!--                    <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>-->
-<!--                    <button type="button" class="profile-buttons" onclick="closeWindow('image-info-modal')">Close</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
-
 <div class="content">
     <div class="side-nav">
         <div class="side-nav-title">
-            <h2>Gallery</h2>
+            <h3>Gallery</h3>
         </div>
         <div class="nav-user-info">
             <div class="image-outer-area-top-bar">
@@ -86,69 +51,240 @@
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
-    <div class="main-content">
-        <div class="home-title-bar sticky-top">
-            <!--    <div id="title">-->
-            <!--        <h2>Photos</h2>-->
-            <!--    </div>-->
-            <!--    <div class="nav-search-bar">-->
-            <!--        <label>-->
-            <!--            <input type="search" name="search_student" placeholder="Search people">-->
-            <!--        </label>-->
-            <!--        <button type="submit" class="btn search-btn text-dark border-0 ml-n5">-->
-            <!--            <i class="fa fa-search"></i>-->
-            <!--        </button>-->
-            <!--    </div>-->
+    <div class="main-content" id="main-parent">
+        <div class="home-title-bar nav-with-tabs sticky-top">
+            <div class="navigation-tabs">
+                <button class="nav-tab" data-for-tab="1">Gallery</button>
+                <button class="nav-tab" data-for-tab="2">Albums</button>
+                <button class="nav-tab" data-for-tab="3">Profile</button>
+            </div>
             <div id="home-title-bar-menu">
-                <!--        <div class="image-outer-area-top-bar">-->
-                <!--            <div class="image-inner-area-top-bar">-->
-                <!--                <img th:if="${user.getUser_image() != null}" class="profile-image"-->
-                <!--                     th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">-->
-                <!--                <img th:unless="${user.getUser_image() != null}" class="profile-image"-->
-                <!--                     src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">-->
-                <!--            </div>-->
-                <!--        </div>-->
                 <form action="#" th:action="@{/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
         </div>
 
-        <div class="main-content-placeholder" th:if="${#lists.size(userPhotos)==0}">
-            <i class="far fa-images fa-3x placeholder-icon"></i>
-            <p th:text="${user.getFirstname() + ' s gallery is empty'}"></p>
-        </div>
 
-        <div class="title-outer-container" th:unless="${#lists.size(userPhotos) == 0}">
-            <div class="user-list-title">
-                <h4 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h4>
+        <!--USER'S GALLERY CONTENT-->
+        <div class="main-content-page-container" data-tab="1">
+            <div class="main-content-placeholder" th:if="${#lists.size(userPhotos)==0}">
+                <i class="far fa-images fa-3x placeholder-icon"></i>
+                <p th:text="${user.getFirstname() + ' s gallery is empty'}"></p>
             </div>
-        </div>
-        <div th:unless="${#lists.size(userPhotos) == 0}" class="outer-container-for-images">
-            <div class="image-container" th:each="img : ${userPhotos}">
-                <div class="image-menu-top">
-                    <a class="image-menu-top-element" href="#">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                    <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
+
+            <div class="title-outer-container" th:unless="${#lists.size(userPhotos) == 0}">
+                <div class="user-list-title">
+                    <h4 th:text="${user.getFirstname() + ' gallery'}">Users gallery</h4>
                 </div>
-                <div class="image-bottom-menu">
-                    <a><i class="far fa-edit fa-2x"></i></a>
-                    <a><i class="fas fa-share-alt fa-2x"></i></a>
-                    <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
-                </div>
-                <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
             </div>
-        </div>
-    </div>
-    <!--    <div class="online-friends-list-container">-->
-    <!--        <h5>Friends online</h5>-->
-    <!--        <div class="online-friends-list">-->
-    <!--            <p>Friend 1</p>-->
-    <!--        </div>-->
-    <!--    </div>-->
+
+            <div th:unless="${#lists.size(userPhotos) == 0}" class="outer-container-for-images">
+                <div class="image-container" th:each="img : ${userPhotos}">
+                    <div class="image-menu-top">
+                        <a class="image-menu-top-element" href="#">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </div>
+                    <div class="image-bottom-menu">
+                        <a><i class="far fa-edit fa-2x"></i></a>
+                        <a><i class="fas fa-share-alt fa-2x"></i></a>
+                        <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
+                    </div>
+                    <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
+                </div>
+            </div>
+        </div> <!--USER'S GALLERY CONTENT END-->
+
+        <!--USER'S ALBUMS CONTENT-->
+        <div class="main-content-page-container" data-tab="2">
+            <div class="main-content-placeholder" th:if="${#lists.size(userAlbums)==0}">
+                <i class="far fa-images fa-3x placeholder-icon"></i>
+                <p th:text="${user.getFirstname() + ' has not created an album yet'}"></p>
+            </div>
+
+            <div class="title-outer-container" th:unless="${#lists.size(userAlbums) == 0}">
+                <div class="user-list-title">
+                    <h4 th:text="${user.getFirstname() + 's albums'}">User's albums</h4>
+                </div>
+            </div>
+
+            <div th:unless="${#lists.size(userAlbums) == 0}" class="outer-album-container">
+                <div class="album-item" th:each="album : ${userAlbums}">
+                    <div class="album-cover" th:if="${#lists.size(album.getImages()) < 3}">
+                        <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getImages()) == 0}">
+                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}" th:unless="${#lists.size(album.getImages()) == 0}">
+                    </div>
+                    <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getImages()) >= 3}">
+                        <div class="album-cover-main-img-container">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}">
+                        </div>
+                        <div class="album-cover-multiple-imgs">
+                            <div class="album-cover-small-img">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(1).getImageId()}}">
+                            </div>
+                            <div class="album-cover-small-img">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(2).getImageId()}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="album-short-info">
+                        <div class="album-menu-options" id="t">
+                            <ul>
+                                <li><a href=""><i class="far fa-eye"></i>View</a></li>
+                                <li><a href=""><i class="fas fa-share"></i>Share request</a></li>
+                            </ul>
+                        </div>
+                        <div class="album-short-info-div1">
+                            <div class="album-short-info-details">
+                                <p th:text="${'Title: ' + album.getName()}">Title: Wedding album</p>
+                                <p th:text="${'Date created: ' + album.getDate_created()}">Date created: 02/09/2020</p>
+                                <p th:text="${album.getImages().size() + ' images'}">0 images</p>
+                            </div>
+                            <div class="album-short-info-details">
+                                <i class="fas fa-ellipsis-v album-item-dot-icon" onclick ="showAlbumMenu(this);"></i>
+                            </div>
+                        </div>
+                        <div class="album-short-info-div2">
+                            <span th:text="${album.getAlbumAccessType()}">Public</span>
+                            <div class="album-short-info-buttons">
+                                <button type="button">View album</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!--USER'S ALBUMS CONTENT END-->
+
+        <!--USER'S PROFILE CONTENT-->
+        <div class="main-content-page-container" data-tab="3">
+            <div class="profile-outer-container">
+                <div class="profile-inner-container">
+                    <div class="profile-image-wrapper">
+                        <div class="image-outer-area">
+                            <div class="image-inner-area">
+                                <img th:if="${user.getUser_image() != null}" class="profile-image"
+                                     th:src="@{'/profile/get-users-profile-picture/' + (userId=${user.getId()})}" alt="Profile image">
+                                <img th:unless="${user.getUser_image() != null}" class="profile-image"
+                                     src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-info-inner-wrapper">
+                            <div id="profile-user-name-wrapper">
+                                <h3 th:text="${user.getFirstname() + ' '}">Username</h3>
+                                <h3 th:text="${user.getLastname()}">Lastname</h3>
+                            </div>
+                            <div id="user-stats">
+                                <div class="user-stats-container">
+                                    <p th:text="${user.getImages().size() + ' photos'}">0 photos</p>
+                                </div>
+                                <div class="user-stats-container">
+                                    <p th:text="${user.getAlbums().size() + ' albums'}">0 albums</p>
+                                </div>
+                                <div class="user-stats-container">
+                                    <p th:text="${users_number_of_friends + ' friends'}">0 friends</p>
+                                </div>
+                            </div>
+                            <h5 th:text="'About ' + ${user.firstname}">About user</h5>
+                            <div th:if="${user.getAbout_info() == null}">
+                                <p th:text="${user.getFirstname() + ' has not written anything here yet...'}" class="paragraph-color"></p>
+                            </div>
+                            <div th:unless="${user.getAbout_info() == null}">
+                                <p th:text="${user.getAbout_info()}" class="paragraph-color"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!--USER'S PROFILE CONTENT END-->
+
+    </div> <!--END OF MAIN CONTENT-->
 </div>
+<script>
+
+    function setupTabs(){
+        document.querySelectorAll(".nav-tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                const sidebar = tab.parentElement;
+                const tabsContainer = sidebar.parentElement;
+                const tabNum = tab.dataset.forTab;
+                const main_parent = document.getElementById("main-parent");
+                //const tabToActivate = tabsContainer.querySelector(`.main-content-page-container[data-tab="${tabNum}"]`);
+                const tabToActivate = main_parent.querySelector(`.main-content-page-container[data-tab="${tabNum}"]`);
+
+                console.log(sidebar);
+                console.log(tabsContainer);
+                console.log(tabNum);
+                console.log(tabToActivate);
+
+                sidebar.querySelectorAll(".nav-tab").forEach(tab => {
+                    tab.classList.remove("nav-tab-active");
+                });
+
+                main_parent.querySelectorAll(".main-content-page-container").forEach(content => {
+                    console.log("FIRED");
+                    content.classList.remove("tab-content-active");
+                });
+
+                tab.classList.add("nav-tab-active");
+                tabToActivate.classList.add("tab-content-active");
+
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        setupTabs();
+
+        document.querySelectorAll(".nav-with-tabs").forEach(tabsContainer => {
+            tabsContainer.querySelector(".navigation-tabs .nav-tab").click();
+        });
+    });
+
+    // function openTab(event, contentName){
+    //     let content_container;
+    //     let nav_tabs;
+    //     let current_tab;
+    //
+    //     content_container = document.getElementsByClassName("main-content-page-container");
+    //     nav_tabs = document.getElementsByClassName("nav-tab");
+    //
+    //     // for(let i = 0;i < content_container.length;i++){
+    //     //     if(content_container[i] === el){
+    //     //         current_tab = content_container[i];
+    //     //     }
+    //     // }
+    //
+    //     for(let i = 0;i < content_container.length;i++){
+    //         content_container[i].style.display = "none";
+    //     }
+    //
+    //     for(let i = 0;i < nav_tabs.length;i++){
+    //         nav_tabs[i].className = nav_tabs[i].className.replace(" active", "");
+    //     }
+    //
+    //     document.getElementById(contentName).style.display = "flex";
+    //     event.currentTarget.className += " active";
+    //
+    // }
+
+    let dots = document.getElementsByClassName("album-item-dot-icon");
+    let menus = document.getElementsByClassName("album-menu-options");
+    let menu;
+
+    function showAlbumMenu(img) {
+        for(let i = 0;i < dots.length;i++){
+            menu = menus[i];
+            if(dots[i] === img){
+                $(menu).toggle( "fast", function() {});
+            }
+        }
+    }
+</script>
 </body>
 </html>

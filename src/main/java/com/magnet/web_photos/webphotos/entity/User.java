@@ -21,6 +21,7 @@ public class User {
     private String firstname;
     private String lastname;
     private LocalDate date;
+    private String about_info = null;
     @Lob //Stored in the DB as BLOB
     private byte [] user_image;
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
@@ -134,6 +135,14 @@ public class User {
         this.date = date;
     }
 
+    public String getAbout_info() {
+        return about_info;
+    }
+
+    public void setAbout_info(String about_info) {
+        this.about_info = about_info;
+    }
+
     public List<Album> getAlbums() {
         return albums;
     }
@@ -148,11 +157,12 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id.equals(user.id) &&
-                username.equals(user.username);
+                firstname.equals(user.firstname) &&
+                lastname.equals(user.lastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username);
+        return Objects.hash(id, firstname, lastname);
     }
 }

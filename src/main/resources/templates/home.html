@@ -112,7 +112,7 @@
     <div class="content">
         <div class="side-nav">
             <div class="side-nav-title">
-                <h2>Photos</h2>
+                <h3>Photos</h3>
             </div>
             <div class="nav-user-info">
                 <div class="image-outer-area-top-bar">
@@ -198,7 +198,8 @@
                         <a><i class="fas fa-share-alt fa-2x"></i></a>
                         <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
                     </div>
-                    <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'" alt="">
+<!--                    th:onclick="'openLightbox();toSlide(' + ${img.getImageId()} + ')'"-->
+                    <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" onclick="openLightbox();toSlide(this)" alt="">
                 </div>
             </div>
         </div>
@@ -332,9 +333,9 @@
         $('#image-info-img-size').val(imageSize ? imageSize + " kb" : '');
         $('#image-info-img-extension').val(imageExt ? imageExt : '');
         $('#image-info-img-comment').val(imgComment ? imgComment : '');
-        // $('#image-info-modal').modal('show');
-        $('#image-info-modal').css({"display": "flex","justify-content":"center","aligh-items":"center"});
+        $('#image-info-modal').css({"display": "flex","justify-content":"center","align-items":"center"});
     }
+
 
     function revealMenu(imageId){
         const el = document.getElementsByClassName("image-menu")[imageId-1];
@@ -347,9 +348,15 @@
 
     // Initializing and running showSlide() to give a lightbox a default state.
 
-    let slideIndex = 1;
-    showSlide(slideIndex);
+    let imageList = document.getElementsByClassName('display-image');
+    let imageContainerLIST = document.getElementsByClassName('image-container');
+    let im;
 
+    let slideIndex = 0;
+    //showSlide(slideIndex);
+
+
+    console.log(slideIndex);
     //Clickable content functionality
 
     function openLightbox() {
@@ -367,34 +374,40 @@
     }
 
     function toSlide(n) {
-        showSlide(slideIndex = n);
+        for(let i = 0;i < imageList.length;i++){
+            if(imageList[i] === n){
+                slideIndex = i;
+                alert("SLIDEINDEX " + slideIndex)
+                showSlide(slideIndex);
+            }
+        }
     }
 
     //Lightbox logic. Decides which image to show and which bottom image is active
 
     function showSlide(n) {
         const slides = document.getElementsByClassName('slide');
-        let modalPreviews = document.getElementsByClassName('modal-preview');
+        //let modalPreviews = document.getElementsByClassName('modal-preview');
 
-        if (n > slides.length) {
-            slideIndex = slides.length % n;
-            //slideIndex = 1;
+        if (n > slides.length-1) {
+            //slideIndex = slides.length % n;
+            slideIndex = 0;
         }
 
-        if (n < 1) {
-            slideIndex = slides.length;
+        if (n < 0) {
+            slideIndex = slides.length -1;
         }
 
         for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }
 
-        for (let i = 0; i < modalPreviews.length; i++) {
-            modalPreviews[i].className = modalPreviews[i].className.replace(' active', '');
-        }
-
-        slides[slideIndex - 1].style.display = 'block';
-        modalPreviews[slideIndex - 1].className += ' active';
+        // for (let i = 0; i < modalPreviews.length; i++) {
+        //     modalPreviews[i].className = modalPreviews[i].className.replace(' active', '');
+        // }
+        alert("DISPLAYING INDEX " + slideIndex);
+        slides[slideIndex].style.display = 'block';
+        //modalPreviews[slideIndex - 1].className += ' active';
     }
 </script>
 </body>

@@ -50,7 +50,7 @@ body {
 }
 
 .nav-user-details .nav-greeting{
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     margin: 0;
 }
@@ -58,7 +58,7 @@ body {
 .nav-user-details .nav-user-id,
 .nav-user-details .nav-user-id-color
 {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 400;
     margin: 0;
 }
@@ -240,6 +240,11 @@ body {
     transition: 0.4s;
 }
 
+
+#create-album-modal{
+    justify-content: center;
+}
+
 .pre-upload-image-wrapper{
     width: 50%;
 }
@@ -335,13 +340,13 @@ body {
 .home-title-bar-buttons{
     border: 3px solid #7ce604;
     color: #737373;
-    font-weight: 500;
+    font-weight: 400;
     padding: 10px 15px;
-    border-radius: 3px;
+    border-radius: 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
 }
 
@@ -592,6 +597,7 @@ body {
 .image-slide {
     width: 100%;
     height: 100%;
+    border: none;
 }
 
 /*.modal-preview {*/
@@ -1023,8 +1029,8 @@ img.hover-shadow {
     display: block;
     position: relative;
     overflow: hidden;
-    height: 120px;
-    flex-basis: 32%;
+    height: 150px;
+    width: 48%;
     transition: 0.25s display;
     border-radius: 5px;
 }
@@ -1044,6 +1050,7 @@ img.hover-shadow {
 #album-create-select-gallery-images-container{
     display: none;
     position: fixed;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     z-index: 102;
@@ -1054,30 +1061,327 @@ img.hover-shadow {
 
 #album-create-gallery-images{
     display: none;
+    justify-content: space-between;
+    margin: 0;
     flex-wrap: wrap;
+    overflow-y: auto;
+    gap: 10px;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
     background-color: #ffffff;
     width: 60%;
     max-height: 70%;
-    overflow: auto;
-    border-radius: 10px;
-    justify-content: space-between;
-    margin: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     padding: 2rem;
-    gap: 10px;
+}
+
+#album-create-gallery-images-add-btn-container{
+    width: 60%;
+    padding: 1rem 2rem;
+    display: flex;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    justify-content: flex-end;
+    background-color: #ffffff;
     animation-name: showSmoothly;
     animation-duration: 0.4s;
 }
 
 #album-create-gallery-image-wrapper{
     display: block;
+    position: relative;
+    overflow: hidden;
     height: 150px;
     flex-grow: unset;
+    width: 30%;
     flex-basis: 30%;
-    transition: 0.25s display;
+    transition: 0.25s display, 0.4s box-shadow;
     border-radius: 5px;
     cursor: pointer;
 }
 
+#album-create-gallery-image-wrapper:hover{
+    box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
+}
 
+.outer-album-container{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0 2rem 0;
+    padding: 0;
+}
 
+.album-item{
+    display: flex;
+    width: 100%;
+    height: 15rem;
+    padding: 0;
+    margin: 1rem 0;
+    box-shadow: 1px 5px 22px 2px rgba(211,217,222,0.98);
+}
 
+.album-cover{
+    width: 40%;
+}
+
+.album-cover-multiple{
+    display: flex;
+    gap: 5px;
+}
+
+.album-cover-multiple-imgs{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    justify-content: space-between;
+}
+
+.album-cover-main-img-container{
+    width: 60%;
+}
+
+.album-cover-small-img{
+    width: 100%;
+    height: 49%;
+}
+
+.album-short-info{
+    position: relative;
+    width: 60%;
+    display: flex;
+    padding: 20px 40px;
+    flex-direction: column;
+}
+
+.album-short-info-div1{
+    display: flex;
+    width: 100%;
+    height: 50%;
+    justify-content: space-between;
+}
+
+.album-short-info-div2 span{
+    padding: 3px 20px;
+    background-color: #7ce604;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.album-short-info-div2{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+}
+
+.album-short-info-buttons{
+    display: flex;
+    gap: 15px;
+}
+
+.album-short-info-buttons button{
+    padding: 5px 15px;
+    text-align: center;
+    border-radius: 30px;
+    border: 2px solid #7ce604;
+}
+
+.album-item-buttons{
+    padding: 10px 20px;
+    text-align: center;
+    border: 2px solid #7ce604;
+    border-radius: 25px;
+}
+
+.album-short-info-details{
+    display: flex;
+    flex-direction: column;
+}
+
+.album-short-info-details p{
+    font-size: 14px;
+}
+
+.album-item-dot-icon{
+    font-size: 1.4rem;
+    color: #808080;
+    cursor: pointer;
+}
+
+.album-cover-main-img:hover{
+    transform: none;
+}
+
+.album-menu-options{
+    display: none;
+    width: 12%;
+    z-index: 2;
+    position: absolute;
+    top:20px;
+    right: 3.5rem;
+    padding: 10px 20px;
+    background-color: #e6e6e6;
+}
+
+.album-menu-options ul {
+    width: 100%;
+    margin: 0;
+}
+
+.album-menu-options ul li{
+    width: 100%;
+    margin: 5px auto;
+    text-align: center;
+}
+
+.album-menu-options ul li a{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none;
+    text-underline: none;
+    color: #333333;
+}
+
+.tickLabel{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 103;
+}
+
+.tick{
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+}
+
+.gallery-select-image:hover{
+    transform: none;
+}
+
+#album-details-edit-modal{
+    box-sizing: border-box;
+}
+
+.edit-details-container{
+    display: block;
+    background-color: #fefefe;
+    flex-direction: column;
+    margin: auto;
+    padding: 2rem;
+    width: 25%;
+    max-width: 30%;
+    border-radius: 10px;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    transition: 0.4s;
+}
+
+.edit-details-container input[type="text"],
+.edit-details-container select,
+.edit-details-container textarea{
+    width: 100%;
+    outline: none;
+    background: rgba(0,0,0,0.04);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom:15px;
+    box-sizing: border-box;
+}
+
+.edit-details-container input[type="text"]:focus,
+.edit-details-container select:focus,
+.edit-details-container textarea:focus{
+    transition: 0.3s;
+    background: none;
+}
+
+.edit-details-buttons-container{
+    margin-bottom: 1rem;
+}
+
+.edit-modal-title{
+    background-color: #7ce604;
+    padding: 25px 0;
+    margin: -2rem -2rem 2rem -2rem;
+    text-align: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.edit-modal-title h5{
+    color: #ffffff;
+    font-family: 'Lora', serif;
+}
+
+.edit-details-buttons-container button{
+    width: 50%;
+}
+
+.edit-form-icons{
+    margin-right: 5px;
+    font-size: 20px;
+    color:#6dc903;
+}
+
+/*OTHER USERS PAGE*/
+
+.navigation-tabs{
+    display: flex;
+    /*gap: 25px;*/
+    background:none;
+    height: 10vh;
+    margin-bottom: -13px;
+    margin-left: 2.5%;
+}
+
+.nav-tab{
+    background: none;
+    border: none;
+    /*border-bottom:4px solid #7ce604;*/
+    line-height: 90px;
+    box-sizing: border-box;
+    font-weight: 500;
+    color: #595959;
+    cursor: pointer;
+    transition: 0.1s;
+    padding: 0 15px;
+}
+
+.nav-tab-active{
+    border-bottom:4px solid #7ce604;
+}
+
+.nav-tab:hover{
+    color: #404040;
+}
+
+.nav-with-tabs{
+    justify-content: space-between;
+}
+
+.main-content-page-container{
+    display: none;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+}
+
+.tab-content-active{
+    display: flex;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+}

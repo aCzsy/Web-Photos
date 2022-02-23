@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        *{
+            -webkit-box-sizing: border-box; /*The width and height properties (and min/max properties) includes content, padding and border*/
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            list-style-type: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sora', sans-serif;
+        }
+
+        body {
+            position: relative;
+        }
+        body{
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        #div{
+            display: block;
+            position: relative;
+            overflow: hidden;
+            width: 500px;
+            height: 250px;
+        }
+
+        #div img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #tick{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+        }
+
+        #tick:checked{
+            background-color: #66bb6a;
+            border-color: #66bb6a;
+        }
+        #album-create-gallery-image-wrapper{
+            display: block;
+            position: relative;
+            overflow: hidden;
+            width: 500px;
+            height: 250px;
+            flex-grow: unset;
+            flex-basis: 30%;
+            transition: 0.25s display;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .display-image{
+            display: block;
+            width: 100%;
+            height: 100%;
+            /*max-width: 25%;*/
+            /*max-height: 15em;*/
+            /*width: auto;*/
+            /*height: auto;*/
+            transition: 0.4s transform;
+            object-fit: cover;
+        }
+
+        #album-create-gallery-images{
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #ffffff;
+            width: 60%;
+            max-height: 70%;
+            overflow: auto;
+            border-radius: 10px;
+            justify-content: space-between;
+            margin: 0;
+            padding: 2rem;
+            gap: 10px;
+            animation-name: showSmoothly;
+            animation-duration: 0.4s;
+        }
+
+        #album-create-select-gallery-images-container{
+            display: flex;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 102;
+            justify-content: center;
+            align-items: center;
+            transition: 1s;
+        }
+    </style>
+</head>
+<body>
+<div id="album-create-select-gallery-images-container">
+<div id="album-create-gallery-images">
+<div id="album-create-gallery-image-wrapper">
+    <label for="tick"></label>
+    <input type="checkbox" id="tick" name="tick">
+    <img class="display-image album-cover-main-img" id="img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}">
+</div>
+</div>
+</div>
+<script>
+    let img = document.getElementsByClassName("display-image")[0];
+    let t = document.getElementById("tick");
+
+    let image = document.getElementById("img");
+
+    image.addEventListener('click', function (){
+        t.checked ? t.checked = false : t.checked = true;
+    })
+</script>
+</body>
+</html>
