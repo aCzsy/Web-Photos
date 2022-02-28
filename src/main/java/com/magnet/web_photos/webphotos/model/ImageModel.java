@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageModel {
     private Long imageId;
     private String imageComment;
+    private String category;
     private MultipartFile uploaded_image;
 
     public String getImageComment() {
@@ -21,6 +22,14 @@ public class ImageModel {
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public MultipartFile getUploaded_image() {

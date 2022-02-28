@@ -213,13 +213,14 @@
             </div>
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(albums)==0}">
-            <i class="far fa-images fa-3x placeholder-icon"></i>
+<!--            <i class="far fa-images fa-3x placeholder-icon"></i>-->
+            <img class="placeholder-icon" src="../static/images/folder.png" th:src="@{/images/folder.png}" alt="Empty state image">
             <p>You don't have any albums</p>
             <button type="button" class="edit-cred-btn placeholder-create-btn album-create-btns-nav">Create album</button>
         </div>
         <div class="title-outer-container" th:unless="${#lists.size(albums) == 0}">
             <div class="user-list-title">
-                <h4 th:text="${user.getFirstname() + ' albums'}">Users albums</h4>
+                <h5 th:text="${user.getFirstname() + ' albums'}">Users albums</h5>
             </div>
         </div>
 

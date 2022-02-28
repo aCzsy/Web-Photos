@@ -46,12 +46,4 @@ public class UserGalleryController {
         model.addAttribute("users_number_of_friends",friendRequestService.getAllAcceptedRequests(user.getId()).size());
         return "user-gallery";
     }
-
-    @GetMapping("/profile/get-users-profile-picture/{userId}")
-    public void getUserProfilePicture(@PathVariable(value = "userId") Long userId, HttpServletResponse httpServletResponse) throws IOException {
-        User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
-        httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        httpServletResponse.getOutputStream().write(user.getUser_image());
-        httpServletResponse.getOutputStream().close();
-    }
 }

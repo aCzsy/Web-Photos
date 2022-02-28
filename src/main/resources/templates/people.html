@@ -81,7 +81,8 @@
             </div>
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(users)==0}">
-            <i class="far fa-images fa-3x"></i>
+<!--            <i class="far fa-images fa-3x"></i>-->
+            <img class="placeholder-icon" src="../static/images/tag.png" th:src="@{/images/tag.png}" alt="Empty state image">
             <p>There are no more registered users</p>
         </div>
 
@@ -92,7 +93,7 @@
 
         <div class="title-outer-container" style="width: 90%;" th:unless="${#lists.size(users) == 0}">
             <div class="user-list-title">
-                <h4>Users list</h4>
+                <h5>Users list</h5>
             </div>
         </div>
         <div class="user-list-labels">

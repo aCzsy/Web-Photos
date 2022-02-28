@@ -193,7 +193,7 @@ body {
 .pre-upload-image-modal{
     display: none;
     position: fixed;
-    z-index: 101;
+    z-index: 1002;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -402,8 +402,26 @@ body {
     height: 100%;
 }
 
+.image-modal-content-comments-container{
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .placeholder-icon{
-    color: #cccccc;
+    width: 4rem;
+    height: 4rem;
+}
+
+.image-comments-placeholder-icon{
+    width: 3rem;
+    height: 3rem;
 }
 
 .main-content-placeholder p{
@@ -564,6 +582,7 @@ body {
 
 .image-modal {
     display: none;
+    align-items: center;
     position: fixed;
     z-index: 1001;
     left: 0;
@@ -571,27 +590,185 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background:rgba(0,0,0,0.8);
+    background: #ffffff;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    /*background:rgba(0,0,0,0.8);*/
 }
 
-.modal-content {
+.image-modal-outer{
+    position: relative;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 80%;
+    max-width: 90%;
+    max-height: 90vh;
+    height: 90vh;
+    box-sizing: border-box;
+    box-shadow: 0px 11px 16px 0px rgba(153,167,178,0.75);
+    -webkit-box-shadow: 0px 11px 16px 0px rgba(153,167,178,0.75);
+    -moz-box-shadow: 0px 11px 16px 0px rgba(153,167,178,0.75);
+}
+
+.image-modal-content-images {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /*margin: auto;*/
+    /*padding: 0 0 0 0;*/
+    width: 75%;
+    height: 100%;
+    /*max-width: 1000px;*/
+    /*height: auto;*/
+    /*max-height: 100vh;*/
+}
+
+.slide:hover > .image-options{
+    opacity: 1;
+    transition: 0.6s opacity;
+}
+
+.image-modal-content-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 25%;
+    height: 100%;
+    background: rgba(0,0,0,0.02);  /* fallback for old browsers */
+    gap: 15px;
+
+}
+
+.image-options{
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    padding: 20px;
+    top: 0;
     margin: auto;
-    padding: 0 0 0 0;
-    width: 60%;
-    max-width: 1000px;
-    height: auto;
-    max-height: 100vh;
+    font-size: 25px;
+    color: #ffffff;
+    background: rgba(0,0,0,0.3);
+    transition: 0.6s opacity;
+    gap: 40px;
+}
+
+.image-modal-content-info-tabs-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    background:none;
+    box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);
+    -webkit-box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);
+    -moz-box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);
+}
+
+.image-modal-content-img-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    background:none;
+    border-radius: 3px;
+    animation-name: showSmoothly;
+    animation-duration: 0.6s;
+    overflow-y: auto;
+}
+
+.image-modal-content-comments{
+    display: none;
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    background:none;
+    border-radius: 3px;
+    animation-name: showSmoothly;
+    animation-duration: 0.6s;
+    overflow-y: auto;
+}
+
+.image-modal-content-send-message-container{
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0;
+    padding: 5px 5px 0 5px;
+    background-color: #f0f2f4;
+    border-top: 1px solid #d3d9de;
+}
+
+.image-modal-content-send-message-container textarea{
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border:none;
+    resize: none;
+    padding: 5px;
+}
+
+.image-modal-content-img-details-item{
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    max-height: 20%;
+    overflow: auto;
+}
+
+.image-modal-content-img-details-item p{
+    padding: 0;
+    margin: 0;
+}
+
+.image-modal-content-img-details-item-heading{
+    font-weight: 500;
+}
+
+.image-modal-content-img-details-item-content{
+    color: #8b9ba7;
+    font-size: 15px;
+}
+
+#msg-send-btn{
+    position: absolute;
+    background: none;
+    right: 10px;
+    top: -55px;
+    color: #5fb003;
+    font-weight: 500;
+}
+
+.image-options i{
+    color: #ffffff;
 }
 
 /* Same with your slides, you set the display to none, because you want to choose which
    one is shown at a time. */
 
 .slide {
-    display: none;
+    display: block;
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 .image-slide {
@@ -600,11 +777,11 @@ body {
     border: none;
 }
 
-/*.modal-preview {*/
-/*    width: 100%;*/
-/*    object-fit: cover;*/
-/*    height: 130px;*/
-/*}*/
+.modal-preview {
+    width: 100%;
+    object-fit: cover;
+    /*height: 130px;*/
+}
 
 /*.dots {*/
 /*    display: flex;*/
@@ -636,7 +813,7 @@ img.hover-shadow {
 }
 
 .close {
-    color: white;
+    color:#2c343a;
     position: absolute;
     top: 10px;
     right: 25px;
@@ -672,6 +849,14 @@ img.hover-shadow {
 .next i,
 .close i{
     color: white;
+}
+
+.close i{
+    color:#2c343a;
+}
+
+.previous{
+    left: 0;
 }
 
 .next {

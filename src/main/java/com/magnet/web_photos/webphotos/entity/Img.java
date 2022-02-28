@@ -2,7 +2,6 @@ package com.magnet.web_photos.webphotos.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +13,7 @@ public class Img {
     private Long imageId;
     private String image_name;
     private String content_type;
+    private String category;
     private String image_size;
     private LocalDate date_uploaded;
     @Column(length = 25)
@@ -21,6 +21,9 @@ public class Img {
     //private Long userId;
     @ManyToMany(mappedBy = "images")
     private List<User> image_owners = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "image_comments_id")
+    private ImageComments imageComments;
     @Lob //Stored in the DB as BLOB
     private byte [] file_data;
 
@@ -46,6 +49,14 @@ public class Img {
 
     public String getContent_type() {
         return content_type;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setContent_type(String content_type) {
@@ -99,6 +110,14 @@ public class Img {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public ImageComments getImageComments() {
+        return imageComments;
+    }
+
+    public void setImageComments(ImageComments imageComments) {
+        this.imageComments = imageComments;
     }
 
     @Override

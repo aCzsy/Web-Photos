@@ -70,6 +70,14 @@ public class ProfileController {
         httpServletResponse.getOutputStream().close();
     }
 
+    @GetMapping("/profile/get-users-profile-picture/{userId}")
+    public void getProfilePictureByUserId(@PathVariable("userId") Long userId, HttpServletResponse httpServletResponse) throws IOException {
+        User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
+        httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+        httpServletResponse.getOutputStream().write(user.getUser_image());
+        httpServletResponse.getOutputStream().close();
+    }
+
     @PostMapping("/profile/edit-user-details")
     public String editUserDetails(@ModelAttribute("userCredentialsModel") UserCredentialsModel userCredentialsModel, Model model){
         String userNameError = null;

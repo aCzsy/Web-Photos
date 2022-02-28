@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
-    @Query("select f from FriendRequest f where f.toUser.id = :userId")
+    @Query("select f from FriendRequest f where f.toUser.id = :userId and f.isAccepted = false ")
     List<FriendRequest> getUsersFriendRequestsForReceiver(Long userId);
 
     @Query("select f from FriendRequest f where f.toUser.id = :userId and f.isAccepted = true")

@@ -38,6 +38,7 @@ public class FriendsController {
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         List<FriendRequest> friendRequestList = friendRequestService.getFriendRequestsForReceiver(user.getId());
         List<UserDTO> friendList = friendRequestService.getAllAcceptedRequests(user.getId());
+        boolean noRequestsNoFriends = friendRequestList.isEmpty() && friendList.isEmpty();
 //        List<UserDTO> friendList = friendRequestService.getAllAcceptedRequestsForReceiver(user.getId());
 //        List<UserDTO> usersWhoAcceptedReq = friendRequestService.getAllAcceptedRequestsForSender(user.getId());
 //        friendList.addAll(usersWhoAcceptedReq);
@@ -45,6 +46,7 @@ public class FriendsController {
         model.addAttribute("friends",friendList);
         model.addAttribute("number_of_friends",friendList.size());
         model.addAttribute("friendRequests", friendRequestList);
+        model.addAttribute("listsEmpty", noRequestsNoFriends);
         return "friends";
     }
 

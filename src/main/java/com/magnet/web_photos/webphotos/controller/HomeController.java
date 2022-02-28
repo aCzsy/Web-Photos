@@ -1,9 +1,12 @@
 package com.magnet.web_photos.webphotos.controller;
 
+import com.magnet.web_photos.webphotos.entity.ImageComments;
 import com.magnet.web_photos.webphotos.entity.Img;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.exception.UserNotFoundException;
+import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
+import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.ImageService;
 import com.magnet.web_photos.webphotos.service.UserService;
@@ -31,18 +34,21 @@ public class HomeController {
     private UserRepository userRepository;
     private UserService userService;
     private ImageService imageService;
+    private ImageCommentsRepository imageCommentsRepository;
 
     String successNote = null;
 
     @Autowired
-    public HomeController(UserRepository userRepository, UserService userService, ImageService imageService) {
+    public HomeController(UserRepository userRepository, UserService userService, ImageService imageService, ImageCommentsRepository imageCommentsRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.imageService = imageService;
+        this.imageCommentsRepository = imageCommentsRepository;
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication, Model model, RedirectAttributes redirectAttributes){
+    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
+                              Model model, RedirectAttributes redirectAttributes, @ModelAttribute("comment")ImageMessage imageMessage){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
@@ -108,6 +114,17 @@ public class HomeController {
         successNote = "Image details have been successfully updated.";
         imageService.editImageDetails(imageModel,authentication);
         return "redirect:/home";
+    }
+
+    @PostMapping("/home/add-comment-to-an-image")
+    public String addComment(@RequestParam(value = "imageId") Long imageId, @ModelAttribute("comment")ImageMessage imageMessage, Authentication authentication, Model model){
+        imageService.addComment(imageId, imageMessage, authentication);
+        return "redirect:/home";
+    }
+
+    @ModelAttribute("categories")
+    public String[] categories () {
+        return new String[] { "Holiday", "Sport", "Event", "Animals", "Friends" , "Outdoor", "Other" };
     }
 
 }
