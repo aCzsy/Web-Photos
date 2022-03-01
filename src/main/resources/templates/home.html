@@ -316,8 +316,19 @@
                         <p>No comments yet</p>
                     </div>
                     <div class="image-modal-content-comments-container" th:unless="${#lists.size(img.getImageComments().getComments()) == 0}">
-                        <div th:each="comm : ${img.getImageComments().getComments()}">
-                            <p th:text="${comm.getMessage()}"></p>
+                        <div class="image-modal-content-comment-outer" th:each="comm : ${img.getImageComments().getComments()}">
+                            <div class="image-outer-area-top-bar comment-item-profile-image">
+                                <div class="image-inner-area-top-bar">
+                                    <img th:if="${comm.getSender().getUser_image() != null}" class="profile-image"
+                                         th:src="@{${'/people/getUserProfileImg/' + comm.getSender().getId()}}" alt="Profile image">
+                                    <img th:unless="${comm.getSender().getUser_image() != null}" class="profile-image"
+                                         src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                                </div>
+                            </div>
+                            <div class="image-modal-content-comment-inner">
+                                <p th:text="${comm.getSender().getFirstname() + ' ' + comm.getSender().getLastname()}">John Doe</p>
+                                <p th:text="${comm.getMessage()}">Comment</p>
+                            </div>
                         </div>
                     </div>
                     <div class="image-modal-content-send-message-container">
