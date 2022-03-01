@@ -326,8 +326,8 @@
                                 </div>
                             </div>
                             <div class="image-modal-content-comment-inner">
-                                <p th:text="${comm.getSender().getFirstname() + ' ' + comm.getSender().getLastname()}">John Doe</p>
-                                <p th:text="${comm.getMessage()}">Comment</p>
+                                <p class="image-comment-sender-name" th:text="${comm.getSender().getFirstname() + ' ' + comm.getSender().getLastname()}">John Doe</p>
+                                <p class="image-comment-text" th:text="${comm.getMessage()}">Comment</p>
                             </div>
                         </div>
                     </div>
@@ -568,7 +568,8 @@
     // })
 
     const fo = document.getElementsByClassName('image-comment-add-form');
-    $(add_comment_btn[slideIndex]).on('click',function (){
+    $(add_comment_btn[slideIndex]).on('click',function (event){
+        event.preventDefault();
         $(fo[slideIndex]).trigger("submit");
     });
 

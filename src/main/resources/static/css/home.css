@@ -406,7 +406,7 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin: 0;
     padding: 0 5px;
@@ -765,6 +765,7 @@ body {
     display: flex;
     width: 100%;
     gap: 5px;
+    margin-top: 15px;
 }
 
 .image-modal-content-comment-inner{
@@ -780,6 +781,15 @@ body {
 .image-modal-content-comment-inner p{
     margin: 0;
     padding: 0;
+}
+
+.image-comment-sender-name{
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.image-comment-text{
+    font-size: 14px;
 }
 
 .comment-item-profile-image{
