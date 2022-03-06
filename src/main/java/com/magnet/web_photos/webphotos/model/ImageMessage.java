@@ -1,22 +1,13 @@
 package com.magnet.web_photos.webphotos.model;
 
 public class ImageMessage {
-    private Long messageId;
-    private String message;
+    private String comment;
 
-    public Long getMessageId() {
-        return messageId;
+    public String getComment() {
+        return comment;
     }
 
-    public void setMessageId(Long messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

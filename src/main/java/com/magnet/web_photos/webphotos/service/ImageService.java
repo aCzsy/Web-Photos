@@ -1,5 +1,6 @@
 package com.magnet.web_photos.webphotos.service;
 
+import com.magnet.web_photos.webphotos.dto.ImageCommentDTO;
 import com.magnet.web_photos.webphotos.entity.Comment;
 import com.magnet.web_photos.webphotos.entity.ImageComments;
 import com.magnet.web_photos.webphotos.entity.Img;
@@ -115,14 +116,16 @@ public class ImageService {
         return imageRepository.findImageById(imageId);
     }
 
-    public void addComment(Long imageId, ImageMessage imageMessage, Authentication authentication){
+    public Comment addComment(Long imageId, ImageMessage imageMessage, Authentication authentication){
         User sender = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Img image = imageRepository.findImageById(imageId);
         ImageComments imageComments = image.getImageComments();
         Comment comment = new Comment();
         comment.setSender(sender);
-        comment.setMessage(imageMessage.getMessage());
+        comment.setMessage(imageMessage.getComment());
         imageComments.getComments().add(comment);
         imageCommentsRepository.save(imageComments);
+
+        return comment;
     }
 }
