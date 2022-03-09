@@ -1,19 +1,17 @@
 package com.magnet.web_photos.webphotos.service;
 
-import com.magnet.web_photos.webphotos.entity.Img;
 import com.magnet.web_photos.webphotos.entity.User;
-import com.magnet.web_photos.webphotos.exception.UserNotFoundException;
 import com.magnet.web_photos.webphotos.model.ImageModel;
 import com.magnet.web_photos.webphotos.model.UserCredentialsModel;
 import com.magnet.web_photos.webphotos.model.UsersAboutInfo;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +40,7 @@ public class UserService {
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
         LocalDate date = LocalDate.now();
 
-        return userRepository.save(new User(null,user.getUsername(), encodedSalt, hashedPassword, user.getFirstname(), user.getLastname(), date));
+        return userRepository.save(new User(null,user.getUsername(),encodedSalt, hashedPassword, user.getFirstname(), user.getLastname(), date));
     }
 
     public User getUser(String username) {
@@ -77,7 +75,6 @@ public class UserService {
                 .map(user -> {
                     user.setUsername(Optional.ofNullable(userCredentialsModel.getUserName()).orElse(user.getUsername()));
                     user.setPassword(hashedPassword);
-                    user.setSalt(encodedSalt);
                     return userRepository.saveAndFlush(user);
                 });
     }

@@ -220,7 +220,7 @@
         </div>
         <div class="title-outer-container" th:unless="${#lists.size(albums) == 0}">
             <div class="user-list-title">
-                <h5 th:text="${user.getFirstname() + ' albums'}">Users albums</h5>
+                <h5 th:text="${user.getFirstname() + '''s albums'}">Users albums</h5>
             </div>
         </div>
 
@@ -246,9 +246,9 @@
                 <div class="album-short-info">
                     <div class="album-menu-options" id="t">
                         <ul>
-                            <li><a href=""><i class="far fa-eye"></i>View</a></li>
+                            <li><a th:href="@{/albums/viewAlbum/(albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
                             <li><a href=""><i class="fas fa-share"></i>Share</a></li>
-                            <li><a href=""><i class="far fa-trash-alt"></i>Delete</a></li>
+                            <li><a th:href="@{/albums/delete-album/(albumId=${album.getId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
                         </ul>
                     </div>
                     <div class="album-short-info-div1">
@@ -264,7 +264,7 @@
                     <div class="album-short-info-div2">
                         <span th:text="${album.getAlbumAccessType()}">Public</span>
                         <div class="album-short-info-buttons">
-                            <button type="button">View album</button>
+                            <a th:href="@{/albums/viewAlbum/(albumId=${album.getId()})}">View album</a>
                             <button type="button" th:albumId="${album.getId()}" th:albumName="${album.getName()}"
                                     th:albumComment="${album.getComment()}" th:albumAccessType="${album.getAlbumAccessType()}" th:albumDateCreated="${album.getDate_created()}"
                             onclick="showAlbumDetailsEditModal(this.getAttribute('albumId'),this.getAttribute('albumName'), this.getAttribute('albumComment'), this.getAttribute('albumAccessType'),this.getAttribute('albumDateCreated'))">Edit details</button>

@@ -2,11 +2,10 @@ package com.magnet.web_photos.webphotos.service;
 
 import com.magnet.web_photos.webphotos.DTOconverters.AlbumConverters;
 import com.magnet.web_photos.webphotos.dto.AlbumDTO;
-import com.magnet.web_photos.webphotos.entity.Album;
-import com.magnet.web_photos.webphotos.entity.Img;
-import com.magnet.web_photos.webphotos.entity.User;
+import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.AlbumModel;
 import com.magnet.web_photos.webphotos.repository.AlbumsRepository;
+import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.ImageRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -28,11 +27,13 @@ public class AlbumsService {
     private AlbumsRepository albumsRepository;
     private UserRepository userRepository;
     private ImageRepository imageRepository;
+    private ImageCommentsRepository imageCommentsRepository;
 
-    public AlbumsService(AlbumsRepository albumsRepository, UserRepository userRepository, ImageRepository imageRepository) {
+    public AlbumsService(AlbumsRepository albumsRepository, UserRepository userRepository, ImageRepository imageRepository, ImageCommentsRepository imageCommentsRepository) {
         this.albumsRepository = albumsRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
+        this.imageCommentsRepository = imageCommentsRepository;
     }
 
     public List<AlbumDTO> getUsersAlbums(Long userId){
@@ -70,7 +71,13 @@ public class AlbumsService {
                         img.setComment("");
                         img.setImage_owners(new ArrayList<>());
                         img.setFile_data(multipartFile.getBytes());
-                        imageRepository.save(img);
+                        ImageComments imageComments = new ImageComments();
+                        img.setImageComments(imageComments);
+                        Img savedImage = imageRepository.save(img);
+                        if(savedImage.getImageId() > 0){
+                            imageComments.setImageId(savedImage.getImageId());
+                            imageCommentsRepository.save(imageComments);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -91,6 +98,22 @@ public class AlbumsService {
         album.getImages().addAll(images);
     }
 
+    public void addImageToAlbum(Album album, Img img, User user){
+        ImageComments imageComments = new ImageComments();
+        imageComments.setOwnerId(user.getId());
+        Comment comment = new Comment();
+        comment.setSender(user);
+        img.setImageComments(imageComments);
+
+        Img savedImage = imageRepository.save(img);
+        if(savedImage.getImageId() > 0){
+            imageComments.setImageId(savedImage.getImageId());
+            imageCommentsRepository.save(imageComments);
+        }
+
+        album.getImages().add(img);
+    }
+
     public void editAlbumDetails(AlbumModel albumModel){
         albumsRepository.findById(albumModel.getAlbumId())
                 .map(album -> {
@@ -101,4 +124,13 @@ public class AlbumsService {
                 });
     }
 
+    public void deleteAlbum(Album album, User user){
+        user.removeAlbum(album);
+        albumsRepository.delete(album); //IMPORTANT
+    }
+
+    public void deleteImageFromAlbum(Album album, Img img, User user){
+        album.getImages().remove(img);
+        imageRepository.delete(img); //IMPORTANT
+    }
 }

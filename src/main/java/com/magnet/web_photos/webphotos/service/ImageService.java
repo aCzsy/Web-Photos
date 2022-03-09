@@ -36,7 +36,7 @@ public class ImageService {
     }
 
     @Transactional
-    public void addImage(ImageModel imageModel, Authentication authentication) throws IOException {
+    public Img addImage(ImageModel imageModel, Authentication authentication) throws IOException {
         Img image = new Img();
         image.setImage_name(imageModel.getUploaded_image().getOriginalFilename());
         image.setImage_size(String.valueOf(imageModel.getUploaded_image().getSize()));
@@ -67,6 +67,8 @@ public class ImageService {
             imageComments.setImageId(savedImage.getImageId());
             imageCommentsRepository.save(imageComments);
         }
+
+        return savedImage;
     }
 
     public Img imageModelToImg(ImageModel imageModel) throws IOException {

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Album Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&family=Sora:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap" rel="stylesheet">
+    <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
+    <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
+    <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
+    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/css/fontawesome-5.15.4-web/css/all.css}">
+    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/css/fontawesome-5.15.4-web/css/fontawesome.css}">
+    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/css/fontawesome-5.15.4-web/css/brands.css}">
+    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/css/fontawesome-5.15.4-web/css/solid.css}">
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css"  th:href="@{/css/home.css}">
+<!--    <script src="../static/js/home.js"></script>-->
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+</head>
+
+<body onload="document.body.style.opacity='1'">
+
+<!--Image preview wrapper-->
+<div class="pre-upload-image-modal" id="pre-upload-image-modal">
+    <div class="pre-upload-image-modal-content" id="pre-upload-content">
+        <div class="pre-upload-image-wrapper">
+            <img id="pre-upload-image" alt=""/>
+        </div>
+        <div class="pre-upload-image-details">
+            <h6>File name</h6>
+            <p id="pre-upload-image-title"></p>
+            <h6>Extension</h6>
+            <p id="pre-upload-image-extension"></p>
+            <h6>File size</h6>
+            <p id="pre-upload-image-size"></p>
+            <h6>Tag friends</h6>
+            <h6>Category</h6>
+            <select id="category">
+                <option
+                        th:each="category : ${categories}"
+                        th:value="${category}"
+                        th:text="${category}"
+                >
+                </option>
+            </select>
+            <br>
+            <form action="#">
+                <label for="image-comment"><h6>Comment</h6></label>
+                <br>
+                <textarea id="image-comment" name="image-comment" rows="2" cols="50" placeholder="Type comment...">
+
+                    </textarea>
+            </form>
+            <br>
+            <h6>Tag friends</h6>
+            <br>
+            <div class="profile-buttons-container">
+                <button type="button" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;" onclick="uploadFile('uploaded_image','image-upload-form')">Save</button>
+                <button type="button" class="profile-buttons" onclick="closeWindow('pre-upload-image-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Image information/edit wrapper-->
+<div class="pre-upload-image-modal" id="image-info-modal">
+    <div class="pre-upload-image-modal-content">
+        <form action="#" id="image-info-form" th:action="@{/albums/edit-image-details/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="image-info-img-id" id="image-info-img-id" th:field="*{imageId}">
+            <div class="pre-upload-image-wrapper">
+                <img id="image-info-img" alt="" th:field="*{uploaded_image}"/>
+            </div>
+            <div class="pre-upload-image-details">
+                <h6>File name</h6>
+                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-name" id="image-info-img-name">
+                <h6>Extension</h6>
+                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-extension" id="image-info-img-extension">
+                <h6>File size</h6>
+                <input type="text" class="image-info-labels" disabled="disabled" name= "image-info-img-size" id="image-info-img-size">
+                <br>
+                <h6>Category</h6>
+                <select id="category_edit" th:field="*{category}">
+                    <option th:field="*{category}"
+                            th:each="category : ${categories}"
+                            th:value="${category}"
+                            th:text="${category}"
+                    >
+                    </option>
+                </select>
+                <form action="#">
+                    <label for="image-info-img-comment"><h6>Comment</h6></label>
+                    <br>
+                    <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">
+
+                                    </textarea>
+                </form>
+                <br>
+                <h6>Tag friends</h6>
+                <br>
+                <div class="profile-buttons-container">
+                    <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>
+                    <button type="button" class="profile-buttons" onclick="closeWindow('image-info-modal')">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--    <div class="success-message" id="successMsg" th:if="${successMessage}">-->
+<!--            <i class="far fa-check-circle fa-4x" style="color: #7ce604;"></i>-->
+<!--            <p th:text="${successMessage}">SUCCESS MESSAGE</p>-->
+<!--    </div>-->
+
+<div class="content">
+    <div class="side-nav">
+        <div class="side-nav-title">
+            <h3>Photos</h3>
+        </div>
+        <div class="nav-user-info">
+            <div class="image-outer-area-top-bar">
+                <div class="image-inner-area-top-bar">
+                    <img th:if="${user.getUser_image() != null}" class="profile-image"
+                         th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">
+                    <img th:unless="${user.getUser_image() != null}" class="profile-image"
+                         src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                </div>
+            </div>
+            <div class="nav-user-details">
+                <p class="nav-greeting">Hello <span th:text="${user.firstname}"></span></p>
+                <p class="nav-user-id-color">User #<span class="nav-user-id" th:text="${user.id}"></span></p>
+            </div>
+        </div>
+        <ul>
+            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
+            <li><a href="#"><i class="fas fa-share-alt-square side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="home-title-bar sticky-top">
+            <div id="home-title-bar-menu">
+                <form id="image-upload-form" action="#" th:action="@{/albums/add-image-to-album/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                    <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
+                    <div class="home-title-bar-options">
+                        <div>
+                            <label class="home-title-bar-buttons" for="uploaded_image"><i class="fas fa-upload icons"></i>&nbsp;&nbsp;Upload image</label>
+                            <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}"  >
+                            <input type="hidden" name="imageComment" id="imageComment" th:field="*{imageComment}">
+                            <input type="hidden" name="imageCategory" id="imageCategory" th:field="*{category}">
+                            <!--                                <button class="home-title-bar-buttons" type="submit">Upload</button>-->
+                        </div>
+                    </div>
+                </form>
+                <form action="#" th:action="@{/logout}" method="POST">
+                    <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
+                </form>
+            </div>
+        </div>
+        <div class="main-content-placeholder" th:if="${#lists.size(images)==0}">
+            <img class="placeholder-icon" src="../static/images/folder_images.png" th:src="@{/images/folder_images.png}" alt="Empty state image">
+            <p>You album is empty</p>
+        </div>
+        <div class="title-outer-container" th:unless="${#lists.size(images) == 0}">
+            <div class="user-list-title">
+                <h5 th:text="${'Album: ' + album_name}">Album images</h5>
+            </div>
+        </div>
+        <div th:unless="${#lists.size(images) == 0}" class="outer-container-for-images">
+            <div class="image-container" th:each="img : ${images}">
+                <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" onclick="openLightbox();toSlide(this)" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="Lightbox" class="image-modal">
+    <a class="close pointer" onclick="closeLightbox()">
+        <i class="fas fa-times fa-1x"></i>
+    </a>
+    <div class="image-modal-outer">
+        <div class="image-modal-content-images">
+            <div class="slide" th:each="img : ${images}">
+                <a class="previous" onclick="changeSlide(-1)"><i class="fas fa-caret-left fa-2x"></i></a>
+                <a class="next" onclick="changeSlide(1)"><i class="fas fa-caret-right fa-2x"></i></a>
+                <div class="image-options">
+                    <a href="#" th:imageId="${img.getImageId()}" th:imageName="${img.getImage_name()}" th:imageSize="${img.getImage_size()}" th:imageExt="${img.getContent_type()}" th:imgComment="${img.getComment()}"
+                       onclick="showImageInfoModal(this.getAttribute('imageId'),this.getAttribute('imageName'), this.getAttribute('imageSize'), this.getAttribute('imageExt'),this.getAttribute('imgComment'))">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <a href="#"><i class="fas fa-share-alt"></i></a>
+                    <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download"></i></a>
+                    <a th:href="@{/albums/delete-image-from-album/(albumId=${album_id},imageId=${img.getImageId()})}"><i class="far fa-trash-alt"></i></a>
+                </div>
+                <img th:src="@{${'/home/image/' + img.getImageId()}}" class="image-slide" alt="Image" />
+                <!--                    <img src="../static/images/album.jpg" class="image-slide" alt="">-->
+            </div>
+        </div>
+        <div class="image-modal-content-info">
+            <div class="image-modal-content-info-tabs-container">
+                <button type="button" id="img_modal_img_details_btn" class="image-modal-content-info-tab edit-cred-btn placeholder-create-btn">Image details</button>
+                <button type="button" id="img_modal_img_comments_btn" class="image-modal-content-info-tab edit-cred-btn placeholder-create-btn">Comments</button>
+            </div>
+            <div class="image-modal-content-img-details" th:each="img : ${images}">
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Title</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${img.getImage_name()}">No data available</p>
+                </div>
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Date uploaded</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${img.getDate_uploaded()}">No data available</p>
+                </div>
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Image size</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${img.getImage_size() + ' Kb'}">No data available</p>
+                </div>
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Category</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${img.getCategory()}">No data available</p>
+                </div>
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Tagged friends</p>
+                    <p class="image-modal-content-img-details-item-content">No friends tagged</p>
+                </div>
+                <div class="image-modal-content-img-details-item">
+                    <p class="image-modal-content-img-details-item-heading">Comment</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${img.getComment()}">No data available</p>
+                </div>
+            </div>
+            <div class="image-modal-content-comments" th:each="img : ${images}">
+                <div th:id="'comments_container' + ${img.getImageId()}" class="image-modal-content-comments-container comments_container">
+                    <div class="image-modal-content-comment-outer" th:each="comm : ${img.getImageComments().getComments()}">
+                        <div class="image-outer-area-top-bar comment-item-profile-image">
+                            <div class="image-inner-area-top-bar">
+                                <img th:if="${comm.getSender().getUser_image() != null}" class="profile-image"
+                                     th:src="@{${'/people/getUserProfileImg/' + comm.getSender().getId()}}" alt="Profile image">
+                                <img th:unless="${comm.getSender().getUser_image() != null}" class="profile-image"
+                                     src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                            </div>
+                        </div>
+                        <div class="image-modal-content-comment-inner">
+                            <p class="image-comment-sender-name" th:text="${comm.getSender().getFirstname() + ' ' + comm.getSender().getLastname()}">John Doe</p>
+                            <p class="image-comment-text" th:text="${comm.getMessage()}">Comment</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-modal-content-send-message-container">
+                    <form class="image-comment-add-form" action="#" method="post">
+                        <textarea class="comment" placeholder="Type comment..."></textarea>
+                        <button type="button" class="home-title-bar-buttons add-comment-buttons" th:onclick="'addCommentFor(' + this + ',' +${img.getImageId()} +  ')'" id="msg-send-btn">Send</button> <!--th:onclick="'addComment(' + ${img.getImageId()} +  ')'"-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--    <script th:src="@{/js/jquery-slim.min.js}"></script>-->
+<!--<script src="../static/js/home_page_script.js"></script>-->
+<script src="../static/js/jquery-3.6.0.js" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<script type="text/javascript">
+
+   'use strict';
+
+   const det = document.getElementById("det");
+   const com = document.getElementById("com");
+
+   const image_modal_img_details_btn = document.getElementById("img_modal_img_details_btn");
+   const image_modal_img_comments_btn = document.getElementById("img_modal_img_comments_btn");
+
+   const slides = document.getElementsByClassName('slide');
+   let image_details_list = document.getElementsByClassName('image-modal-content-img-details');
+   let image_comments_list = document.getElementsByClassName('image-modal-content-comments');
+
+   const add_comment_btn = document.getElementsByClassName('add-comment-buttons');
+
+
+   let pre_upload = document.getElementById("pre-upload-image-modal");
+
+   function closeWindow(elementId){
+       document.getElementById(elementId).style.display = "none";
+   }
+
+   const upl_img = document.getElementById("uploaded_image");
+   upl_img.addEventListener("change",function (event){
+       const output = document.getElementById('pre-upload-image');
+       let pre_upload = document.getElementById("pre-upload-image-modal");
+       let pre_upload_title = document.getElementById("pre-upload-image-title");
+       let pre_upload_ext = document.getElementById("pre-upload-image-extension");
+       let pre_upload_size = document.getElementById("pre-upload-image-size");
+       pre_upload.style.display = "flex";
+       pre_upload.style.justifyContent = "center";
+       pre_upload.style.alignItems = "center";
+       output.src = URL.createObjectURL(event.target.files[0]);
+       pre_upload_title.innerText = event.target.files[0].name;
+       pre_upload_ext.innerText = event.target.files[0].type;
+       pre_upload_size.innerText = event.target.files[0].size + " kb"
+       output.onload = function() {
+           URL.revokeObjectURL(output.src) // free memory
+       }
+   })
+
+
+   function uploadFile(inputId,formId){
+       let input = document.getElementById(inputId);
+       let preview_comment = document.getElementById("image-comment");
+       let preview_category = document.getElementById("category");
+       let temp = document.getElementById("temp")
+       let image_comment = document.getElementById("imageComment");
+       let image_category = document.getElementById("imageCategory");
+       image_comment.value = preview_comment.value;
+       image_category.value = preview_category.value;
+       //function called when file gets selected
+       let selected_item = input.files[0];
+       let upload_form = document.getElementById(formId);
+       //submit a form if an image has a name, meaning file exists
+       if(selected_item.name !== ""){
+           upload_form.submit();
+       }
+       pre_upload.style.display = "none";
+   }
+
+   function showImageInfoModal(imageId, imageName, imageSize, imageExt, imgComment) {
+       $('#image-info-img-id').val(imageId ? imageId : '');
+       $('#image-info-img').attr("src", "/home/image/" + imageId);
+       $('#image-info-img-name').val(imageName ? imageName : '');
+       $('#image-info-img-size').val(imageSize ? imageSize + " kb" : '');
+       $('#image-info-img-extension').val(imageExt ? imageExt : '');
+       $('#image-info-img-comment').val(imgComment ? imgComment : '');
+       $('#image-info-modal').css({"display": "flex","justify-content":"center","align-items":"center"});
+   }
+
+
+   function revealMenu(imageId){
+       const el = document.getElementsByClassName("image-menu")[imageId-1];
+       if(el.style.visibility === "hidden"){
+           el.style.visibility = "visible";
+       } else{
+           el.style.visibility = "hidden";
+       }
+   }
+
+   // Initializing and running showSlide() to give a lightbox a default state.
+
+   let imageList = document.getElementsByClassName('display-image');
+   let imageContainerLIST = document.getElementsByClassName('image-container');
+   let im;
+
+   let slideIndex = 0;
+   //showSlide(slideIndex);
+
+
+   console.log(slideIndex);
+   //Clickable content functionality
+
+   function openLightbox() {
+       document.getElementById('Lightbox').style.display = 'flex';
+   }
+
+   function closeLightbox() {
+       document.getElementById('Lightbox').style.display = 'none';
+   }
+
+   // New values are assigned to slideIndex.
+
+   function changeSlide(n) {
+       showSlide(slideIndex += n);
+   }
+
+   function toSlide(n) {
+       for(let i = 0;i < imageList.length;i++){
+           if(imageList[i] === n){
+               slideIndex = i;
+               //alert("SLIDEINDEX " + slideIndex)
+               showSlide(slideIndex);
+           }
+       }
+   }
+
+   image_modal_img_details_btn.addEventListener('click', function (){
+       image_comments_list[slideIndex].style.display = "none";
+       image_details_list[slideIndex].style.display = "flex";
+   })
+
+   image_modal_img_comments_btn.addEventListener('click', function (){
+       image_details_list[slideIndex].style.display = "none";
+       image_comments_list[slideIndex].style.display = "flex";
+   })
+
+   //Lightbox logic. Decides which image to show and which bottom image is active
+
+   function showSlide(n) {
+
+       if (n > slides.length-1) {
+           //slideIndex = slides.length % n;
+           slideIndex = 0;
+       }
+
+       if (n < 0) {
+           slideIndex = slides.length -1;
+       }
+
+       for (let i = 0; i < slides.length; i++) {
+           slides[i].style.display = "none";
+           image_details_list[i].style.display = "none";
+           image_comments_list[i].style.display = "none";
+       }
+
+       slides[slideIndex].style.display = 'block';
+       image_details_list[slideIndex].style.display = "flex";
+       image_comments_list[slideIndex].style.display = "none";
+   }
+
+
+   const fo = document.getElementsByClassName('image-comment-add-form');
+   const comment = document.getElementsByClassName('comment');
+   const comment_id = document.getElementsByClassName("comment_id");
+   const comment_item = document.getElementsByClassName('image-modal-content-comment-outer');
+   const token = $("meta[name='_csrf']").attr("content");
+
+   const add_image_comment_btn = document.getElementById("msg-send-btn");
+   const comments_container = document.getElementsByClassName("comments_container");
+   const empty_state_item = document.getElementsByClassName("comments_empty_state");
+   const image_content_ = document.getElementsByClassName("image-modal-content-comments");
+   let opened_image_id;
+
+   let comments_container_;
+   let comment_btn;
+   let image_content;
+   let comment_index;
+   let empty;
+   function addCommentFor(buttonIndex,imageId){
+       let image_comment;
+       for(let i = 0;i < add_comment_btn.length;i++){
+           if(add_comment_btn[i] === buttonIndex){
+           }
+       }
+       comments_container_ = comments_container[slideIndex];
+       comment_index = comment[slideIndex];
+       image_comment = {
+           comment : comment_index.value
+       }
+
+       alert(`SLIDEINDEX ${slideIndex}`)
+       const com_cont = "#comments_container" + imageId;
+
+       event.preventDefault();
+       $.ajax({
+           type: "POST",
+           url: '/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+           contentType : "application/json",
+           dataType: "json",
+           data: JSON.stringify(image_comment),
+           headers: {"X-CSRF-TOKEN" : token},
+           success: function (data) {
+               if(data.message !== ''){
+                   $(com_cont).load(" " + com_cont);
+               }
+           }
+       });
+
+       comment_index.value = '';
+   }
+
+
+
+</script>
+</body>
+</html>

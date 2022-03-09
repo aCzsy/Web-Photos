@@ -1,6 +1,8 @@
 package com.magnet.web_photos.webphotos.controller;
 
+import com.magnet.web_photos.webphotos.entity.Album;
 import com.magnet.web_photos.webphotos.entity.User;
+import com.magnet.web_photos.webphotos.repository.AlbumsRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.AlbumsService;
 import com.magnet.web_photos.webphotos.service.FriendRequestService;
@@ -24,15 +26,17 @@ public class UserGalleryController {
     private UserService userService;
     private ImageService imageService;
     private AlbumsService albumsService;
+    private AlbumsRepository albumsRepository;
     private FriendRequestService friendRequestService;
 
     @Autowired
-    public UserGalleryController(UserRepository userRepository, UserService userService, ImageService imageService, AlbumsService albumsService, FriendRequestService friendRequestService) {
+    public UserGalleryController(UserRepository userRepository, UserService userService, ImageService imageService, AlbumsService albumsService, FriendRequestService friendRequestService, AlbumsRepository albumsRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.imageService = imageService;
         this.albumsService = albumsService;
         this.friendRequestService = friendRequestService;
+        this.albumsRepository = albumsRepository;
     }
 
     @GetMapping("/user/user-gallery/")
@@ -45,5 +49,20 @@ public class UserGalleryController {
         model.addAttribute("userAlbums",albumsService.getUsersAlbums(user.getId()));
         model.addAttribute("users_number_of_friends",friendRequestService.getAllAcceptedRequests(user.getId()).size());
         return "user-gallery";
+    }
+
+    @GetMapping("/user/album-gallery")
+    public String getUserAlbumGallery(@RequestParam(value = "userId") Long userId,@RequestParam(value = "albumId") Long albumId, Model model, Authentication authentication){
+        User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
+        User authenticatedUser = userRepository.getUser(authentication.getName());
+        Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
+        String user_firstname = user.getFirstname();
+        model.addAttribute("authUser", authenticatedUser);
+        model.addAttribute("album_name", album.getName());
+        model.addAttribute("album_id",album.getId());
+        model.addAttribute("users_name", user_firstname);
+        model.addAttribute("images",album.getImages());
+        model.addAttribute("user",user);
+        return "user-album-gallery";
     }
 }

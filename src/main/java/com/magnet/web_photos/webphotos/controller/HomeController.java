@@ -31,6 +31,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class HomeController {
     public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
                               Model model, RedirectAttributes redirectAttributes){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+//        User foundUser = UserSession.getUserFromSession(request);
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));
@@ -106,7 +108,7 @@ public class HomeController {
     }
 
     @GetMapping("/home/delete-image")
-    public String deleteImage(@RequestParam(value = "imageId") Long imageId, @RequestParam(value = "imageName") String imageName,
+    public String deleteImage(@RequestParam(value = "imageId") Long imageId,
                             Model model, Authentication authentication, @ModelAttribute("imageModel")ImageModel imageModel){
         User user = userService.getUser(authentication.getName());
         Img img = imageService.getImageById(imageId);
@@ -159,33 +161,6 @@ public class HomeController {
 //        User user = userService.getUser(authentication.getName());
 //        return commentsService.getAllCommentsForImage(imageId, user.getId());
 //    }
-
-    @GetMapping("/home/get-comments-for-image/{imageId}")
-    @ResponseBody
-    public String getCommentsForImage(@PathVariable("imageId") Long imageId,Authentication authentication){
-        String htmlContent = "";
-        User user = userService.getUser(authentication.getName());
-        List<ImageCommentDTO> images = commentsService.getAllCommentsForImage(imageId, user.getId());
-        for(ImageCommentDTO imageCommentDTO: images){
-            htmlContent += "<div class='image-modal-content-comments-container comments_container'>" +
-                    "<div class='image-modal-content-comment-outer' th:each='comm : ${img.getImageComments().getComments()}'>" +
-                        "<div class='image-outer-area-top-bar comment-item-profile-image'>" +
-                            "<div class='image-inner-area-top-bar'>" +
-                                "<img th:if='${comm.getSender().getUser_image() != null}' class='profile-image'" +
-            "th:src='@{${'/people/getUserProfileImg/' + comm.getSender().getId()}}' alt=' Profile image'>" +
-                                "<img th:unless='${comm.getSender().getUser_image() != null}' class='profile-image'" +
-            "src='../static/images/default_profile_pic.png' th:src='@{/images/default_profile_pic.png}' alt='Profile image'>" +
-                            "</div>" +
-                        "</div>" +
-                        "<div class='image-modal-content-comment-inner'>" +
-                            "<p class='image-comment-sender-name' th:text='${comm.getSender().getFirstname() + ' ' + comm.getSender().getLastname()}'>John Doe</p>" +
-                            "<p class='image-comment-text' th:text='${comm.getMessage()}'>Comment</p>" +
-                        "</div>" +
-                    "</div>" +
-                    "</div>";
-        }
-        return htmlContent;
-    }
 
     @ModelAttribute("categories")
     public String[] categories () {
