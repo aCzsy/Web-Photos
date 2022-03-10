@@ -5,13 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.magnet.web_photos.webphotos.DTOconverters.ImageCommentConverters;
 import com.magnet.web_photos.webphotos.dto.ImageCommentDTO;
-import com.magnet.web_photos.webphotos.entity.Comment;
-import com.magnet.web_photos.webphotos.entity.ImageComments;
-import com.magnet.web_photos.webphotos.entity.Img;
-import com.magnet.web_photos.webphotos.entity.User;
+import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.exception.UserNotFoundException;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
+import com.magnet.web_photos.webphotos.model.ImageShareRequestModel;
 import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.CommentsService;
@@ -63,7 +61,8 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
+    public String getHomePage(@ModelAttribute("imageShareRequestModel") ImageShareRequestModel imageShareRequestModel,
+                              @ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
                               Model model, RedirectAttributes redirectAttributes){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
 //        User foundUser = UserSession.getUserFromSession(request);
@@ -71,6 +70,7 @@ public class HomeController {
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));
         model.addAttribute("user",foundUser);
+        model.addAttribute("people" ,userService.getListOfPeople(foundUser.getId()));
         if(successNote != null){
             model.addAttribute("successMessage",successNote);
         }
@@ -152,6 +152,17 @@ public class HomeController {
         ImageCommentDTO imageCommentDTO = ImageCommentConverters.convertCommentToImageCommentDTO(savedComment);
         objectMapper.writeValue(new File("target/comment.json"), imageCommentDTO);
         return imageCommentDTO;
+    }
+
+    @PostMapping("/home/share-image/to")
+    public String shareImage(@RequestParam("userId") Long userId,@RequestParam("imageId") Long imageId, Model model, Authentication authentication){
+        if(userId != null && imageId != null){
+            User sender = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+            imageService.createImageShareRequest(sender.getId(), userId, imageId);
+        }
+        System.out.println("IMAGE ID = " + imageId);
+        System.out.println("USER TO ID= " + userId);
+        return "redirect:/home";
     }
 
 

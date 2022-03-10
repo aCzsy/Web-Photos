@@ -8,11 +8,11 @@ public class ImageShareRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageShareId;
     @ManyToOne
-    @JoinColumn(name = "requesting_user_id")
-    private User userMakingRequest;
+    @JoinColumn(name = "request_sender_id")
+    private User sender;
     @ManyToOne
-    @JoinColumn(name = "image_owner_id")
-    private User imageOwner;
+    @JoinColumn(name = "request_receiver_id")
+    private User receiver;
     @ManyToOne
     @JoinColumn(name = "image_id")
     private Img image;
@@ -30,20 +30,20 @@ public class ImageShareRequest {
         this.imageShareId = imageShareId;
     }
 
-    public User getUserMakingRequest() {
-        return userMakingRequest;
+    public User getSender() {
+        return sender;
     }
 
-    public void setUserMakingRequest(User userMakingRequest) {
-        this.userMakingRequest = userMakingRequest;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public User getImageOwner() {
-        return imageOwner;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setImageOwner(User imageOwner) {
-        this.imageOwner = imageOwner;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
     public Img getImage() {
