@@ -173,25 +173,30 @@ body {
 .success-message,
 #successMsg{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     gap: 10px;
     z-index: 101;
-    margin: auto;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 20px;
-    border: 2px solid #7ce604;
-    border-radius: 5px;
+    margin: 0;
+    padding: 5px 0;
+    /*position: absolute;*/
+    /*top: 30%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    box-sizing: border-box;
+    background-color: #7ce604;
+    color: #ffffff;
+    border: none;
     animation-name: showSmoothly;
     animation-duration: 0.4s;
     transition: display 0.5s ease-out;
 }
 
+.success-message p{
+    padding: 0;
+    margin: 0;
+}
 
 .pre-upload-image-modal{
     display: none;
@@ -454,7 +459,8 @@ body {
     margin-left: 0;
 }
 
-.display-image{
+.display-image,
+.shared-image{
     display: block;
     width: 100%;
     height: 100%;
@@ -1057,7 +1063,8 @@ img.hover-shadow {
     transition: 0.4s;
 }
 
-#people_list_container{
+#people_list_container,
+.request-container{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1077,6 +1084,7 @@ img.hover-shadow {
 
 .container-top{
     width: 100%;
+    background-color: #ffffff;
     padding: 10px;
     position: sticky;
     top: 0;
@@ -1706,3 +1714,70 @@ img.hover-shadow {
 #return-to-user-albums span{
     margin-left: 10px;
 }
+
+/*REQUESTS PAGE*/
+.request-container{
+    width: 90%;
+    min-height: 0;
+    max-height: 50%;
+    margin-top: 5rem;
+}
+
+.shared-image-container{
+    display: block;
+    overflow: hidden;
+    height: 150px;
+    width: 20%;
+}
+
+.shared-image{
+    transition: none;
+}
+
+.share-request-container{
+    padding: 0;
+}
+
+/*#people_list_container{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: flex-start;*/
+/*    width: 70%;*/
+/*    min-height: 30%;*/
+/*    max-height: 70%;*/
+/*    overflow-y: auto;*/
+/*    box-sizing: border-box;*/
+/*    background-color: #ffffff;*/
+/*    border-radius: 5px;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    animation-name: showSmoothly;*/
+/*    animation-duration: 0.4s;*/
+/*    transition: 0.4s;*/
+/*}*/
+
+/*.container-top{*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    position: sticky;*/
+/*    top: 0;*/
+/*    display: flex;*/
+/*    justify-content: flex-end;*/
+/*    align-items: center;*/
+/*    box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);*/
+/*    -webkit-box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);*/
+/*    -moz-box-shadow: 0px 4px 10px 0px rgba(182,192,200,0.75);*/
+/*}*/
+
+/*.container-top button{*/
+/*    border: none;*/
+/*}*/
+
+/*.people-list-container{*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: flex-start;*/
+/*    padding: 10px;*/
+/*}*/

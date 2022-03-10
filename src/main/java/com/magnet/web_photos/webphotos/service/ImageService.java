@@ -1,12 +1,11 @@
 package com.magnet.web_photos.webphotos.service;
 
-import com.magnet.web_photos.webphotos.dto.ImageCommentDTO;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
 import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.ImageRepository;
-import com.magnet.web_photos.webphotos.repository.ImageShareRequestRepository;
+import com.magnet.web_photos.webphotos.repository.ImageSendRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,14 +24,14 @@ public class ImageService {
     private UserRepository userRepository;
     private ImageRepository imageRepository;
     private ImageCommentsRepository imageCommentsRepository;
-    private ImageShareRequestRepository imageShareRequestRepository;
+    private ImageSendRepository imageSendRepository;
 
     @Autowired
-    public ImageService(UserRepository userRepository, ImageRepository imageRepository, ImageCommentsRepository imageCommentsRepository, ImageShareRequestRepository imageShareRequestRepository) {
+    public ImageService(UserRepository userRepository, ImageRepository imageRepository, ImageCommentsRepository imageCommentsRepository, ImageSendRepository imageSendRepository) {
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.imageCommentsRepository = imageCommentsRepository;
-        this.imageShareRequestRepository = imageShareRequestRepository;
+        this.imageSendRepository = imageSendRepository;
     }
 
     @Transactional
@@ -135,10 +134,10 @@ public class ImageService {
         User sender = Optional.ofNullable(userRepository.findUserById(senderId)).orElseThrow();
         User receiver = Optional.ofNullable(userRepository.findUserById(receiverId)).orElseThrow();
         Img image = getImageById(imageId);
-        ImageShareRequest imageShareRequest = new ImageShareRequest();
-        imageShareRequest.setSender(sender);
-        imageShareRequest.setReceiver(receiver);
-        imageShareRequest.setImage(image);
-        imageShareRequestRepository.save(imageShareRequest);
+        ImageSendEntity imageSendEntity = new ImageSendEntity();
+        imageSendEntity.setSender(sender);
+        imageSendEntity.setReceiver(receiver);
+        imageSendEntity.setImage(image);
+        imageSendRepository.save(imageSendEntity);
     }
 }

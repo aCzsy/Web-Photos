@@ -3,15 +3,15 @@ package com.magnet.web_photos.webphotos.entity;
 import javax.persistence.*;
 
 @Entity
-public class ImageShareRequest {
+public class ImageSendEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageShareId;
+    private Long imageToSendRequestId;
     @ManyToOne
-    @JoinColumn(name = "request_sender_id")
+    @JoinColumn(name = "image_sender_id")
     private User sender;
     @ManyToOne
-    @JoinColumn(name = "request_receiver_id")
+    @JoinColumn(name = "image_receiver_id")
     private User receiver;
     @ManyToOne
     @JoinColumn(name = "image_id")
@@ -19,15 +19,15 @@ public class ImageShareRequest {
     private boolean isAccepted;
     private boolean isDeclined;
 
-    public ImageShareRequest() {
+    public ImageSendEntity() {
     }
 
-    public Long getImageShareId() {
-        return imageShareId;
+    public Long getImageToSendRequestId() {
+        return imageToSendRequestId;
     }
 
-    public void setImageShareId(Long imageShareId) {
-        this.imageShareId = imageShareId;
+    public void setImageToSendRequestId(Long imageToSendRequestId) {
+        this.imageToSendRequestId = imageToSendRequestId;
     }
 
     public User getSender() {
