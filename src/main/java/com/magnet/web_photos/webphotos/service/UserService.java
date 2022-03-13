@@ -1,5 +1,6 @@
 package com.magnet.web_photos.webphotos.service;
 
+import com.magnet.web_photos.webphotos.entity.Role;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.model.ImageModel;
 import com.magnet.web_photos.webphotos.model.UserCredentialsModel;
@@ -12,20 +13,20 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final HashService hashService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, HashService hashService) {
+    public UserService(UserRepository userRepository, HashService hashService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.hashService = hashService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public boolean isUsernameAvailable(String username){
@@ -33,14 +34,18 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-        String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
+        Role role = new Role();
+        role.setName("USER");
         LocalDate date = LocalDate.now();
 
-        return userRepository.save(new User(null,user.getUsername(),encodedSalt, hashedPassword, user.getFirstname(), user.getLastname(), date));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setDate(date);
+        user.getRoles().add(role);
+        user.setEnabled(true);
+
+        return userRepository.save(user);
+
+        //return userRepository.save(new User(null,user.getUsername(), bCryptPasswordEncoder.encode(user.getPassword()), user.getFirstname(), user.getLastname(), date,  true));
     }
 
     public User getUser(String username) {

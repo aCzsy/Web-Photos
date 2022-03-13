@@ -4,11 +4,10 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +15,6 @@ public class User {
     @Nationalized
     @Column(length = 20)
     private String username;
-    private String salt;
     private String password;
     private String firstname;
     private String lastname;
@@ -28,19 +26,28 @@ public class User {
     private List<Img> images = new ArrayList<>();
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Album> albums = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+    private boolean enabled;
 
     public User(){
 
     }
 
-    public User(Long id, String username, String salt, String password, String firstname, String lastname, LocalDate date) {
+    public User(Long id, String username, String password, String firstname, String lastname, LocalDate date, boolean enabled) {
         this.id = id;
         this.username = username;
-        this.salt = salt;
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.date = date;
+        this.roles = new HashSet<>();
+        this.enabled = enabled;
     }
 
     public void addImage(Img img){
@@ -77,14 +84,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getPassword() {
@@ -149,6 +148,22 @@ public class User {
 
     public void setAlbums(List<Album> albums) {
         this.albums = albums;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
