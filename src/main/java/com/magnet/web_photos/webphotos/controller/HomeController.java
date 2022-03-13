@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.magnet.web_photos.webphotos.DTOconverters.ImageCommentConverters;
 import com.magnet.web_photos.webphotos.dto.ImageCommentDTO;
+import com.magnet.web_photos.webphotos.dto.UserDTO;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.exception.UserNotFoundException;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
@@ -58,6 +59,15 @@ public class HomeController {
         this.imageService = imageService;
         this.imageCommentsRepository = imageCommentsRepository;
         this.commentsService = commentsService;
+    }
+
+    @GetMapping("/")
+    public String getHomePageByDefault(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (request.getSession().getAttribute("user") != null) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return null;
+        }
+        return "redirect:/home";
     }
 
     @GetMapping("/home")
