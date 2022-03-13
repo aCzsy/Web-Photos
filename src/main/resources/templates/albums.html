@@ -163,6 +163,50 @@
     </div>
 </div>
 
+<div id="people_list_bg">
+    <div id="people_list_container">
+        <div class="container-top">
+            <button type="button" onclick="closeWindow('people_list_bg')" class="edit-cred-btn">Close</button>
+        </div>
+        <div class="main-content-placeholder" th:if="${#lists.size(people)==0}">
+            <img class="placeholder-icon" src="../static/images/tag.png" th:src="@{/images/tag.png}" alt="Empty state image">
+            <p>There are no more registered users</p>
+        </div>
+
+        <div class="people-list-container" th:unless="${#lists.size(people) == 0}">
+            <div class="user-info-wrapper" th:each="registered_user : ${people}">
+                <!--                    <input type="text" name="to_user_id" id="to_user_id" th:field="*{toUserId}" th:value="${registered_user.getId()}">-->
+                <div class="image-outer-area-top-bar">
+                    <div class="image-inner-area-top-bar">
+                        <img th:if="${registered_user.getUser_image() != null}" class="profile-image"
+                             th:src="@{${'/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
+                        <img th:unless="${registered_user.getUser_image() != null}" class="profile-image"
+                             src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                    </div>
+                </div>
+                <div class="people-item-descr-wrapper">
+                    <p>Full Name</p>
+                    <h6 th:text="${registered_user.getFirstname()} + ' ' + ${registered_user.getLastname()}">Full Name</h6>
+                </div>
+                <div class="people-item-descr-wrapper">
+                    <p>Username</p>
+                    <h6 th:text="${registered_user.getUsername()}">Username</h6>
+                </div>
+                <div class="people-item-descr-wrapper">
+                    <p>Date registered</p>
+                    <h6 th:text="${registered_user.getDate()}">Date</h6>
+                </div>
+                <div class="people-item-buttons">
+                    <!--                    <form id="friend-request-form" action="#" th:action="@{/home/share-image/to/(userId=${registered_user.getId()})}" method="post">-->
+                    <!--                        <input class="profile-buttons" type="submit" value="Share">-->
+                    <!--                    </form>-->
+                    <input class="profile-buttons" type="submit" th:onclick="'shareAlbum(' + ${registered_user.getId()} + ')'" value="Share">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="content">
     <div class="side-nav">
         <div class="side-nav-title">
@@ -185,8 +229,8 @@
         <ul>
             <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
             <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a href="#"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a href="#"><i class="fas fa-share-alt side-nav-icons"></i>Received files</a></li>
+            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
             <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
             <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
@@ -227,20 +271,20 @@
 
         <div th:unless="${#lists.size(albums) == 0}" class="outer-album-container">
             <div class="album-item" th:each="album : ${albums}">
-                <div class="album-cover" th:if="${#lists.size(album.getImages()) < 3}">
-                    <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getImages()) == 0}">
-                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}" th:unless="${#lists.size(album.getImages()) == 0}">
+                <div class="album-cover" th:if="${#lists.size(album.getAlbum_images()) < 3}">
+                    <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getAlbum_images()) == 0}">
+                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(album.getAlbum_images()) == 0}">
                 </div>
-                <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getImages()) >= 3}">
+                <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getAlbum_images()) >= 3}">
                     <div class="album-cover-main-img-container">
-                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}">
+                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}">
                     </div>
                     <div class="album-cover-multiple-imgs">
                         <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(1).getImageId()}}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(1).getImageId()}}">
                         </div>
                         <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(2).getImageId()}}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(2).getImageId()}}">
                         </div>
                     </div>
                 </div>
@@ -248,7 +292,7 @@
                     <div class="album-menu-options" id="t">
                         <ul>
                             <li><a th:href="@{/albums/viewAlbum/(albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
-                            <li><a href=""><i class="fas fa-share"></i>Share</a></li>
+                            <li><a th:albumId="${album.getId()}" onclick="passAlbumId(this.getAttribute('albumId'))" href="#"><i class="fas fa-share"></i>Share</a></li>
                             <li><a th:href="@{/albums/delete-album/(albumId=${album.getId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
                         </ul>
                     </div>
@@ -256,7 +300,7 @@
                         <div class="album-short-info-details">
                             <p th:text="${'Title: ' + album.getName()}">Title: Wedding album</p>
                             <p th:text="${'Date created: ' + album.getDate_created()}">Date created: 02/09/2020</p>
-                            <p th:text="${album.getImages().size() + ' images'}">0 images</p>
+                            <p th:text="${album.getAlbum_images().size() + ' images'}">0 images</p>
                         </div>
                         <div class="album-short-info-details">
                             <i class="fas fa-ellipsis-v album-item-dot-icon" onclick ="showMenu(this);"></i>
@@ -308,6 +352,9 @@
     let album_image_select_checkbox = document.getElementsByClassName("tick");
 
     const add_gallery_images_btn_album_create = document.getElementById("add-gallery-images-btn-album-create");
+
+    const people_list = document.getElementById("people_list_bg");
+    const token = $("meta[name='_csrf']").attr("content");
 
     //album_create_gallery_open.addEventListener('click', function ()
 
@@ -542,6 +589,31 @@
 
     function closeWindow(elementId){
         document.getElementById(elementId).style.display = "none";
+    }
+
+
+    let albumToShare;
+
+    function passAlbumId(albumId) {
+        people_list.style.display = "flex";
+        albumToShare = albumId;
+    }
+
+    function shareAlbum(user_id){
+        if(albumToShare !== ''){
+            alert(albumToShare + ' ' + user_id);
+            $.ajax({
+                type: "POST",
+                url: '/albums/share-album/to/?userId=' + user_id + '&albumId=' + albumToShare,
+                contentType : "application/json",
+                dataType: "json",
+                headers: {"X-CSRF-TOKEN" : token},
+                success: function () {
+
+                }
+            });
+        }
+        albumToShare = '';
     }
 
 </script>

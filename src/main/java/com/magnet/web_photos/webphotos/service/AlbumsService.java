@@ -4,20 +4,14 @@ import com.magnet.web_photos.webphotos.DTOconverters.AlbumConverters;
 import com.magnet.web_photos.webphotos.dto.AlbumDTO;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.AlbumModel;
-import com.magnet.web_photos.webphotos.repository.AlbumsRepository;
-import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
-import com.magnet.web_photos.webphotos.repository.ImageRepository;
-import com.magnet.web_photos.webphotos.repository.UserRepository;
+import com.magnet.web_photos.webphotos.repository.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -28,12 +22,15 @@ public class AlbumsService {
     private UserRepository userRepository;
     private ImageRepository imageRepository;
     private ImageCommentsRepository imageCommentsRepository;
+    private AlbumSendRepository albumSendRepository;
 
-    public AlbumsService(AlbumsRepository albumsRepository, UserRepository userRepository, ImageRepository imageRepository, ImageCommentsRepository imageCommentsRepository) {
+    public AlbumsService(AlbumsRepository albumsRepository, UserRepository userRepository, ImageRepository imageRepository,
+                         ImageCommentsRepository imageCommentsRepository, AlbumSendRepository albumSendRepository) {
         this.albumsRepository = albumsRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.imageCommentsRepository = imageCommentsRepository;
+        this.albumSendRepository = albumSendRepository;
     }
 
     public List<AlbumDTO> getUsersAlbums(Long userId){
@@ -74,6 +71,7 @@ public class AlbumsService {
                         ImageComments imageComments = new ImageComments();
                         img.setImageComments(imageComments);
                         Img savedImage = imageRepository.save(img);
+                        album.addImage(img);
                         if(savedImage.getImageId() > 0){
                             imageComments.setImageId(savedImage.getImageId());
                             imageCommentsRepository.save(imageComments);
@@ -85,7 +83,7 @@ public class AlbumsService {
                     return img;
                 }).collect(Collectors.toList());
         user.addAlbum(album);
-        album.setImages(images);
+        //album.setImages(images);
         album.setAlbum_size(album_size.toString());
         //album.setDate_created(LocalDate.now());
 
@@ -95,7 +93,11 @@ public class AlbumsService {
     }
 
     public void addImagesToAlbum(Album album, Set<Img> images){
-        album.getImages().addAll(images);
+        //album.getImages().addAll(images);
+        images.forEach(img -> {
+            album.addImage(img);
+            imageRepository.save(img);
+        });
     }
 
     public void addImageToAlbum(Album album, Img img, User user){
@@ -111,7 +113,7 @@ public class AlbumsService {
             imageCommentsRepository.save(imageComments);
         }
 
-        album.getImages().add(img);
+        album.getAlbum_images().add(img);
     }
 
     public void editAlbumDetails(AlbumModel albumModel){
@@ -125,12 +127,37 @@ public class AlbumsService {
     }
 
     public void deleteAlbum(Album album, User user){
+        Set<Img> imagesFromGallery = new HashSet<>();
+        album.getAlbum_images()
+                .forEach(img -> {
+                    if(!(user.getImages().contains(img))) imagesFromGallery.add(img);
+                });
+
+        album.getAlbum_images().clear();
+        imageRepository.deleteAll(imagesFromGallery);
         user.removeAlbum(album);
         albumsRepository.delete(album); //IMPORTANT
     }
 
     public void deleteImageFromAlbum(Album album, Img img, User user){
-        album.getImages().remove(img);
-        imageRepository.delete(img); //IMPORTANT
+        //album.getImages().remove(img);
+        if(user.getImages().contains(img)){
+            album.removeImage(img);
+        } else{
+            album.removeImage(img);
+            imageRepository.delete(img); //IMPORTANT
+        }
+    }
+
+    public void createAlbumShareRequest(Long senderId, Long receiverId, Long albumId){
+        User sender = Optional.ofNullable(userRepository.findUserById(senderId)).orElseThrow();
+        User receiver = Optional.ofNullable(userRepository.findUserById(receiverId)).orElseThrow();
+        Album album = albumsRepository.findAlbumById(albumId);
+        AlbumSendEntity albumSendEntity = new AlbumSendEntity();
+        albumSendEntity.setSender(sender);
+        albumSendEntity.setReceiver(receiver);
+//        albumSendEntity.setAlbum(album);
+        album.addRequest(albumSendEntity);
+        albumSendRepository.save(albumSendEntity);
     }
 }

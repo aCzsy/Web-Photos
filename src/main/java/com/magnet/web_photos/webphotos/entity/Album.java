@@ -1,5 +1,6 @@
 package com.magnet.web_photos.webphotos.entity;
 
+import org.apache.tomcat.jni.Address;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
@@ -23,9 +24,31 @@ public class Album {
     @ManyToMany(mappedBy = "albums")
     private List<User> owners = new ArrayList<>();
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private List<Img> images = new ArrayList<>();
+    private List<Img> album_images = new ArrayList<>();
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AlbumSendEntity> albumSendEntities = new ArrayList<>();
 
     public Album(){
+    }
+
+    public void addImage(Img image) {
+        album_images.add(image);
+        image.getAlbumsWhereImageExist().add(this);
+    }
+
+    public void removeImage(Img image) {
+        album_images.remove(image);
+        image.getAlbumsWhereImageExist().remove(this);
+    }
+
+    public void addRequest(AlbumSendEntity albumSendEntity) {
+        albumSendEntities.add( albumSendEntity );
+        albumSendEntity.setAlbum( this );
+    }
+
+    public void removeRequest(AlbumSendEntity albumSendEntity) {
+        albumSendEntities.remove( albumSendEntity );
+        albumSendEntity.setAlbum( null );
     }
 
     public Long getId() {
@@ -84,12 +107,19 @@ public class Album {
         this.owners = owners;
     }
 
-    public List<Img> getImages() {
-        return images;
+    public List<Img> getAlbum_images() {
+        return album_images;
     }
 
-    public void setImages(List<Img> images) {
-        this.images = images;
+    public void setAlbum_images(List<Img> album_images) {
+        this.album_images = album_images;
     }
 
+    public List<AlbumSendEntity> getAlbumSendEntities() {
+        return albumSendEntities;
+    }
+
+    public void setAlbumSendEntities(List<AlbumSendEntity> albumSendEntities) {
+        this.albumSendEntities = albumSendEntities;
+    }
 }

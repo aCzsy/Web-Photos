@@ -21,6 +21,10 @@ public class Img {
     //private Long userId;
     @ManyToMany(mappedBy = "images")
     private List<User> image_owners = new ArrayList<>();
+    @ManyToMany(mappedBy = "album_images")
+    private List<Album> albumsWhereImageExist = new ArrayList<>();
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImageSendEntity> imageSendEntities = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "image_comments_id")
     private ImageComments imageComments;
@@ -29,6 +33,16 @@ public class Img {
 
     public Img(){
 
+    }
+
+    public void addRequest(ImageSendEntity imageSendEntity) {
+        imageSendEntities.add( imageSendEntity );
+        imageSendEntity.setImage( this );
+    }
+
+    public void removeRequest(ImageSendEntity imageSendEntity) {
+        imageSendEntities.remove( imageSendEntity );
+        imageSendEntity.setImage( null );
     }
 
     public Long getImageId() {
@@ -79,7 +93,15 @@ public class Img {
         this.date_uploaded = date_uploaded;
     }
 
-    //    public Long getUserId() {
+    public List<ImageSendEntity> getImageSendEntities() {
+        return imageSendEntities;
+    }
+
+    public void setImageSendEntities(List<ImageSendEntity> imageSendEntities) {
+        this.imageSendEntities = imageSendEntities;
+    }
+
+//    public Long getUserId() {
 //        return userId;
 //    }
 //
@@ -94,6 +116,14 @@ public class Img {
 
     public void setImage_owners(List<User> image_owners) {
         this.image_owners = image_owners;
+    }
+
+    public List<Album> getAlbumsWhereImageExist() {
+        return albumsWhereImageExist;
+    }
+
+    public void setAlbumsWhereImageExist(List<Album> albumsWhereImageExist) {
+        this.albumsWhereImageExist = albumsWhereImageExist;
     }
 
     public byte[] getFile_data() {

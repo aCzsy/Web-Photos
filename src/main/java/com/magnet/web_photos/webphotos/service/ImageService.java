@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,9 +109,22 @@ public class ImageService {
         return userRepository.findUserById(userId).getImages();
     }
 
+    /***This method deletes an image.
+     * This method is executed when the user want's to delete a parent entity image,
+     * which means that if an image was uploaded to a gallery and then also inserted in an album, then if
+     * a user deletes this image from a gallery, this will delete all children entities (eg in albums) also as this is a parent entity.
+     * If a child entity is being removed only from an album, parent entity still exists (deleteImageFromAlbum() in AlbumService is used for that)
+     * This method loops through all albums where this image exists and removes them first before removing a parent.
+     * Java 8 removeIf method is used in order to prevent ConcurrentModificationException exception.
+     * */
     public void deleteImage(User owner, Img img){
-        imageRepository.delete(img);
+        if(!img.getAlbumsWhereImageExist().isEmpty()){
+            for (Album album : img.getAlbumsWhereImageExist()) {
+                album.getAlbum_images().removeIf(image -> image == img);
+            }
+        }
         owner.removeImage(img);
+        imageRepository.delete(img);
     }
 
     public Img downloadImage(Long imageId){
@@ -137,7 +151,8 @@ public class ImageService {
         ImageSendEntity imageSendEntity = new ImageSendEntity();
         imageSendEntity.setSender(sender);
         imageSendEntity.setReceiver(receiver);
-        imageSendEntity.setImage(image);
+//        imageSendEntity.setImage(image);
+        image.addRequest(imageSendEntity);
         imageSendRepository.save(imageSendEntity);
     }
 }

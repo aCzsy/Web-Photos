@@ -11,18 +11,18 @@ public class AlbumDTO {
     private String comment;
     private LocalDate date_created;
     private String albumAccessType;
-    private List<Img> images;
+    private List<Img> album_images;
 
     public AlbumDTO() {
     }
 
-    public AlbumDTO(Long id, String name, String comment, LocalDate date_created, String albumAccessType, List<Img> images) {
+    public AlbumDTO(Long id, String name, String comment, LocalDate date_created, String albumAccessType, List<Img> album_images) {
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.date_created = date_created;
         this.albumAccessType = albumAccessType;
-        this.images = images;
+        this.album_images = album_images;
     }
 
     public Long getId() {
@@ -65,11 +65,11 @@ public class AlbumDTO {
         this.albumAccessType = albumAccessType;
     }
 
-    public List<Img> getImages() {
-        return images;
+    public List<Img> getAlbum_images() {
+        return album_images;
     }
 
-    public void setImages(List<Img> images) {
-        this.images = images;
+    public void setAlbum_images(List<Img> album_images) {
+        this.album_images = album_images;
     }
 }

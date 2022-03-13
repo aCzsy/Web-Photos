@@ -1,5 +1,6 @@
 package com.magnet.web_photos.webphotos.controller;
 
+import com.magnet.web_photos.webphotos.entity.AlbumSendEntity;
 import com.magnet.web_photos.webphotos.entity.ImageSendEntity;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.repository.AlbumsRepository;
@@ -45,20 +46,35 @@ public class RequestsController {
     public String getRequestsPage(Model model, Authentication authentication){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         List<ImageSendEntity> imagesSentFromOthers = requestsService.getImageSendRequestsToUser(user.getId());
+        List<AlbumSendEntity> albumsSentFromOthers = requestsService.getAlbumSendRequestsToUser(user.getId());
         model.addAttribute("user", user);
         model.addAttribute("imagesSharedByOthers", imagesSentFromOthers);
+        model.addAttribute("albumsSharedByOthers", albumsSentFromOthers);
         return "requests";
     }
 
-    @PostMapping("/requests/accept-and-save")
+    @PostMapping("/requests/accept-and-save-image")
     public String saveSharedImage(@RequestParam("requestId") Long requestId){
         requestsService.acceptAndSaveSentImage(requestId);
         return "redirect:/requests";
     }
 
-    @PostMapping("/requests/delete-request")
+    @GetMapping("/requests/delete-image-request")
     public String deleteImageShareRequest(@RequestParam("requestId") Long requestId){
         requestsService.deleteImageShareRequest(requestId);
         return "redirect:/requests";
     }
+
+    @PostMapping("/requests/accept-and-save-album")
+    public String saveSharedAlbum(@RequestParam("requestId") Long requestId){
+        requestsService.acceptAndSaveSentAlbum(requestId);
+        return "redirect:/requests";
+    }
+
+    @GetMapping("/requests/delete-album-request")
+    public String deleteAlbumShareRequest(@RequestParam("requestId") Long requestId){
+        requestsService.deleteAlbumShareRequest(requestId);
+        return "redirect:/requests";
+    }
+
 }

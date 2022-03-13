@@ -52,8 +52,8 @@
         <ul>
             <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
             <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a href="#"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a href="#"><i class="fas fa-share-alt side-nav-icons"></i>Received files</a></li>
+            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
             <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
             <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
@@ -90,19 +90,6 @@
 
             <div th:unless="${#lists.size(userPhotos) == 0}" class="outer-container-for-images">
                 <div class="image-container" th:each="img : ${userPhotos}">
-                    <div class="image-menu-top">
-                        <a class="image-menu-top-element" href="#">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                        <a class="image-menu-top-element" th:href="@{/home/delete-image/(imageId=${img.getImageId()}, imageName=${img.getImage_name()})}">
-                            <i class="far fa-trash-alt"></i>
-                        </a>
-                    </div>
-                    <div class="image-bottom-menu">
-                        <a><i class="far fa-edit fa-2x"></i></a>
-                        <a><i class="fas fa-share-alt fa-2x"></i></a>
-                        <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download fa-2x"></i></a>
-                    </div>
                     <img class="display-image" th:src="@{${'/home/image/' + img.getImageId()}}" onclick="openLightbox();toSlide(this)" alt="">
                 </div>
             </div>
@@ -123,20 +110,20 @@
 
             <div th:unless="${#lists.size(userAlbums) == 0}" class="outer-album-container">
                 <div class="album-item" th:each="album : ${userAlbums}">
-                    <div class="album-cover" th:if="${#lists.size(album.getImages()) < 3}">
-                        <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getImages()) == 0}">
-                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}" th:unless="${#lists.size(album.getImages()) == 0}">
+                    <div class="album-cover" th:if="${#lists.size(album.getAlbum_images()) < 3}">
+                        <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getAlbum_images()) == 0}">
+                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(album.getAlbum_images()) == 0}">
                     </div>
-                    <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getImages()) >= 3}">
+                    <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getAlbum_images()) >= 3}">
                         <div class="album-cover-main-img-container">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(0).getImageId()}}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}">
                         </div>
                         <div class="album-cover-multiple-imgs">
                             <div class="album-cover-small-img">
-                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(1).getImageId()}}">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(1).getImageId()}}">
                             </div>
                             <div class="album-cover-small-img">
-                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getImages().get(2).getImageId()}}">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(2).getImageId()}}">
                             </div>
                         </div>
                     </div>
@@ -151,7 +138,7 @@
                             <div class="album-short-info-details">
                                 <p th:text="${'Title: ' + album.getName()}">Title: Wedding album</p>
                                 <p th:text="${'Date created: ' + album.getDate_created()}">Date created: 02/09/2020</p>
-                                <p th:text="${album.getImages().size() + ' images'}">0 images</p>
+                                <p th:text="${album.getAlbum_images().size() + ' images'}">0 images</p>
                             </div>
                             <div class="album-short-info-details">
                                 <i class="fas fa-ellipsis-v album-item-dot-icon" onclick ="showAlbumMenu(this);"></i>

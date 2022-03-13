@@ -61,8 +61,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("imageShareRequestModel") ImageShareRequestModel imageShareRequestModel,
-                              @ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
+    public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
                               Model model, RedirectAttributes redirectAttributes){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
 //        User foundUser = UserSession.getUserFromSession(request);

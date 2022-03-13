@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>Album Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}"/>
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/css/fontawesome-5.15.4-web/css/brands.css}">
     <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/css/fontawesome-5.15.4-web/css/solid.css}">
     <link rel="stylesheet" type="text/css" href="../static/css/home.css"  th:href="@{/css/home.css}">
-    <script src="../static/js/home.js"></script>
+    <!--    <script src="../static/js/home.js"></script>-->
     <script
             src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -68,71 +68,18 @@
                 </form>
             </div>
         </div>
-        <div class="main-content-placeholder" th:if="${#lists.size(sentImageRequests)==0}">
+        <div class="main-content-placeholder" th:if="${#lists.size(sentAlbumRequest)==0}">
             <img class="placeholder-icon" src="../static/images/folder_images.png" th:src="@{/images/folder_images.png}" alt="Empty state image">
-            <p>You haven't received any images or albums yet</p>
+            <p>Album is empty</p>
         </div>
-
-        <!--RECEIVED IMAGES-->
-        <div class="title-outer-container" th:unless="${#lists.size(sentImageRequests) == 0}">
+        <div class="title-outer-container" th:unless="${#lists.size(sentAlbumRequest) == 0}">
             <div class="user-list-title">
-                <h5>Received images</h5>
+                <h5 th:text="${'Album: ' + album_name}">Album images</h5>
             </div>
         </div>
-        <div th:unless="${#lists.size(sentImageRequests) == 0}" class="outer-container-for-images">
-            <div class="image-container" th:each="savedImageRequest : ${sentImageRequests}">
-                <img class="display-image" th:src="@{${'/home/image/' + savedImageRequest.getImage().getImageId()}}" onclick="openLightbox();toSlide(this)" alt="">
-            </div>
-        </div>
-
-        <!--RECEIVED ALBUMS-->
-        <div class="title-outer-container" th:unless="${#lists.size(sentAlbumRequests) == 0}">
-            <div class="user-list-title">
-                <h5>Received albums</h5>
-            </div>
-        </div>
-        <div th:unless="${#lists.size(sentAlbumRequests) == 0}" class="outer-album-container">
-            <div class="album-item" th:each="savedAlbumRequest : ${sentAlbumRequests}">
-                <div class="album-cover" th:if="${#lists.size(savedAlbumRequest.getAlbum().getAlbum_images()) < 3}">
-                    <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(savedAlbumRequest.getAlbum().getAlbum_images()) == 0}">
-                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + savedAlbumRequest.getAlbum().getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(savedAlbumRequest.getAlbum().getAlbum_images()) == 0}">
-                </div>
-                <div class="album-cover album-cover-multiple" th:if="${#lists.size(savedAlbumRequest.getAlbum().getAlbum_images()) >= 3}">
-                    <div class="album-cover-main-img-container">
-                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + savedAlbumRequest.getAlbum().getAlbum_images().get(0).getImageId()}}">
-                    </div>
-                    <div class="album-cover-multiple-imgs">
-                        <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + savedAlbumRequest.getAlbum().getAlbum_images().get(1).getImageId()}}">
-                        </div>
-                        <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + savedAlbumRequest.getAlbum().getAlbum_images().get(2).getImageId()}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="album-short-info">
-                    <div class="album-menu-options">
-                        <ul>
-                            <li><a th:href="@{/requests/delete-album-request/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
-                        </ul>
-                    </div>
-                    <div class="album-short-info-div1">
-                        <div class="album-short-info-details">
-                            <p th:text="${'Title: ' + savedAlbumRequest.getAlbum().getName()}">Title: Wedding album</p>
-                            <p th:text="${'Date created: ' + savedAlbumRequest.getAlbum().getDate_created()}">Date created: 02/09/2020</p>
-                            <p th:text="${savedAlbumRequest.getAlbum().getAlbum_images().size() + ' images'}">0 images</p>
-                        </div>
-                        <div class="album-short-info-details">
-                            <i class="fas fa-ellipsis-v album-item-dot-icon" onclick ="showMenu(this);"></i>
-                        </div>
-                    </div>
-                    <div class="album-short-info-div2">
-<!--                        <span th:text="${savedAlbumRequest.getAlbum().getAlbumAccessType()}">Public</span>-->
-                        <div class="album-short-info-buttons">
-                            <a th:href="@{/received-files/album-gallery/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}">View album</a>
-                        </div>
-                    </div>
-                </div>
+        <div th:unless="${#lists.size(sentAlbumRequest) == 0}" class="outer-container-for-images">
+            <div class="image-container" th:each="albumRequestImages : ${sentAlbumRequest}">
+                <img class="display-image" th:src="@{${'/home/image/' + albumRequestImages.getImageId()}}" onclick="openLightbox();toSlide(this)" alt="">
             </div>
         </div>
     </div>
@@ -145,36 +92,37 @@
     </a>
     <div class="image-modal-outer">
         <div class="image-modal-content-images">
-            <div class="slide" th:each="savedImageRequest : ${sentImageRequests}">
+            <div class="slide" th:each="albumRequestImages : ${sentAlbumRequest}">
                 <a class="previous" onclick="changeSlide(-1)"><i class="fas fa-caret-left fa-2x"></i></a>
                 <a class="next" onclick="changeSlide(1)"><i class="fas fa-caret-right fa-2x"></i></a>
                 <div class="image-options">
-                    <a th:href="@{/home/download-image/(imageId=${savedImageRequest.getImage().getImageId()})}"><i class="fas fa-download"></i></a>
-                    <a th:href="@{/requests/delete-image-request/(requestId=${savedImageRequest.getImageToSendRequestId()})}"><i class="far fa-trash-alt"></i></a>
+                    <a href="#"><i class="fas fa-share-alt"></i></a>
+                    <a th:href="@{/home/download-image/(imageId=${albumRequestImages.getImageId()})}"><i class="fas fa-download"></i></a>
                 </div>
-                <img th:src="@{${'/home/image/' + savedImageRequest.getImage().getImageId()}}" class="image-slide" alt="Image" />
+                <img th:src="@{${'/home/image/' + albumRequestImages.getImageId()}}" class="image-slide" alt="Image" />
+                <!--                    <img src="../static/images/album.jpg" class="image-slide" alt="">-->
             </div>
         </div>
         <div class="image-modal-content-info">
             <div class="image-modal-content-info-tabs-container">
                 <button type="button" id="img_modal_img_details_btn" class="image-modal-content-info-tab edit-cred-btn placeholder-create-btn">Image details</button>
             </div>
-            <div class="image-modal-content-img-details" th:each="savedImageRequest : ${sentImageRequests}">
+            <div class="image-modal-content-img-details" th:each="albumRequestImages : ${sentAlbumRequest}">
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Title</p>
-                    <p class="image-modal-content-img-details-item-content" th:text="${savedImageRequest.getImage().getImage_name()}">No data available</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${albumRequestImages.getImage_name()}">No data available</p>
                 </div>
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Date uploaded</p>
-                    <p class="image-modal-content-img-details-item-content" th:text="${savedImageRequest.getImage().getDate_uploaded()}">No data available</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${albumRequestImages.getDate_uploaded()}">No data available</p>
                 </div>
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Image size</p>
-                    <p class="image-modal-content-img-details-item-content" th:text="${savedImageRequest.getImage().getImage_size() + ' Kb'}">No data available</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${albumRequestImages.getImage_size() + ' Kb'}">No data available</p>
                 </div>
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Category</p>
-                    <p class="image-modal-content-img-details-item-content" th:text="${savedImageRequest.getImage().getCategory()}">No data available</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${albumRequestImages.getCategory()}">No data available</p>
                 </div>
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Tagged friends</p>
@@ -182,13 +130,15 @@
                 </div>
                 <div class="image-modal-content-img-details-item">
                     <p class="image-modal-content-img-details-item-heading">Comment</p>
-                    <p class="image-modal-content-img-details-item-content" th:text="${savedImageRequest.getImage().getComment()}">No data available</p>
+                    <p class="image-modal-content-img-details-item-content" th:text="${albumRequestImages.getComment()}">No data available</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!--    <script th:src="@{/js/jquery-slim.min.js}"></script>-->
+<!--<script src="../static/js/home_page_script.js"></script>-->
 <script src="../static/js/jquery-3.6.0.js" th:src="@{/js/jquery-3.6.0.js}"></script>
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -197,13 +147,14 @@
 
     'use strict';
 
+    const image_modal_img_details_btn = document.getElementById("img_modal_img_details_btn");
+
     const slides = document.getElementsByClassName('slide');
     let image_details_list = document.getElementsByClassName('image-modal-content-img-details');
 
     function closeWindow(elementId){
         document.getElementById(elementId).style.display = "none";
     }
-
     function revealMenu(imageId){
         const el = document.getElementsByClassName("image-menu")[imageId-1];
         if(el.style.visibility === "hidden"){
@@ -217,10 +168,13 @@
 
     let imageList = document.getElementsByClassName('display-image');
     let imageContainerLIST = document.getElementsByClassName('image-container');
+    let im;
 
     let slideIndex = 0;
+    //showSlide(slideIndex);
 
-    //console.log(slideIndex);
+
+    console.log(slideIndex);
     //Clickable content functionality
 
     function openLightbox() {
@@ -248,6 +202,7 @@
     }
 
     function showSlide(n) {
+
         if (n > slides.length-1) {
             //slideIndex = slides.length % n;
             slideIndex = 0;
@@ -265,20 +220,6 @@
         slides[slideIndex].style.display = 'block';
         image_details_list[slideIndex].style.display = "flex";
     }
-
-    let dots = document.getElementsByClassName("album-item-dot-icon");
-    let menus = document.getElementsByClassName("album-menu-options");
-    let menu = document.getElementsByClassName("album-menu-options")[-1];
-
-    function showMenu(img) {
-        for(let i = 0;i < dots.length;i++){
-            menu = menus[i];
-            if(dots[i] === img){
-                $(menu).toggle( "fast", function() {});
-            }
-        }
-    }
-
 </script>
 </body>
 </html>

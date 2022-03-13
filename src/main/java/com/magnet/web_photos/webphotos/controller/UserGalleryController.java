@@ -61,7 +61,7 @@ public class UserGalleryController {
         model.addAttribute("album_name", album.getName());
         model.addAttribute("album_id",album.getId());
         model.addAttribute("users_name", user_firstname);
-        model.addAttribute("images",album.getImages());
+        model.addAttribute("images",album.getAlbum_images());
         model.addAttribute("user",user);
         return "user-album-gallery";
     }

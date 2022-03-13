@@ -5,7 +5,6 @@
     <title>Friends</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}"/>
-    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +50,8 @@
         <ul>
             <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
             <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a href="#"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a href="#"><i class="fas fa-share-alt side-nav-icons"></i>Received files</a></li>
+            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
             <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
             <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
             <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
@@ -72,9 +71,10 @@
             <p id="success-msg-text"></p>
         </div>
 
+        <!--IMAGES SENT BY OTHERS-->
         <div class="request-container">
             <div class="container-top">
-                <button type="button" onclick="closeWindow('people_list_bg')" class="edit-cred-btn">Close</button>
+                <button type="button" class="edit-cred-btn">Expand</button>
             </div>
             <div id="imagesSentToUser" class="people-list-container share-request-container">
                 <div class="main-content-placeholder" th:if="${#lists.size(imagesSharedByOthers)==0}">
@@ -83,51 +83,89 @@
                 </div>
 
                 <div class="people-list-container" th:unless="${#lists.size(imagesSharedByOthers) == 0}">
-                    <div class="user-info-wrapper" th:each="image : ${imagesSharedByOthers}">
+                    <div class="user-info-wrapper" th:each="imageSendRequest : ${imagesSharedByOthers}">
                         <div class="shared-image-container">
-                            <img th:src="@{${'/home/image/' + image.getImage().getImageId()}}" class="shared-image" alt="Image" />
+                            <img th:src="@{${'/home/image/' + imageSendRequest.getImage().getImageId()}}" class="shared-image" alt="Image" />
                         </div>
-                        <div class="image-outer-area-top-bar">
-                            <div class="image-inner-area-top-bar">
-                                <img th:if="${image.getSender().getUser_image() != null}" class="profile-image"
-                                     th:src="@{${'/people/getUserProfileImg/' + image.getSender().getId()}}" alt="Profile image">
-                                <img th:unless="${image.getSender().getUser_image() != null}" class="profile-image"
-                                     src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                        <div class="people-item-descr-wrapper item-with-icon">
+                            <p>Sender</p>
+                            <div class="image-outer-area-top-bar">
+                                <div class="image-inner-area-top-bar">
+                                    <img th:if="${imageSendRequest.getSender().getUser_image() != null}" class="profile-image"
+                                         th:src="@{${'/people/getUserProfileImg/' + imageSendRequest.getSender().getId()}}" alt="Profile image">
+                                    <img th:unless="${imageSendRequest.getSender().getUser_image() != null}" class="profile-image"
+                                         src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                                </div>
                             </div>
                         </div>
                         <div class="people-item-descr-wrapper">
                             <p>Sender's name</p>
-                            <h6 th:text="${image.getSender().getFirstname()} + ' ' + ${image.getSender().getLastname()}">Full Name</h6>
+                            <h6 th:text="${imageSendRequest.getSender().getFirstname()} + ' ' + ${imageSendRequest.getSender().getLastname()}">Full Name</h6>
                         </div>
                         <div class="people-item-descr-wrapper">
                             <p>Date registered</p>
-                            <h6 th:text="${image.getSender().getDate()}">Date</h6>
+                            <h6 th:text="${imageSendRequest.getSender().getDate()}">Date</h6>
                         </div>
                         <div class="people-item-buttons">
-                            <!--                    <form id="friend-request-form" action="#" th:action="@{/home/share-image/to/(userId=${registered_user.getId()})}" method="post">-->
-                            <!--                        <input class="profile-buttons" type="submit" value="Share">-->
-                            <!--                    </form>-->
-                            <!--                        <form action="#" th:action="@{/requests/accept-and-save/(requestId=${image.getImageToSendRequestId()})}" method="post">-->
-                            <!--                            <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveImage(' + ${image.getImageToSendRequestId()} + ')'" value="Save image">-->
-                            <!--                        </form>-->
-                            <!--                        <form action="#" th:action="@{/requests/delete-request/(requestId=${image.getImageToSendRequestId()})}" method="post">-->
-                            <!--                            <input class="profile-buttons" type="submit" th:onclick="'deleteImageShareRequest(' + ${image.getImageToSendRequestId()} + ')'" value="Delete">-->
-                            <!--                        </form>-->
-
-                            <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveImage(' + ${image.getImageToSendRequestId()} + ')'" value="Save image">
-                            <input class="profile-buttons" type="submit" th:onclick="'deleteImageShareRequest(' + ${image.getImageToSendRequestId()} + ')'" value="Delete">
+                            <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveImage(' + ${imageSendRequest.getImageToSendRequestId()} + ')'" value="Save image">
+                            <input class="profile-buttons" type="submit" th:onclick="'deleteImageShareRequest(' + ${imageSendRequest.getImageToSendRequestId()} + ')'" value="Delete">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-<!--        <div class="main-content-placeholder" th:if="${listsEmpty}">-->
-<!--            &lt;!&ndash;            <i class="far fa-images fa-3x placeholder-icon"></i>&ndash;&gt;-->
-<!--            <img class="placeholder-icon" src="../static/images/notification.png" th:src="@{images/notification.png}" alt="Empty state image">-->
-<!--            <p>You don't have new friend requests here just yet</p>-->
-<!--        </div>-->
+        <!--ALBUMS SENT BY OTHERS-->
+        <div class="request-container">
+            <div class="container-top">
+                <button type="button" class="edit-cred-btn">Expand</button>
+            </div>
+            <div id="albumsSentToUser" class="people-list-container share-request-container">
+                <div class="main-content-placeholder" th:if="${#lists.size(albumsSharedByOthers)==0}">
+                    <img class="placeholder-icon" src="../static/images/tag.png" th:src="@{/images/tag.png}" alt="Empty state image">
+                    <p>No images were sent to you</p>
+                </div>
 
+                <div class="people-list-container" th:unless="${#lists.size(albumsSharedByOthers) == 0}">
+                    <div class="album-item" th:each="albumSendRequest : ${albumsSharedByOthers}">
+                        <div class="album-cover" th:if="${#lists.size(albumSendRequest.getAlbum().getAlbum_images()) < 3}">
+                            <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(albumSendRequest.getAlbum().getAlbum_images()) == 0}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + albumSendRequest.getAlbum().getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(albumSendRequest.getAlbum().getAlbum_images()) == 0}">
+                        </div>
+                        <div class="album-cover album-cover-multiple" th:if="${#lists.size(albumSendRequest.getAlbum().getAlbum_images()) >= 3}">
+                            <div class="album-cover-main-img-container">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + albumSendRequest.getAlbum().getAlbum_images().get(0).getImageId()}}">
+                            </div>
+                            <div class="album-cover-multiple-imgs">
+                                <div class="album-cover-small-img">
+                                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + albumSendRequest.getAlbum().getAlbum_images().get(1).getImageId()}}">
+                                </div>
+                                <div class="album-cover-small-img">
+                                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + albumSendRequest.getAlbum().getAlbum_images().get(2).getImageId()}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="album-short-info">
+                            <div class="album-short-info-div1">
+                                <div class="album-short-info-details">
+                                    <p th:text="${'Title: ' + albumSendRequest.getAlbum().getName()}">Title: Wedding album</p>
+                                    <p th:text="${'Date created: ' + albumSendRequest.getAlbum().getDate_created()}">Date created: 02/09/2020</p>
+                                    <p th:text="${albumSendRequest.getAlbum().getAlbum_images().size() + ' images'}">0 images</p>
+                                </div>
+                            </div>
+                            <div class="album-short-info-div2">
+                                <div class="people-item-buttons">
+                                    <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveAlbum(' + ${albumSendRequest.getAlbumToSendRequestId()} + ')'" value="Save image">
+                                    <input class="profile-buttons" type="submit" th:onclick="'deleteAlbumShareRequest(' + ${albumSendRequest.getAlbumToSendRequestId()} + ')'" value="Delete">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!---->
     </div>
 </div>
 <script src="../static/js/jquery-3.6.0.js" th:src="@{/js/jquery-3.6.0.js}"></script>
@@ -155,7 +193,7 @@
     function acceptAndSaveImage(requestId){
         $.ajax({
             type: "POST",
-            url: '/requests/accept-and-save/?requestId=' + requestId,
+            url: '/requests/accept-and-save-image/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},
@@ -170,13 +208,45 @@
 
     function deleteImageShareRequest(requestId){
         $.ajax({
-            type: "POST",
-            url: '/requests/delete-request/?requestId=' + requestId,
+            type: "GET",
+            url: '/requests/delete-image-request/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},
             success: function () {
                 $('#imagesSentToUser').load(" #imagesSentToUser");
+                successMsgBox.style.display = "flex";
+                successMsgText.innerHTML = "Request has been deleted"
+                showSuccessMsg()
+            }
+        });
+    }
+
+    function acceptAndSaveAlbum(requestId){
+        $.ajax({
+            type: "POST",
+            url: '/requests/accept-and-save-album/?requestId=' + requestId,
+            contentType : "application/json",
+            dataType: "text",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function () {
+                $('#albumsSentToUser').load(" #albumsSentToUser");
+                successMsgBox.style.display = "flex";
+                successMsgText.innerText = "Album has been saved"
+                showSuccessMsg()
+            }
+        });
+    }
+
+    function deleteAlbumShareRequest(requestId){
+        $.ajax({
+            type: "GET",
+            url: '/requests/delete-album-request/?requestId=' + requestId,
+            contentType : "application/json",
+            dataType: "text",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function () {
+                $('#albumsSentToUser').load(" #albumsSentToUser");
                 successMsgBox.style.display = "flex";
                 successMsgText.innerHTML = "Request has been deleted"
                 showSuccessMsg()

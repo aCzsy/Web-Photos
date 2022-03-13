@@ -3,30 +3,30 @@ package com.magnet.web_photos.webphotos.entity;
 import javax.persistence.*;
 
 @Entity
-public class ImageSendEntity {
+public class AlbumSendEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageToSendRequestId;
+    private Long albumToSendRequestId;
     @ManyToOne
-    @JoinColumn(name = "image_sender_id")
+    @JoinColumn(name = "album_sender_id")
     private User sender;
     @ManyToOne
-    @JoinColumn(name = "image_receiver_id")
+    @JoinColumn(name = "album_receiver_id")
     private User receiver;
     @ManyToOne
-    private Img image;
+    private Album album;
     private boolean isAccepted;
     private boolean isDeclined;
 
-    public ImageSendEntity() {
+    public AlbumSendEntity() {
     }
 
-    public Long getImageToSendRequestId() {
-        return imageToSendRequestId;
+    public Long getAlbumToSendRequestId() {
+        return albumToSendRequestId;
     }
 
-    public void setImageToSendRequestId(Long imageToSendRequestId) {
-        this.imageToSendRequestId = imageToSendRequestId;
+    public void setAlbumToSendRequestId(Long albumToSendRequestId) {
+        this.albumToSendRequestId = albumToSendRequestId;
     }
 
     public User getSender() {
@@ -45,12 +45,12 @@ public class ImageSendEntity {
         this.receiver = receiver;
     }
 
-    public Img getImage() {
-        return image;
+    public Album getAlbum() {
+        return album;
     }
 
-    public void setImage(Img image) {
-        this.image = image;
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 
     public boolean isAccepted() {

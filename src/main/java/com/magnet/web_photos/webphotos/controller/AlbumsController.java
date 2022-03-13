@@ -53,6 +53,7 @@ public class AlbumsController {
         model.addAttribute("user",foundUser);
         model.addAttribute("albums", albumsService.getUsersAlbums(foundUser.getId()));
         model.addAttribute("images",imageService.getAllImages(authentication));
+        model.addAttribute("people" ,userService.getListOfPeople(foundUser.getId()));
         return "albums";
     }
 
@@ -189,7 +190,7 @@ public class AlbumsController {
         model.addAttribute("album_name", album.getName());
         model.addAttribute("album_id",album.getId());
         model.addAttribute("users_name", user_firstname);
-        model.addAttribute("images",album.getImages());
+        model.addAttribute("images",album.getAlbum_images());
         model.addAttribute("user",user);
 //        if(successNote != null){
 //            model.addAttribute("successMessage",successNote);
@@ -207,7 +208,7 @@ public class AlbumsController {
         model.addAttribute("album_name", album.getName());
         model.addAttribute("album_id",album.getId());
         model.addAttribute("users_name", user_firstname);
-        model.addAttribute("images",album.getImages());
+        model.addAttribute("images",album.getAlbum_images());
         model.addAttribute("user",user);
         return "album-gallery";
     }
@@ -227,28 +228,23 @@ public class AlbumsController {
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
         Img img = imageService.getImageById(imageId);
         albumsService.deleteImageFromAlbum(album, img, user);
-//        imageService.deleteImage(user,img);
-//        model.addAttribute("images",imageService.getAllImages(authentication));
-//        String user_firstname = user.getFirstname();
-//        model.addAttribute("album_name", album.getName());
-//        model.addAttribute("album_id",album.getId());
-//        model.addAttribute("users_name", user_firstname);
-//        model.addAttribute("images",album.getImages());
-//        model.addAttribute("user",user);
         return "redirect:/albums/viewAlbum/?albumId=" + albumId;
     }
 
     @PostMapping("/albums/edit-image-details")
     public String editAlbumImageDetails(@RequestParam(value = "albumId") Long albumId,@ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws InterruptedException {
-//        User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
-//        Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
         imageService.editImageDetails(imageModel,authentication);
-//        String user_firstname = user.getFirstname();
-//        model.addAttribute("album_name", album.getName());
-//        model.addAttribute("album_id",album.getId());
-//        model.addAttribute("users_name", user_firstname);
-//        model.addAttribute("images",album.getImages());
-//        model.addAttribute("user",user);
         return "redirect:/albums/viewAlbum/?albumId=" + albumId;
+    }
+
+    @PostMapping("/albums/share-album/to")
+    public String shareAlbum(@RequestParam("userId") Long userId,@RequestParam("albumId") Long albumId, Model model, Authentication authentication){
+        if(userId != null && albumId != null){
+            User sender = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+            albumsService.createAlbumShareRequest(sender.getId(),userId,albumId);
+        }
+        System.out.println("ALBUM ID = " + albumId);
+        System.out.println("USER TO ID= " + userId);
+        return "redirect:/albums";
     }
 }
