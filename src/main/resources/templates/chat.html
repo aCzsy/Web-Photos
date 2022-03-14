@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            -webkit-box-sizing: border-box; /*The width and height properties (and min/max properties) includes content, padding and border*/
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            list-style-type: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sora', sans-serif;
+        }
+
+        body {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        #chat-outer-container{
+            width: 70%;
+            height: 80vh;
+            display: flex;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f2f2f2;
+            box-sizing: border-box;
+        }
+
+        #chat-inner-users-list{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 40%;
+            height: 100%;
+            background: #003366;
+            overflow-y: auto;
+        }
+
+        #chat-inner-chat-room{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 60%;
+            height: 100%;
+        }
+
+        #chat-inner-chat-room-chat-with{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .chat-inner-users-list-item{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 15px;
+            color: #d9d9d9;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid #004d99;
+        }
+
+        #chat-inner-chat-room-chat-window{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .chat-message{
+            padding: 15px;
+            display: flex;
+            margin-top: 15px;
+            flex-direction: column;
+            background:rgba(0,0,0,0.4);
+            border-radius: 15px;
+        }
+
+        #chat-inner-chat-room-message-area{
+            width: 100%;
+            height: 5rem;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+
+        #chat-inner-chat-room-message-area button{
+            padding: 10px;
+         }
+
+        #message-box{
+            flex-grow: 1;
+        }
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css"  th:href="@{/css/home.css}">
+</head>
+<body onload="document.body.style.opacity='1'">
+<div id="chat-outer-container">
+    <div id="chat-inner-users-list">
+        <div class="chat-inner-users-list-item">
+            <div class="image-outer-area-top-bar comment-item-profile-image">
+                <div class="image-inner-area-top-bar">
+                    <img src="../static/images/default_profile_pic.png" class="profile-image" alt="Profile image">
+                </div>
+            </div>
+            <p>John Doe</p>
+        </div>
+        <div class="chat-inner-users-list-item">
+            <div class="image-outer-area-top-bar comment-item-profile-image">
+                <div class="image-inner-area-top-bar">
+                    <img src="../static/images/default_profile_pic.png" class="profile-image" alt="Profile image">
+                </div>
+            </div>
+            <p>John Doe</p>
+        </div>
+        <div class="chat-inner-users-list-item">
+            <div class="image-outer-area-top-bar comment-item-profile-image">
+                <div class="image-inner-area-top-bar">
+                    <img src="../static/images/default_profile_pic.png" class="profile-image" alt="Profile image">
+                </div>
+            </div>
+            <p>John Doe</p>
+        </div>
+    </div>
+    <div id="chat-inner-chat-room">
+        <div id="chat-inner-chat-room-chat-with" class="chat-inner-users-list-item">
+            <div class="image-outer-area-top-bar comment-item-profile-image">
+                <div class="image-inner-area-top-bar">
+                    <img src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
+                </div>
+            </div>
+            <p>John Doe</p>
+        </div>
+
+        <div id="chat-inner-chat-room-chat-window">
+            <div class="chat-message">
+                <p>John Doe</p>
+                <p>Hi my name is John!</p>
+            </div>
+            <div class="chat-message">
+                <p>John Doe</p>
+                <p>Hi my name is John!</p>
+            </div>
+        </div>
+        <div id="chat-inner-chat-room-message-area">
+            <textarea id="message-box" placeholder="Type message..."></textarea>
+            <button type="button">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+</body>
+</html>
