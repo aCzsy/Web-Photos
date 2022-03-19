@@ -678,6 +678,8 @@
         // alert(`IMAGEID ${imageId}`)
 
         const com_cont = "#comments_container" + imageId;
+        let content = $(com_cont).innerHTML;
+        //let content = document.getElementById(com_cont).innerHTML;
         //alert(com_cont);
 
         event.preventDefault();
@@ -690,7 +692,11 @@
             headers: {"X-CSRF-TOKEN" : token},
             success: function (data) {
                 if(data.message !== ''){
-                    $(com_cont).load(" " + com_cont);
+                    alert("SUCCESS");
+                    //$(com_cont).load(" " + com_cont);
+                    let content = $(com_cont).append(data.message);
+                    $(com_cont).html($(com_cont).html());
+
                 }
             }
         });
