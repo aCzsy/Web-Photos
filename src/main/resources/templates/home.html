@@ -673,7 +673,7 @@
             comment : comment_index.value
         }
 
-        alert(`SLIDEINDEX ${slideIndex}`)
+        //alert(`SLIDEINDEX ${slideIndex}`)
         // alert(`COMMENT ${image_comment.comment}`)
         // alert(`IMAGEID ${imageId}`)
 
@@ -692,10 +692,10 @@
             headers: {"X-CSRF-TOKEN" : token},
             success: function (data) {
                 if(data.message !== ''){
-                    alert("SUCCESS");
-                    //$(com_cont).load(" " + com_cont);
-                    let content = $(com_cont).append(data.message);
-                    $(com_cont).html($(com_cont).html());
+                    //alert("SUCCESS");
+                    $(com_cont).load(" " + com_cont);
+                    //let content = $(com_cont).append(data.message);
+                    //$(com_cont).html($(com_cont).html());
 
                 }
             }
