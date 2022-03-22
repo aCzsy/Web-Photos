@@ -192,15 +192,46 @@
                 <p>Hi my name is John!</p>
             </div>
         </div>
+        <ul id="message-list"></ul>
         <div id="chat-inner-chat-room-message-area">
             <textarea id="message-box" placeholder="Type message..."></textarea>
-            <button type="button" id="message-send-btn"><i class="far fa-paper-plane"></i></button>
+            <button onclick="sendMessage()" type="button" id="message-send-btn"><i class="far fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js" integrity="sha512-lyIq9fRcCeSCXhp41XC/250UBmypAHV8KW+AhLcSEIksWHBfhzub6XXwDe67wTpOG8zrO2NAU/TYmEaCW+aQSg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous"></script>
 <script>
+    // Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
+    let sock = new SockJS("http://localhost:8080/stomp");
 
+    // Create a new StompClient object with the WebSocket endpoint
+    let client = Stomp.over(sock);
+
+    // Start the STOMP communications, provide a callback for when the CONNECT frame arrives.
+    client.connect({}, frame => {
+        // Subscribe to "/topic/messages". Whenever a message arrives add the text in a list-item element in the unordered list.
+        client.subscribe("/topic/messages", payload => {
+
+            let message_list = document.getElementById('message-list');
+            let message = document.createElement('li');
+
+            message.appendChild(document.createTextNode(JSON.parse(payload.body).message));
+            message_list.appendChild(message);
+
+        });
+
+    });
+
+    // Take the value in the ‘message-input’ text field and send it to the server with empty headers.
+    function sendMessage(){
+
+        let input = document.getElementById("message-box");
+        let message = input.value;
+
+        client.send('/app/chat', {}, JSON.stringify({message: message}));
+
+    }
 </script>
 </body>
 </html>
