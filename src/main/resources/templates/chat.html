@@ -203,7 +203,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous"></script>
 <script>
     // Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
-    let sock = new SockJS("http://localhost:8080/stomp");
+    let sock = new SockJS("https://final-software-project.herokuapp.com/stomp");
 
     // Create a new StompClient object with the WebSocket endpoint
     let client = Stomp.over(sock);
