@@ -13,9 +13,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>webphotos</name>
     <description>Demo project for Spring Boot</description>
-<!--    <properties>-->
-<!--&lt;!&ndash;        <java.version>11</java.version>&ndash;&gt;-->
-<!--    </properties>-->
+    <properties>
+        <java.version>11</java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
