@@ -1,0 +1,11 @@
+runtime: java11
+instance_class: F2
+#env: standard
+#runtime_config:
+#  jdk: openjdk11
+handlers:
+- url: /.*
+  script: this field is required, but ignored
+
+- url: /favicon.ico
+  static_dir: images/favicon.ico
