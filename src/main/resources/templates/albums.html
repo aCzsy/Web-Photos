@@ -122,7 +122,7 @@
         <div class="edit-modal-title">
             <h5>Album details</h5>
         </div>
-        <form action="#" id="album-info-edit-form" th:action="@{/albums/edit-album-details}" th:object="${albumModel}" method="POST">
+        <form action="#" id="album-info-edit-form" th:action="@{/web/albums/edit-album-details}" th:object="${albumModel}" method="POST">
             <input type="hidden" name="album_id" id="album_id" th:field="*{albumId}">
             <h6><i class="fas fa-heading edit-form-icons"></i>Album name</h6>
             <input type="text" class="image-info-labels" name="album_name" id="album_name" th:field="*{albumName}">
@@ -230,13 +230,13 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -255,7 +255,7 @@
                 <div class="home-title-bar-options">
                     <button type="button" class="home-title-bar-buttons album-create-btns-nav"><i class="fas fa-plus-circle icons"></i>&nbsp;&nbsp;Create album</button>
                 </div>
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -294,9 +294,9 @@
                 <div class="album-short-info">
                     <div class="album-menu-options" id="t">
                         <ul>
-                            <li><a th:href="@{/albums/viewAlbum/(albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
+                            <li><a th:href="@{/web/albums/viewAlbum/(albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
                             <li><a th:albumId="${album.getId()}" onclick="passAlbumId(this.getAttribute('albumId'))" href="#"><i class="fas fa-share"></i>Share</a></li>
-                            <li><a th:href="@{/albums/delete-album/(albumId=${album.getId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
+                            <li><a th:href="@{/web/albums/delete-album/(albumId=${album.getId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
                         </ul>
                     </div>
                     <div class="album-short-info-div1">
@@ -312,7 +312,7 @@
                     <div class="album-short-info-div2">
                         <span th:text="${album.getAlbumAccessType()}">Public</span>
                         <div class="album-short-info-buttons">
-                            <a th:href="@{/albums/viewAlbum/(albumId=${album.getId()})}">View album</a>
+                            <a th:href="@{/web/albums/viewAlbum/(albumId=${album.getId()})}">View album</a>
                             <button type="button" th:albumId="${album.getId()}" th:albumName="${album.getName()}"
                                     th:albumComment="${album.getComment()}" th:albumAccessType="${album.getAlbumAccessType()}" th:albumDateCreated="${album.getDate_created()}"
                             onclick="showAlbumDetailsEditModal(this.getAttribute('albumId'),this.getAttribute('albumName'), this.getAttribute('albumComment'), this.getAttribute('albumAccessType'),this.getAttribute('albumDateCreated'))">Edit details</button>
@@ -536,7 +536,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/albums/create-album',//do not put the full url,you need use an absolute url
+                url: '/web/albums/create-album',//do not put the full url,you need use an absolute url
                 enctype: 'multipart/form-data',
                 processData: false,
                 contentType: false,
@@ -607,7 +607,7 @@
             alert(albumToShare + ' ' + user_id);
             $.ajax({
                 type: "POST",
-                url: '/albums/share-album/to/?userId=' + user_id + '&albumId=' + albumToShare,
+                url: '/web/albums/share-album/to/?userId=' + user_id + '&albumId=' + albumToShare,
                 contentType : "application/json",
                 dataType: "json",
                 headers: {"X-CSRF-TOKEN" : token},

@@ -38,7 +38,7 @@
         <div class="edit-modal-title">
             <h5>User details</h5>
         </div>
-        <form action="#" id="album-info-edit-form" th:action="@{/profile/edit-user-details}" th:object="${userCredentialsModel}" method="POST">
+        <form action="#" id="album-info-edit-form" th:action="@{/web/profile/edit-user-details}" th:object="${userCredentialsModel}" method="POST">
             <input type="hidden" name="user_id" id="user_id" th:field="*{userId}">
             <h6><i class="fas fa-user edit-form-icons"></i>Username</h6>
             <input type="text" class="image-info-labels" name="user_name" id="user_name" th:field="*{userName}">
@@ -75,19 +75,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -103,7 +103,7 @@
                                  src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
                         </div>
                     </div>
-                    <form id="avatar-upload-form" action="#" th:action="@{/profile/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                    <form id="avatar-upload-form" action="#" th:action="@{/web/profile/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                         <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
                         <label class="home-title-bar-buttons" for="uploaded_avatar"><i class="fas fa-upload"></i>&nbsp;&nbsp;Choose avatar</label>
                         <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_avatar" name="uploaded_avatar" th:field="*{uploaded_image}" onclick="uploadFile('uploaded_avatar','avatar-upload-form')">
@@ -136,7 +136,7 @@
                         </div>
 
                         <div th:if="${user.getAbout_info() == null}">
-                            <form action="#" id="user-about-info-form" th:action="@{/profile/edit-user-info}" th:object="${userAboutInfo}" method="post">
+                            <form action="#" id="user-about-info-form" th:action="@{/web/profile/edit-user-info}" th:object="${userAboutInfo}" method="post">
                                 <input type="hidden" name="userId" id="userId" th:field="*{userId}">
                                 <label for="profile-description"><h5 th:text="'About ' + ${user.firstname}">About user</h5></label>
                                 <br>

@@ -44,7 +44,7 @@ public class ReceivedFilesController {
         this.albumSendRepository = albumSendRepository;
     }
 
-    @GetMapping("/received-files")
+    @GetMapping("/web/received-files")
     public String getReceivedFilesPage(Model model, Authentication authentication){
         User user = userRepository.getUser(authentication.getName());
         model.addAttribute("user",user);
@@ -53,7 +53,7 @@ public class ReceivedFilesController {
         return "received-files";
     }
 
-    @GetMapping("/received-files/album-gallery")
+    @GetMapping("/web/received-files/album-gallery")
     public String getReceivedAlbumsGalleryPage(@RequestParam("requestId") Long requestId, Model model, Authentication authentication){
         User user = userRepository.getUser(authentication.getName());
         AlbumSendEntity albumSendEntity = albumSendRepository.getById(requestId);

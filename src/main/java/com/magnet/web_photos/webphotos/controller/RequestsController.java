@@ -42,7 +42,7 @@ public class RequestsController {
         this.requestsService = requestsService;
     }
 
-    @GetMapping("/requests")
+    @GetMapping("/web/requests")
     public String getRequestsPage(Model model, Authentication authentication){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         List<ImageSendEntity> imagesSentFromOthers = requestsService.getImageSendRequestsToUser(user.getId());
@@ -53,28 +53,28 @@ public class RequestsController {
         return "requests";
     }
 
-    @PostMapping("/requests/accept-and-save-image")
+    @PostMapping("/web/requests/accept-and-save-image")
     public String saveSharedImage(@RequestParam("requestId") Long requestId){
         requestsService.acceptAndSaveSentImage(requestId);
-        return "redirect:/requests";
+        return "redirect:/web/requests";
     }
 
-    @GetMapping("/requests/delete-image-request")
+    @GetMapping("/web/requests/delete-image-request")
     public String deleteImageShareRequest(@RequestParam("requestId") Long requestId){
         requestsService.deleteImageShareRequest(requestId);
-        return "redirect:/requests";
+        return "redirect:/web/requests";
     }
 
-    @PostMapping("/requests/accept-and-save-album")
+    @PostMapping("/web/requests/accept-and-save-album")
     public String saveSharedAlbum(@RequestParam("requestId") Long requestId){
         requestsService.acceptAndSaveSentAlbum(requestId);
-        return "redirect:/requests";
+        return "redirect:/web/requests";
     }
 
-    @GetMapping("/requests/delete-album-request")
+    @GetMapping("/web/requests/delete-album-request")
     public String deleteAlbumShareRequest(@RequestParam("requestId") Long requestId){
         requestsService.deleteAlbumShareRequest(requestId);
-        return "redirect:/requests";
+        return "redirect:/web/requests";
     }
 
 }

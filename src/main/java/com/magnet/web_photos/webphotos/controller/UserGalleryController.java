@@ -39,7 +39,7 @@ public class UserGalleryController {
         this.albumsRepository = albumsRepository;
     }
 
-    @GetMapping("/user/user-gallery/")
+    @GetMapping("/web/user/user-gallery/")
     public String getUserGallery(@RequestParam(value = "userId") Long userId, Model model, Authentication authentication){
         User authenticatedUser = userRepository.getUser(authentication.getName());
         User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
@@ -51,7 +51,7 @@ public class UserGalleryController {
         return "user-gallery";
     }
 
-    @GetMapping("/user/album-gallery")
+    @GetMapping("/web/user/album-gallery")
     public String getUserAlbumGallery(@RequestParam(value = "userId") Long userId,@RequestParam(value = "albumId") Long albumId, Model model, Authentication authentication){
         User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
         User authenticatedUser = userRepository.getUser(authentication.getName());

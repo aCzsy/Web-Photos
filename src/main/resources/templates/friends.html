@@ -43,20 +43,20 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -91,10 +91,10 @@
                     <h6 th:text="${friendRequest.getFromUser().getUsername()}">Username</h6>
                 </div>
                 <div class="friend-request-options">
-                    <form action="#" th:action="@{/friends/accept-friend-request/(requestId=${friendRequest.getFriendRequestId()})}" method="post">
+                    <form action="#" th:action="@{/web/friends/accept-friend-request/(requestId=${friendRequest.getFriendRequestId()})}" method="post">
                         <input class="profile-buttons" type="submit" value="Accept">
                     </form>
-                    <form action="#" th:action="@{/friends/decline-friend-request/(requestId=${friendRequest.getFriendRequestId()})}" method="post">
+                    <form action="#" th:action="@{/web/friends/decline-friend-request/(requestId=${friendRequest.getFriendRequestId()})}" method="post">
                         <input class="profile-buttons" type="submit" value="Decline">
                     </form>
                 </div>
@@ -150,7 +150,7 @@
 <!--                    <h6 th:text="${friend.getDate()}">Date</h6>-->
 <!--                </div>-->
                 <div class="people-item-buttons">
-                    <a th:href="@{/user/user-gallery/(userId=${friend.getId()})}" class="profile-buttons">View Gallery</a>
+                    <a th:href="@{/web/user/user-gallery/(userId=${friend.getId()})}" class="profile-buttons">View Gallery</a>
 <!--                    <form id="friend-request-form" action="#" th:action="@{/people/friend-request/to/(userId=${friend.getId()})}" method="post">-->
 <!--                        <input class="profile-buttons" type="submit" value="Friend request">-->
 <!--                    </form>-->

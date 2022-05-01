@@ -53,19 +53,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -99,7 +99,7 @@
                 <a class="next" onclick="changeSlide(1)"><i class="fas fa-caret-right fa-2x"></i></a>
                 <div class="image-options">
                     <a href="#"><i class="fas fa-share-alt"></i></a>
-                    <a th:href="@{/home/download-image/(imageId=${albumRequestImages.getImageId()})}"><i class="fas fa-download"></i></a>
+                    <a th:href="@{/web/home/download-image/(imageId=${albumRequestImages.getImageId()})}"><i class="fas fa-download"></i></a>
                 </div>
                 <img th:src="@{${'/home/image/' + albumRequestImages.getImageId()}}" class="image-slide" alt="Image" />
                 <!--                    <img src="../static/images/album.jpg" class="image-slide" alt="">-->

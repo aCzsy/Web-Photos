@@ -53,19 +53,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -115,7 +115,7 @@
                 <div class="album-short-info">
                     <div class="album-menu-options">
                         <ul>
-                            <li><a th:href="@{/requests/delete-album-request/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
+                            <li><a th:href="@{/web/requests/delete-album-request/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}"><i class="far fa-trash-alt"></i>Delete</a></li>
                         </ul>
                     </div>
                     <div class="album-short-info-div1">
@@ -131,7 +131,7 @@
                     <div class="album-short-info-div2">
 <!--                        <span th:text="${savedAlbumRequest.getAlbum().getAlbumAccessType()}">Public</span>-->
                         <div class="album-short-info-buttons">
-                            <a th:href="@{/received-files/album-gallery/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}">View album</a>
+                            <a th:href="@{/web/received-files/album-gallery/(requestId=${savedAlbumRequest.getAlbumToSendRequestId()})}">View album</a>
                         </div>
                     </div>
                 </div>
@@ -151,8 +151,8 @@
                 <a class="previous" onclick="changeSlide(-1)"><i class="fas fa-caret-left fa-2x"></i></a>
                 <a class="next" onclick="changeSlide(1)"><i class="fas fa-caret-right fa-2x"></i></a>
                 <div class="image-options">
-                    <a th:href="@{/home/download-image/(imageId=${savedImageRequest.getImage().getImageId()})}"><i class="fas fa-download"></i></a>
-                    <a th:href="@{/requests/delete-image-request/(requestId=${savedImageRequest.getImageToSendRequestId()})}"><i class="far fa-trash-alt"></i></a>
+                    <a th:href="@{/web/home/download-image/(imageId=${savedImageRequest.getImage().getImageId()})}"><i class="fas fa-download"></i></a>
+                    <a th:href="@{/web/requests/delete-image-request/(requestId=${savedImageRequest.getImageToSendRequestId()})}"><i class="far fa-trash-alt"></i></a>
                 </div>
                 <img th:src="@{${'/home/image/' + savedImageRequest.getImage().getImageId()}}" class="image-slide" alt="Image" />
             </div>

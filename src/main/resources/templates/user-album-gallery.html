@@ -53,13 +53,13 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -308,7 +308,7 @@
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: '/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+            url: '/web/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
             contentType : "application/json",
             dataType: "json",
             data: JSON.stringify(image_comment),

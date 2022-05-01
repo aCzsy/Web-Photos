@@ -34,7 +34,7 @@ public class PeopleController {
 
     //String reqSentMsg = null;
 
-    @GetMapping("/people")
+    @GetMapping("/web/people")
     public String getPeoplePage(Model model,@ModelAttribute("sortForm") SortForm sortForm, Authentication authentication){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         model.addAttribute("user",foundUser);
@@ -57,12 +57,12 @@ public class PeopleController {
         httpServletResponse.getOutputStream().close();
     }
 
-    @PostMapping("/people/sort-users")
+    @PostMapping("/web/people/sort-users")
     public String sortUsersList(@ModelAttribute("sortForm") SortForm sortForm, Model model){
-        return "redirect:/people";
+        return "redirect:/web/people";
     }
 
-    @PostMapping("/people/friend-request/to/")
+    @PostMapping("/web/people/friend-request/to/")
     public String sendFriendRequest(@RequestParam(value = "userId") Long userId, RedirectAttributes redirectAttrs, Authentication authentication){
         User authenticatedUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         User receiver = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
@@ -73,7 +73,7 @@ public class PeopleController {
         redirectAttrs.addFlashAttribute("successMessage", "Friend request sent");
 
 //        reqSentMsg = "Friend request sent";
-        return "redirect:/people";
+        return "redirect:/web/people";
     }
 
     @ModelAttribute("sortTypes")

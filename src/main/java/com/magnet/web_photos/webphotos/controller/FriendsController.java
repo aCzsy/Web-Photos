@@ -33,7 +33,7 @@ public class FriendsController {
         this.friendRequestRepository = friendRequestRepository;
     }
 
-    @GetMapping("/friends")
+    @GetMapping("/web/friends")
     public String getFriendsPage(@ModelAttribute("sortForm") SortForm sortForm,Model model, Authentication authentication){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         List<FriendRequest> friendRequestList = friendRequestService.getFriendRequestsForReceiver(user.getId());
@@ -50,12 +50,12 @@ public class FriendsController {
         return "friends";
     }
 
-    @PostMapping("/friends/sort-friends")
+    @PostMapping("/web/friends/sort-friends")
     public String sortFriendsList(@ModelAttribute("sortForm") SortForm sortForm, Model model){
-        return "redirect:/friends";
+        return "redirect:/web/friends";
     }
 
-    @PostMapping("/friends/accept-friend-request")
+    @PostMapping("/web/friends/accept-friend-request")
     public String acceptFriendRequest(@RequestParam(value = "requestId") Long requestId, RedirectAttributes redirectAttrs, Authentication authentication){
         String successMessage = "";
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
@@ -70,10 +70,10 @@ public class FriendsController {
             successMessage = "Error during request";
         }
         redirectAttrs.addFlashAttribute("successMessage", successMessage);
-        return "redirect:/friends";
+        return "redirect:/web/friends";
     }
 
-    @PostMapping("/friends/decline-friend-request")
+    @PostMapping("/web/friends/decline-friend-request")
     public String declineFriendRequest(@RequestParam(value = "requestId") Long requestId, RedirectAttributes redirectAttrs){
         String successMessage = "";
         Optional<FriendRequest> friendRequest = friendRequestRepository.findById(requestId);
@@ -88,15 +88,15 @@ public class FriendsController {
             successMessage = "Error during request";
         }
         redirectAttrs.addFlashAttribute("successMessage", successMessage);
-        return "redirect:/friends";
+        return "redirect:/web/friends";
     }
 
-    @GetMapping("friends/getFriendRequestInfo")
+    @GetMapping("/web/friends/getFriendRequestInfo")
     public String getFriendRequestInfo(@RequestParam(value = "userId") Long userId, Model model){
         User user = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
         model.addAttribute("friendRequestUserName", user.getFirstname());
         model.addAttribute("friendRequestUser", user);
-        return "redirect:/friends";
+        return "redirect:/web/friends";
     }
 
     @ModelAttribute("sortTypes")

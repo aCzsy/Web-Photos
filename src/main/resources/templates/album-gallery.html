@@ -78,7 +78,7 @@
 <!--Image information/edit wrapper-->
 <div class="pre-upload-image-modal" id="image-info-modal">
     <div class="pre-upload-image-modal-content">
-        <form action="#" id="image-info-form" th:action="@{/albums/edit-image-details/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+        <form action="#" id="image-info-form" th:action="@{/web/albums/edit-image-details/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
             <input type="hidden" name="image-info-img-id" id="image-info-img-id" th:field="*{imageId}">
             <div class="pre-upload-image-wrapper">
                 <img id="image-info-img" alt="" th:field="*{uploaded_image}"/>
@@ -144,19 +144,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form id="image-upload-form" action="#" th:action="@{/albums/add-image-to-album/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
+                <form id="image-upload-form" action="#" th:action="@{/web/albums/add-image-to-album/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
                     <div class="home-title-bar-options">
                         <div>
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                 </form>
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -206,8 +206,8 @@
                         <i class="far fa-edit"></i>
                     </a>
                     <a href="#"><i class="fas fa-share-alt"></i></a>
-                    <a th:href="@{/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download"></i></a>
-                    <a th:href="@{/albums/delete-image-from-album/(albumId=${album_id},imageId=${img.getImageId()})}"><i class="far fa-trash-alt"></i></a>
+                    <a th:href="@{/web/home/download-image/(imageId=${img.getImageId()})}"><i class="fas fa-download"></i></a>
+                    <a th:href="@{/web/albums/delete-image-from-album/(albumId=${album_id},imageId=${img.getImageId()})}"><i class="far fa-trash-alt"></i></a>
                 </div>
                 <img th:src="@{${'/home/image/' + img.getImageId()}}" class="image-slide" alt="Image" />
                 <!--                    <img src="../static/images/album.jpg" class="image-slide" alt="">-->
@@ -468,7 +468,7 @@
        event.preventDefault();
        $.ajax({
            type: "POST",
-           url: '/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+           url: '/web/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
            contentType : "application/json",
            dataType: "json",
            data: JSON.stringify(image_comment),

@@ -47,7 +47,7 @@ public class AlbumsController {
         this.albumsRepository = albumsRepository;
     }
 
-    @GetMapping("/albums")
+    @GetMapping("/web/albums")
     public String getAlbumsPage(@ModelAttribute("albumModel") AlbumModel albumModel,  Authentication authentication, Model model){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         model.addAttribute("user",foundUser);
@@ -75,7 +75,7 @@ public class AlbumsController {
 //    @RequestBody MultipartFile[] images
 //@RequestParam MultiValueMap<MultipartFile[],MultipartFile[]> values,
 
-    @PostMapping(value = "albums/create-album",produces = {"application/json", "multipart/form-data"}, consumes = {"multipart/form-data", "application/json"})
+    @PostMapping(value = "web/albums/create-album",produces = {"application/json", "multipart/form-data"}, consumes = {"multipart/form-data", "application/json"})
     public String createAlbum(@RequestParam MultiValueMap<String,String> values, MultipartHttpServletRequest request, Authentication authentication, Model model) throws IOException {
         Map <String, MultipartFile> receivedAlbumData;
         //Map <String, MultipartFile> receivedAlbumData2;
@@ -162,14 +162,14 @@ public class AlbumsController {
             albumsService.addImagesToAlbum(createdAlbum,images);
         }
 
-        return "redirect:/albums";
+        return "redirect:/web/albums";
     }
 
-    @PostMapping("/albums/edit-album-details")
+    @PostMapping("/web/albums/edit-album-details")
     public String editAlbumDetails(@ModelAttribute("albumModel") AlbumModel albumModel,Model model){
         String successNote = "Album details have been successfully updated.";
         albumsService.editAlbumDetails(albumModel);
-        return "redirect:/albums";
+        return "redirect:/web/albums";
     }
 
     @ModelAttribute("accessTypes")
@@ -182,7 +182,7 @@ public class AlbumsController {
         return new String[] { "Holiday", "Sport", "Event", "Animals", "Friends" , "Outdoor", "Other" };
     }
 
-    @GetMapping("/albums/viewAlbum")
+    @GetMapping("/web/albums/viewAlbum")
     public String getAlbumsGallery(@RequestParam(value = "albumId") Long albumId,@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication, Model model){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
@@ -198,7 +198,7 @@ public class AlbumsController {
         return "album-gallery";
     }
 
-    @PostMapping("/albums/add-image-to-album")
+    @PostMapping("/web/albums/add-image-to-album")
     public String addImageToAlbum(@RequestParam(value = "albumId") Long albumId, @ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws IOException, SQLException {
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
@@ -213,31 +213,31 @@ public class AlbumsController {
         return "album-gallery";
     }
 
-    @GetMapping("/albums/delete-album")
+    @GetMapping("/web/albums/delete-album")
     public String deleteImage(@RequestParam(value = "albumId") Long albumId, Model model, Authentication authentication){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
         albumsService.deleteAlbum(album,user);
-        return "redirect:/albums";
+        return "redirect:/web/albums";
     }
 
-    @GetMapping("/albums/delete-image-from-album")
+    @GetMapping("/web/albums/delete-image-from-album")
     public String deleteImage(@RequestParam(value = "albumId") Long albumId,@RequestParam(value = "imageId") Long imageId,
                               Model model, Authentication authentication, @ModelAttribute("imageModel")ImageModel imageModel){
         User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
         Img img = imageService.getImageById(imageId);
         albumsService.deleteImageFromAlbum(album, img, user);
-        return "redirect:/albums/viewAlbum/?albumId=" + albumId;
+        return "redirect:/web/albums/viewAlbum/?albumId=" + albumId;
     }
 
-    @PostMapping("/albums/edit-image-details")
+    @PostMapping("/web/albums/edit-image-details")
     public String editAlbumImageDetails(@RequestParam(value = "albumId") Long albumId,@ModelAttribute("imageModel")ImageModel imageModel, Model model, Authentication authentication) throws InterruptedException {
         imageService.editImageDetails(imageModel,authentication);
-        return "redirect:/albums/viewAlbum/?albumId=" + albumId;
+        return "redirect:/web/albums/viewAlbum/?albumId=" + albumId;
     }
 
-    @PostMapping("/albums/share-album/to")
+    @PostMapping("/web/albums/share-album/to")
     public String shareAlbum(@RequestParam("userId") Long userId,@RequestParam("albumId") Long albumId, Model model, Authentication authentication){
         if(userId != null && albumId != null){
             User sender = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
@@ -245,6 +245,6 @@ public class AlbumsController {
         }
         System.out.println("ALBUM ID = " + albumId);
         System.out.println("USER TO ID= " + userId);
-        return "redirect:/albums";
+        return "redirect:/web/albums";
     }
 }

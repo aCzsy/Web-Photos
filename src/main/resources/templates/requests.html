@@ -50,20 +50,20 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -195,7 +195,7 @@
     function acceptAndSaveImage(requestId){
         $.ajax({
             type: "POST",
-            url: '/requests/accept-and-save-image/?requestId=' + requestId,
+            url: '/web/requests/accept-and-save-image/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},
@@ -211,7 +211,7 @@
     function deleteImageShareRequest(requestId){
         $.ajax({
             type: "GET",
-            url: '/requests/delete-image-request/?requestId=' + requestId,
+            url: '/web/requests/delete-image-request/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},
@@ -227,7 +227,7 @@
     function acceptAndSaveAlbum(requestId){
         $.ajax({
             type: "POST",
-            url: '/requests/accept-and-save-album/?requestId=' + requestId,
+            url: '/web/requests/accept-and-save-album/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},
@@ -243,7 +243,7 @@
     function deleteAlbumShareRequest(requestId){
         $.ajax({
             type: "GET",
-            url: '/requests/delete-album-request/?requestId=' + requestId,
+            url: '/web/requests/delete-album-request/?requestId=' + requestId,
             contentType : "application/json",
             dataType: "text",
             headers: {"X-CSRF-TOKEN" : token},

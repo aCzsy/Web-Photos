@@ -37,7 +37,7 @@ public class ProfileController {
         this.friendRequestService = friendRequestService;
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/web/profile")
     public String getProfilePage(@ModelAttribute("imageModel") ImageModel imageModel, Model model, Authentication authentication,
                                  @ModelAttribute("userCredentialsModel") UserCredentialsModel userCredentialsModel, @ModelAttribute("userAboutInfo")UsersAboutInfo usersAboutInfo){
         User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
@@ -49,7 +49,7 @@ public class ProfileController {
         return "profile";
     }
 
-    @PostMapping("/profile/upload-image")
+    @PostMapping("/web/profile/upload-image")
     public String uploadProfileImage(@ModelAttribute("imageModel") ImageModel imageModel, Model model, Authentication authentication) throws IOException {
         if(imageModel.getUploaded_image().getSize() == 0){
             //uploadError = "Please select file to upload.";
@@ -59,7 +59,7 @@ public class ProfileController {
             User currentUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
             userService.setUserProfilePicture(currentUser,imageModel);
         }
-        return "redirect:/profile";
+        return "redirect:/web/profile";
     }
 
     @GetMapping("/profile/getUserProfileImg")
@@ -78,7 +78,7 @@ public class ProfileController {
         httpServletResponse.getOutputStream().close();
     }
 
-    @PostMapping("/profile/edit-user-details")
+    @PostMapping("/web/profile/edit-user-details")
     public String editUserDetails(@ModelAttribute("userCredentialsModel") UserCredentialsModel userCredentialsModel, Model model){
         String userNameError = null;
         String passwordError = null;
@@ -100,10 +100,10 @@ public class ProfileController {
         return "profile";
     }
 
-    @PostMapping("/profile/edit-user-info")
+    @PostMapping("/web/profile/edit-user-info")
     public String editUserAboutInfo(@ModelAttribute("userAboutInfo")UsersAboutInfo usersAboutInfo){
         userService.editUserAboutInfo(usersAboutInfo);
-        return "redirect:/profile";
+        return "redirect:/web/profile";
     }
 
 }

@@ -52,13 +52,13 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
-            <li><a th:href="@{/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
-            <li><a th:href="@{/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
+            <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
         </ul>
     </div>
     <div class="main-content" id="main-parent">
@@ -69,7 +69,7 @@
                 <button class="nav-tab" data-for-tab="3">Profile</button>
             </div>
             <div id="home-title-bar-menu">
-                <form action="#" th:action="@{/logout}" method="POST">
+                <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
@@ -132,7 +132,7 @@
                     <div class="album-short-info">
                         <div class="album-menu-options" id="t">
                             <ul>
-                                <li><a th:href="@{/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
+                                <li><a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
                                 <li><a href=""><i class="fas fa-share"></i>Share request</a></li>
                             </ul>
                         </div>
@@ -149,7 +149,7 @@
                         <div class="album-short-info-div2">
                             <span th:text="${album.getAlbumAccessType()}">Public</span>
                             <div class="album-short-info-buttons">
-                                <a th:href="@{/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}" type="button">View album</a>
+                                <a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}" type="button">View album</a>
                             </div>
                         </div>
                     </div>
@@ -494,7 +494,7 @@
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: '/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+            url: '/web/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
             contentType : "application/json",
             dataType: "json",
             data: JSON.stringify(image_comment),
