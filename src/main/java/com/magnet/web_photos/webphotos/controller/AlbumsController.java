@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:8080/web/albums")
 public class AlbumsController {
 
     private UserRepository userRepository;
@@ -57,7 +58,7 @@ public class AlbumsController {
         return "albums";
     }
 
-    @GetMapping("/albums/images/{imageId}")
+    @GetMapping("/web/albums/images/{imageId}")
     public void displayImage(@PathVariable("imageId") Long imageId, HttpServletResponse httpServletResponse) throws IOException {
         Img image = imageService.getImageById(imageId);
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");

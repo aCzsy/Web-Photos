@@ -3,8 +3,8 @@
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="../static/images/favicon.ico">
-    <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico">
+    <link rel="shortcut icon" href="../static/web/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../static/web/images/favicon.ico">
 
     <title>Title</title>
     <style>
@@ -138,14 +138,14 @@
         }
 
     </style>
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/css/fontawesome-5.15.4-web/css/all.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/css/fontawesome-5.15.4-web/css/fontawesome.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/css/fontawesome-5.15.4-web/css/brands.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/css/fontawesome-5.15.4-web/css/solid.css}">
-    <link rel="stylesheet" type="text/css" href="../static/css/home.css"  th:href="@{/css/home.css}">
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/all.js"></script>
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/all.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/fontawesome.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/brands.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/solid.css}">
+    <link rel="stylesheet" type="text/css" href="../static/web/css/home.css"  th:href="@{/web/css/home.css}">
 </head>
 <body onload="document.body.style.opacity='1'">
 <div id="chat-outer-container">
@@ -153,7 +153,7 @@
         <div class="chat-inner-users-list-item">
             <div class="image-outer-area-top-bar comment-item-profile-image">
                 <div class="image-inner-area-top-bar">
-                    <img src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
+                    <img src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
                 </div>
             </div>
             <p>John Doe</p>
@@ -161,7 +161,7 @@
         <div class="chat-inner-users-list-item">
             <div class="image-outer-area-top-bar comment-item-profile-image">
                 <div class="image-inner-area-top-bar">
-                    <img src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
+                    <img src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
                 </div>
             </div>
             <p>John Doe</p>
@@ -169,7 +169,7 @@
         <div class="chat-inner-users-list-item">
             <div class="image-outer-area-top-bar comment-item-profile-image">
                 <div class="image-inner-area-top-bar">
-                    <img src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
+                    <img src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
                 </div>
             </div>
             <p>John Doe</p>
@@ -179,7 +179,7 @@
         <div id="chat-inner-chat-room-chat-with" class="chat-with-header">
             <div class="image-outer-area-top-bar comment-item-profile-image">
                 <div class="image-inner-area-top-bar">
-                    <img src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
+                    <img src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" class="profile-image" alt="Profile image">
                 </div>
             </div>
             <p>John Doe</p>
@@ -207,7 +207,7 @@
 <script>
     // Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
     // let sock = new SockJS("https://final-software-project.herokuapp.com/stomp");
-    let sock = new SockJS("http://localhost:8080/stomp");
+    let sock = new SockJS("http://localhost:8080/web/stomp");
 
     // Create a new StompClient object with the WebSocket endpoint
     let client = Stomp.over(sock);
@@ -215,7 +215,7 @@
     // Start the STOMP communications, provide a callback for when the CONNECT frame arrives.
     client.connect({}, frame => {
         // Subscribe to "/topic/messages". Whenever a message arrives add the text in a list-item element in the unordered list.
-        client.subscribe("/topic/messages", payload => {
+        client.subscribe("/web/topic/messages", payload => {
 
             let message_list = document.getElementById('message-list');
             let message = document.createElement('li');
@@ -233,7 +233,7 @@
         let input = document.getElementById("message-box");
         let message = input.value;
 
-        client.send('/app/chat', {}, JSON.stringify({message: message}));
+        client.send('/web/app/chat', {}, JSON.stringify({message: message}));
 
     }
 </script>

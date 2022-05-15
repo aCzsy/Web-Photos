@@ -5,27 +5,27 @@
     <title>Albums</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}"/>
-    <link rel="shortcut icon" href="../static/images/favicon.ico">
-    <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico">
+    <link rel="shortcut icon" href="../static/web/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../static/web/images/favicon.ico">
 
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/web/css/bootstrap.min.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500&family=Sora:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap" rel="stylesheet">
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/all.js"></script>
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
-    <script defer src="../static/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/css/fontawesome-5.15.4-web/css/all.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/css/fontawesome-5.15.4-web/css/fontawesome.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/css/fontawesome-5.15.4-web/css/brands.css}">
-    <link rel="stylesheet" href="../static/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/css/fontawesome-5.15.4-web/css/solid.css}">
-    <link rel="stylesheet" type="text/css" href="../static/css/home.css"  th:href="@{/css/home.css}">
-    <script src="../static/js/home.js"></script>
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/all.js"></script>
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
+    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/all.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/fontawesome.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/brands.css}">
+    <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/solid.css}">
+    <link rel="stylesheet" type="text/css" href="../static/web/css/home.css"  th:href="@{/web/css/home.css}">
+    <script src="../static/web/js/home.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -37,7 +37,7 @@
 <div class="pre-upload-image-modal" id="create-album-modal">
     <div class="pre-upload-image-modal-content" id="pre-upload-content">
         <div class="pre-upload-image-wrapper">
-            <img id="pre-upload-image" th:src="@{/images/album.jpg}" src="../static/images/album.jpg" alt=""/>
+            <img id="pre-upload-image" th:src="@{/web/images/album.jpg}" src="../static/web/images/album.jpg" alt=""/>
         </div>
         <div class="pre-upload-image-details create-album-details-wrapper">
             <form id="album-create-form-title">
@@ -161,7 +161,7 @@
             <label class="tickLabel" for="tick">
                 <input type="checkbox" class="tick" id="tick" name="tick">
             </label>
-            <img class="display-image gallery-select-image" th:src="@{${'/home/image/' + img.getImageId()}}" onclick="albumCreateImageCheck(this)" alt="">
+            <img class="display-image gallery-select-image" th:src="@{${'/web/home/image/' + img.getImageId()}}" onclick="albumCreateImageCheck(this)" alt="">
         </div>
     </div>
 </div>
@@ -172,7 +172,7 @@
             <button type="button" onclick="closeWindow('people_list_bg')" class="edit-cred-btn">Close</button>
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(people)==0}">
-            <img class="placeholder-icon" src="../static/images/tag.png" th:src="@{/images/tag.png}" alt="Empty state image">
+            <img class="placeholder-icon" src="../static/web/images/tag.png" th:src="@{/web/images/tag.png}" alt="Empty state image">
             <p>There are no more registered users</p>
         </div>
 
@@ -182,9 +182,9 @@
                 <div class="image-outer-area-top-bar">
                     <div class="image-inner-area-top-bar">
                         <img th:if="${registered_user.getUser_image() != null}" class="profile-image"
-                             th:src="@{${'/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
+                             th:src="@{${'/web/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
                         <img th:unless="${registered_user.getUser_image() != null}" class="profile-image"
-                             src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                             src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" alt="Profile image">
                     </div>
                 </div>
                 <div class="people-item-descr-wrapper">
@@ -219,9 +219,9 @@
             <div class="image-outer-area-top-bar">
                 <div class="image-inner-area-top-bar">
                     <img th:if="${user.getUser_image() != null}" class="profile-image"
-                         th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">
+                         th:src="@{'/web/profile/getUserProfileImg'}" alt="Profile image">
                     <img th:unless="${user.getUser_image() != null}" class="profile-image"
-                         src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">
+                         src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" alt="Profile image">
                 </div>
             </div>
             <div class="nav-user-details">
@@ -262,7 +262,7 @@
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(albums)==0}">
 <!--            <i class="far fa-images fa-3x placeholder-icon"></i>-->
-            <img class="placeholder-icon" src="../static/images/folder.png" th:src="@{/images/folder.png}" alt="Empty state image">
+            <img class="placeholder-icon" src="../static/web/images/folder.png" th:src="@{/web/images/folder.png}" alt="Empty state image">
             <p>You don't have any albums</p>
             <button type="button" class="edit-cred-btn placeholder-create-btn album-create-btns-nav">Create album</button>
         </div>
@@ -275,19 +275,19 @@
         <div th:unless="${#lists.size(albums) == 0}" class="outer-album-container">
             <div class="album-item" th:each="album : ${albums}">
                 <div class="album-cover" th:if="${#lists.size(album.getAlbum_images()) < 3}">
-                    <img class="display-image album-cover-main-img" src="../static/images/album.jpg" th:src="@{/images/album.jpg}" th:if="${#lists.size(album.getAlbum_images()) == 0}">
-                    <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(album.getAlbum_images()) == 0}">
+                    <img class="display-image album-cover-main-img" src="../static/web/images/album.jpg" th:src="@{/web/images/album.jpg}" th:if="${#lists.size(album.getAlbum_images()) == 0}">
+                    <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + album.getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(album.getAlbum_images()) == 0}">
                 </div>
                 <div class="album-cover album-cover-multiple" th:if="${#lists.size(album.getAlbum_images()) >= 3}">
                     <div class="album-cover-main-img-container">
-                        <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(0).getImageId()}}">
+                        <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + album.getAlbum_images().get(0).getImageId()}}">
                     </div>
                     <div class="album-cover-multiple-imgs">
                         <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(1).getImageId()}}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + album.getAlbum_images().get(1).getImageId()}}">
                         </div>
                         <div class="album-cover-small-img">
-                            <img class="display-image album-cover-main-img" th:src="@{${'/albums/images/' + album.getAlbum_images().get(2).getImageId()}}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + album.getAlbum_images().get(2).getImageId()}}">
                         </div>
                     </div>
                 </div>
@@ -326,7 +326,7 @@
 </div>
 </div>
 
-<script src="../static/js/jquery-3.6.0.js" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script src="../static/web/js/jquery-3.6.0.js" th:src="@{/web/js/jquery-3.6.0.js}"></script>
 
 
 <script>
@@ -569,7 +569,7 @@
 
     function showImageInfoModal(imageId, imageName, imageSize, imageExt, imgComment) {
         $('#image-info-img-id').val(imageId ? imageId : '');
-        $('#image-info-img').attr("src", "/home/image/" + imageId);
+        $('#image-info-img').attr("src", "/web/home/image/" + imageId);
         $('#image-info-img-name').val(imageName ? imageName : '');
         $('#image-info-img-size').val(imageSize ? imageSize + " kb" : '');
         $('#image-info-img-extension').val(imageExt ? imageExt : '');

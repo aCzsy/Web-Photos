@@ -7,6 +7,8 @@ import com.magnet.web_photos.webphotos.model.UserDetailsServiceImpl;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -29,11 +31,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 @EnableWebSecurity
@@ -55,7 +63,20 @@ public class SecurityConfig{
 //        // Use BCryptPasswordEncoder
 //        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 //    }
-
+//        @Bean
+//        public CorsConfigurationSource corsConfigurationSource() {
+//            final CorsConfiguration config = new CorsConfiguration();
+//
+//            config.setAllowedOrigins(Arrays.asList("http://localhost:8080/web"));
+//            config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+//            config.setAllowCredentials(true);
+//            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//
+//            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//            source.registerCorsConfiguration("/web/**", config);
+//
+//            return source;
+//        }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -81,8 +102,6 @@ public class SecurityConfig{
         @Autowired
         DaoAuthenticationProvider authenticationProvider;
 
-
-
         @Bean
         @Override
         public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -104,11 +123,16 @@ public class SecurityConfig{
 //                    .csrf().disable();
 
 
-            http
-                    .antMatcher("/android/**")
-                    .authorizeRequests().anyRequest().authenticated()
-                    .and()
-                    .csrf().disable();
+            http.csrf().disable()
+                    .authorizeRequests().antMatchers("/android/**").permitAll()
+                    .anyRequest().authenticated();
+
+
+//            http
+//                    .antMatcher("/android/**")
+//                    .authorizeRequests().anyRequest().authenticated()
+//                    .and()
+//                    .csrf().disable();
 
 //            http.authorizeRequests()
 //            .antMatchers("/authenticate").permitAll()
@@ -121,16 +145,15 @@ public class SecurityConfig{
 //                        .antMatchers("/authenticate");
 //            http.authorizeRequests().anyRequest().authenticated();
 
-            http
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and();
-
-
             // Set unauthorized requests exception handler
             http
                     .exceptionHandling()
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .and();
+
+            http
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and();
 
             // Add JWT token filter
@@ -147,10 +170,40 @@ public class SecurityConfig{
         @Autowired
         DaoAuthenticationProvider authenticationProvider;
 
+//        @Bean
+//        public CorsConfigurationSource corsConfigurationSource() {
+//            final CorsConfiguration config = new CorsConfiguration();
+//
+//            config.setAllowedOrigins(Arrays.asList("http://localhost:8080/web"));
+//            config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+//            config.setAllowCredentials(true);
+//            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//
+//            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//            source.registerCorsConfiguration("/web/**", config);
+//
+//            return source;
+//        }
+
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(authenticationProvider());
         }
+//        @Bean
+//        public WebMvcConfigurer corsConfigurer() {
+//            return new WebMvcConfigurer() {
+//                @Override
+//                public void addCorsMappings(CorsRegistry registry) {
+//                    registry.addMapping("/web/**");
+//                }
+//            };
+//        }
+
+//        @Override
+//        public void addCorsMappings(CorsRegistry registry) {
+//            registry.addMapping("/**");
+//        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -159,22 +212,27 @@ public class SecurityConfig{
 //                    .authorizeRequests()
 //                    .antMatchers("/web/login", "/web/home/", "/signup", "/css/**", "/js/**").permitAll();
 
-            http.csrf().disable().cors();
+//            http.csrf().disable().cors().and();
+
 
             http.antMatcher("/web/**")
-                    .authorizeRequests().anyRequest().authenticated()
+                    .authorizeRequests()
+                    .antMatchers("/web/login", "/web/signup", "/web/css/**", "/web/js/**").permitAll()
+                    .anyRequest().authenticated()
                     .and()
-                    .formLogin()
-                    .loginPage("/web/login")
-                    .permitAll()
-                    .successHandler((request, response, authentication) -> { //new AuthenticationSuccessHandler()
-                        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                        User user = userRepository.getUser(userDetails.getUsername());
-                        System.out.println("LOGGED IN");
-                        System.out.println("The user " + user.getFirstname() + " " + user.getLastname() + " has logged in.");
+                    .csrf().disable().cors();
 
-                        response.sendRedirect(request.getContextPath() + "/web/home");
-                    });
+            http.formLogin()
+            .loginPage("/web/login")
+            .permitAll()
+            .successHandler((request, response, authentication) -> { //new AuthenticationSuccessHandler()
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                User user = userRepository.getUser(userDetails.getUsername());
+                System.out.println("LOGGED IN");
+                System.out.println("The user " + user.getFirstname() + " " + user.getLastname() + " has logged in.");
+
+                response.sendRedirect(request.getContextPath() + "/web/home");
+            });
 
 //            http
 //                    .authorizeRequests()
@@ -198,6 +256,7 @@ public class SecurityConfig{
 
             http.logout()
                     .logoutUrl("/web/logout")
+                    .deleteCookies("JSESSIONID")
                     .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
                         try {
                             Thread.sleep(1000);

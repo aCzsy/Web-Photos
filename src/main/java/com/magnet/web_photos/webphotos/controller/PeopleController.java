@@ -49,7 +49,7 @@ public class PeopleController {
         return "people";
     }
 
-    @GetMapping("/people/getUserProfileImg/{userId}")
+    @GetMapping("/web/people/getUserProfileImg/{userId}")
     public void displayUserProfileImage(@PathVariable("userId") Long userId, HttpServletResponse httpServletResponse) throws IOException {
         User user = userRepository.getById(userId);
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");

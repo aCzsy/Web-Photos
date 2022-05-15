@@ -105,6 +105,10 @@ public class ImageService {
         return userRepository.getUser(authentication.getName()).getImages();
     }
 
+    public List<Img> getAllImagesByUsername(String username){
+        return userRepository.getUser(username).getImages();
+    }
+
     public List<Img> getAllImagesByUserId(Long userId){
         return userRepository.findUserById(userId).getImages();
     }

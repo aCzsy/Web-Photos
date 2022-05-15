@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -72,10 +73,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHomePageByDefault(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getSession().getAttribute("user") != null) {
-            response.sendRedirect(request.getContextPath() + "/web/home");
-            return null;
-        }
+//        if (request.getSession().getAttribute("user") == null) {
+//            response.sendRedirect(request.getContextPath() + "/web/home");
+//            return null;
+//        }
+//
         return "redirect:/web/home";
     }
 
@@ -124,8 +126,17 @@ public class HomeController {
         return ImageConvertersAndroid.convertImgToImageDTOAndroid(image);
     }
 
+    @GetMapping("android/getUsersImages/{username}")
+    public @ResponseBody List<ImageDTO_Android> getUsersImages(@PathVariable String username){
+        List<Img> usersImages = imageService.getAllImagesByUsername(username);
+        return usersImages
+                .stream()
+                .map(img -> ImageConvertersAndroid.convertImgToImageDTOAndroid(img))
+                .collect(Collectors.toList());
+    }
 
-    @GetMapping("/home/image/{imageId}")
+
+    @GetMapping("/web/home/image/{imageId}")
     public void displayImage(@PathVariable("imageId") Long imageId, HttpServletResponse httpServletResponse) throws IOException {
         Img image = imageService.getImageById(imageId);
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");

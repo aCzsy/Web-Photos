@@ -62,7 +62,7 @@ public class ProfileController {
         return "redirect:/web/profile";
     }
 
-    @GetMapping("/profile/getUserProfileImg")
+    @GetMapping("/web/profile/getUserProfileImg")
     public void displayUserProfileImage(Authentication authentication, HttpServletResponse httpServletResponse) throws IOException {
         User currentUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         httpServletResponse.setContentType("image/jpeg, image/jpg, image/png, image/gif");
