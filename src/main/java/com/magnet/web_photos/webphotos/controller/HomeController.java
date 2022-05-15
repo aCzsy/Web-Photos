@@ -78,6 +78,8 @@ public class HomeController {
 //            return null;
 //        }
 //
+
+        response.sendRedirect(request.getContextPath() + "/web/home");
         return "redirect:/web/home";
     }
 

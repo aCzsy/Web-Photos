@@ -93,7 +93,7 @@ public class SecurityConfig{
     }
 
     @Configuration
-//    @Order(1)
+    //@Order(2)
     public class JWTSecurityConfig extends WebSecurityConfigurerAdapter{
         @Autowired
         private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -101,6 +101,13 @@ public class SecurityConfig{
         private JwtRequestFilter jwtRequestFilter;
         @Autowired
         DaoAuthenticationProvider authenticationProvider;
+
+//        @Autowired
+//        JWTSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,JwtRequestFilter jwtRequestFilter,DaoAuthenticationProvider authenticationProvider){
+//            this.jwtAuthenticationEntryPoint  = jwtAuthenticationEntryPoint;
+//            this.jwtRequestFilter = jwtRequestFilter;
+//            this.authenticationProvider = authenticationProvider;
+//        }
 
         @Bean
         @Override
@@ -184,7 +191,11 @@ public class SecurityConfig{
 //
 //            return source;
 //        }
-
+//        @Bean
+//        @Override
+//        public AuthenticationManager authenticationManagerBean() throws Exception {
+//            return super.authenticationManagerBean();
+//        }
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -207,7 +218,6 @@ public class SecurityConfig{
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-
 //            http
 //                    .authorizeRequests()
 //                    .antMatchers("/web/login", "/web/home/", "/signup", "/css/**", "/js/**").permitAll();
@@ -220,7 +230,7 @@ public class SecurityConfig{
                     .antMatchers("/web/login", "/web/signup", "/web/css/**", "/web/js/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
-                    .csrf().disable().cors();
+                    .csrf().disable();
 
             http.formLogin()
             .loginPage("/web/login")
@@ -271,6 +281,25 @@ public class SecurityConfig{
 
         }
     }
+
+//    @Configuration
+//    @Order(3)
+//    public class DefaultLoginConfig extends WebSecurityConfigurerAdapter{
+//
+//        @Override
+//        protected void configure(HttpSecurity http) throws Exception {
+//            http.authorizeRequests()
+//                    .antMatchers("/web/login", "/web/signup", "/web/css/**", "/web/js/**").permitAll()
+//                    .anyRequest().authenticated()
+//                    .and()
+//                    .csrf().disable().cors();
+//
+//            http.formLogin()
+//                    .loginPage("/web/login")
+//                    .permitAll()
+//                    .defaultSuccessUrl("/web/home",true);
+//        }
+//    }
 
 
 }

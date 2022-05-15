@@ -12,10 +12,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Registers the endpoint where the connection will take place
-        registry.addEndpoint("/web/stomp")
-                .setAllowedOrigins("http://localhost:63343")
-                // Enable SockJS fallback options
-                .withSockJS();
+//        registry.addEndpoint("/web/stomp")
+//                .setAllowedOrigins("http://localhost:8080/web")
+//                // Enable SockJS fallback options
+//                .withSockJS();
+
+        registry.addEndpoint("/web/websocket").withSockJS();
     }
 
     @Override
@@ -24,6 +26,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/web/topic");
 
         // Set prefix for endpoints the client will send messages to
-        registry.setApplicationDestinationPrefixes("/web/app");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }

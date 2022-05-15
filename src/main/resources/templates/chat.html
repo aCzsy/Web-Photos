@@ -138,9 +138,9 @@
         }
 
     </style>
-    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/all.js"></script>
-    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/brands.js.js"></script>
-    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/solid.js.js"></script>
+<!--    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/all.js"></script>-->
+<!--    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/brands.js"></script>-->
+<!--    <script defer src="../static/web/css/fontawesome-5.15.4-web/js/solid.js"></script>-->
     <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/all.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/all.css}">
     <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/fontawesome.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/fontawesome.css}">
     <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/brands.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/brands.css}">
@@ -205,9 +205,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js" integrity="sha512-lyIq9fRcCeSCXhp41XC/250UBmypAHV8KW+AhLcSEIksWHBfhzub6XXwDe67wTpOG8zrO2NAU/TYmEaCW+aQSg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous"></script>
 <script>
+
     // Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
     // let sock = new SockJS("https://final-software-project.herokuapp.com/stomp");
-    let sock = new SockJS("http://localhost:8080/web/stomp");
+    let sock = new SockJS("/web/websocket");
 
     // Create a new StompClient object with the WebSocket endpoint
     let client = Stomp.over(sock);
@@ -222,7 +223,7 @@
 
             message.appendChild(document.createTextNode(JSON.parse(payload.body).message));
             message_list.appendChild(message);
-
+            console.log("MESSAGE=" + JSON.parse(payload.body).message);
         });
 
     });
@@ -233,7 +234,7 @@
         let input = document.getElementById("message-box");
         let message = input.value;
 
-        client.send('/web/app/chat', {}, JSON.stringify({message: message}));
+        client.send('/app/chat', {}, JSON.stringify({message: message}));
 
     }
 </script>
