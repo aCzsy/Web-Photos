@@ -56,28 +56,6 @@ public class SecurityConfig{
 
     }
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        // configure AuthenticationManager so that it knows from where to load
-//        // user for matching credentials
-//        // Use BCryptPasswordEncoder
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//    }
-//        @Bean
-//        public CorsConfigurationSource corsConfigurationSource() {
-//            final CorsConfiguration config = new CorsConfiguration();
-//
-//            config.setAllowedOrigins(Arrays.asList("http://localhost:8080/web"));
-//            config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
-//            config.setAllowCredentials(true);
-//            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//
-//            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//            source.registerCorsConfiguration("/web/**", config);
-//
-//            return source;
-//        }
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -93,7 +71,7 @@ public class SecurityConfig{
     }
 
     @Configuration
-    //@Order(2)
+    @Order(3)
     public class JWTSecurityConfig extends WebSecurityConfigurerAdapter{
         @Autowired
         private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -282,24 +260,35 @@ public class SecurityConfig{
         }
     }
 
-//    @Configuration
-//    @Order(3)
-//    public class DefaultLoginConfig extends WebSecurityConfigurerAdapter{
-//
-//        @Override
-//        protected void configure(HttpSecurity http) throws Exception {
-//            http.authorizeRequests()
-//                    .antMatchers("/web/login", "/web/signup", "/web/css/**", "/web/js/**").permitAll()
-//                    .anyRequest().authenticated()
-//                    .and()
-//                    .csrf().disable().cors();
-//
-//            http.formLogin()
-//                    .loginPage("/web/login")
-//                    .permitAll()
-//                    .defaultSuccessUrl("/web/home",true);
-//        }
-//    }
+    @Configuration
+    @Order(2)
+    public class DefaultLoginConfig extends WebSecurityConfigurerAdapter{
+
+        @Autowired
+        DaoAuthenticationProvider authenticationProvider;
+
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.authenticationProvider(authenticationProvider());
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+
+            http.antMatcher("/")
+                    .authorizeRequests()
+                    .antMatchers("/web/login", "/web/signup", "/web/css/**", "/web/js/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .csrf().disable();
+
+                    http.formLogin()
+                    .loginPage("/web/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/web/home",true);
+        }
+    }
 
 
 }

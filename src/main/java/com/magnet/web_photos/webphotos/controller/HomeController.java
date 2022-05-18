@@ -73,13 +73,13 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHomePageByDefault(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        if (request.getSession().getAttribute("user") == null) {
-//            response.sendRedirect(request.getContextPath() + "/web/home");
-//            return null;
-//        }
-//
+        if (request.getSession().getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/web/home");
+            return null;
+        }
 
-        response.sendRedirect(request.getContextPath() + "/web/home");
+
+//        response.sendRedirect(request.getContextPath() + "/web/home");
         return "redirect:/web/home";
     }
 

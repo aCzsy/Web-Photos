@@ -1,8 +1,10 @@
 package com.magnet.web_photos.webphotos.service;
 
+import com.magnet.web_photos.webphotos.dto.ImageDTO_Android;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
+import com.magnet.web_photos.webphotos.model.UploadImageRequestAndroid;
 import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.ImageRepository;
 import com.magnet.web_photos.webphotos.repository.ImageSendRepository;
@@ -33,6 +35,42 @@ public class ImageService {
         this.imageRepository = imageRepository;
         this.imageCommentsRepository = imageCommentsRepository;
         this.imageSendRepository = imageSendRepository;
+    }
+
+    @Transactional
+    public String addImageFromAndroid(UploadImageRequestAndroid uploadedImage) throws IOException {
+        Img image = new Img();
+        image.setImage_name(uploadedImage.getImageDTO_android().getImage_name());
+        image.setImage_size(uploadedImage.getImageDTO_android().getImage_size());
+        image.setContent_type(uploadedImage.getImageDTO_android().getContent_type());
+        image.setFile_data(uploadedImage.getImageDTO_android().getFile_data());
+        image.setCategory(uploadedImage.getImageDTO_android().getCategory());
+        //image.setUserId(userRepository.getUser(authentication.getName()).getId());
+        image.setDate_uploaded(LocalDate.now());
+        if(!uploadedImage.getImageDTO_android().getComment().equals("")){
+            String trimmerComment = uploadedImage.getImageDTO_android().getComment().trim();
+            image.setComment(trimmerComment);
+        }
+
+
+        User user = userRepository.getUser(uploadedImage.getUsername());
+        ImageComments imageComments = new ImageComments();
+        imageComments.setOwnerId(user.getId());
+        Comment comment = new Comment();
+        comment.setSender(user);
+        //comment.setMessage("Hi this is my first comment!");
+        //imageComments.getComments().add(comment);
+        image.setImageComments(imageComments);
+
+        user.addImage(image);
+
+        Img savedImage = imageRepository.save(image);
+        if(savedImage.getImageId() > 0){
+            imageComments.setImageId(savedImage.getImageId());
+            imageCommentsRepository.save(imageComments);
+        }
+
+        return image.getImage_name();
     }
 
     @Transactional
