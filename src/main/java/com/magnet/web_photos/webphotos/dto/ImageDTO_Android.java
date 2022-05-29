@@ -3,23 +3,33 @@ package com.magnet.web_photos.webphotos.dto;
 import java.time.LocalDate;
 
 public class ImageDTO_Android {
+    private Long imageId;
     private String image_name;
     private String content_type;
     private String category;
     private String image_size;
     private String comment;
-    private byte [] file_data;
+    private String file_data;
 
     public ImageDTO_Android() {
     }
 
-    public ImageDTO_Android(String image_name, String content_type, String category, String image_size, String comment, byte[] file_data) {
+    public ImageDTO_Android(Long imageId, String image_name, String content_type, String category, String image_size, String comment, String file_data) {
+        this.imageId = imageId;
         this.image_name = image_name;
         this.content_type = content_type;
         this.category = category;
         this.image_size = image_size;
         this.comment = comment;
         this.file_data = file_data;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 
     public String getImage_name() {
@@ -62,11 +72,11 @@ public class ImageDTO_Android {
         this.comment = comment;
     }
 
-    public byte[] getFile_data() {
+    public String getFile_data() {
         return file_data;
     }
 
-    public void setFile_data(byte[] file_data) {
+    public void setFile_data(String file_data) {
         this.file_data = file_data;
     }
 }

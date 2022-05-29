@@ -4,6 +4,7 @@ import com.magnet.web_photos.webphotos.dto.ImageDTO_Android;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
+import com.magnet.web_photos.webphotos.model.UpdateImageDetailsRequestAndroid;
 import com.magnet.web_photos.webphotos.model.UploadImageRequestAndroid;
 import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.ImageRepository;
@@ -13,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -43,7 +45,11 @@ public class ImageService {
         image.setImage_name(uploadedImage.getImageDTO_android().getImage_name());
         image.setImage_size(uploadedImage.getImageDTO_android().getImage_size());
         image.setContent_type(uploadedImage.getImageDTO_android().getContent_type());
-        image.setFile_data(uploadedImage.getImageDTO_android().getFile_data());
+        System.out.println("BEFORE");
+        byte [] imageBytes = uploadedImage.getImageDTO_android().getFile_data().getBytes();
+        byte[] data = Base64.getDecoder().decode(imageBytes);
+        //image.setFile_data(uploadedImage.getImageDTO_android().getFile_data());
+        image.setFile_data(data);
         image.setCategory(uploadedImage.getImageDTO_android().getCategory());
         //image.setUserId(userRepository.getUser(authentication.getName()).getId());
         image.setDate_uploaded(LocalDate.now());
@@ -130,6 +136,14 @@ public class ImageService {
         imageRepository.save(image);
     }
 
+    public void editImageDetailsAndroid(UpdateImageDetailsRequestAndroid req){
+        System.out.println("EDITING...");
+        Img image = Optional.ofNullable(imageRepository.findImageById(req.getImageId())).orElseThrow();
+        image.setCategory(req.getCategory());
+        image.setComment(req.getComment());
+        imageRepository.save(image);
+    }
+
     public Img getImageById(Long id){
         return Optional.ofNullable(imageRepository.findImageById(id)).orElseThrow();
     }
@@ -152,8 +166,8 @@ public class ImageService {
     }
 
     /***This method deletes an image.
-     * This method is executed when the user want's to delete a parent entity image,
-     * which means that if an image was uploaded to a gallery and then also inserted in an album, then if
+     * This method is executed when the user wants to delete a parent entity image,
+     * which means that if an image was uploaded to a gallery and then also inserted into an album, then if
      * a user deletes this image from a gallery, this will delete all children entities (eg in albums) also as this is a parent entity.
      * If a child entity is being removed only from an album, parent entity still exists (deleteImageFromAlbum() in AlbumService is used for that)
      * This method loops through all albums where this image exists and removes them first before removing a parent.
