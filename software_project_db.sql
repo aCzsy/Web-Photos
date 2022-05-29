@@ -18,7 +18,7 @@
 --
 -- Table structure for table `album`
 --
-use heroku_de39c73b70f5a3c;
+use heroku_20faf1f6297f587;
 
 DROP TABLE IF EXISTS `album`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
