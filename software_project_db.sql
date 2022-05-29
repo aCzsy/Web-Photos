@@ -18,7 +18,6 @@
 --
 -- Table structure for table `album`
 --
-
 use heroku_de39c73b70f5a3c;
 
 DROP TABLE IF EXISTS `album`;
