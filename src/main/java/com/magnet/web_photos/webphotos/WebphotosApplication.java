@@ -47,23 +47,23 @@ public class WebphotosApplication {
     }
 
 
-//    @Bean
-//    CommandLineRunner initDB(UserService userService){
-//        Role role = new Role();
-//        role.setName("ADMIN");
-//        Set<Role> userRoles = new HashSet<>();
-//        userRoles.add(role);
-//
-//        return args -> {
-//            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"admin","root","Artis","Brizs",userRoles)));
-//            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"johnDoe","john","John","Doe", new HashSet<>())
-//            ));
-//            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"janeDoe","jane","Jane","Doe", new HashSet<>())
-//            ));
-//        };
-//    }
+    @Bean
+    CommandLineRunner initDB(UserService userService){
+        Role role = new Role();
+        role.setName("ADMIN");
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(role);
+
+        return args -> {
+            userService.saveUser(UserConverters.convertUserDTOtoUser(
+                    new UserDTO(null,"admin","root","Artis","Brizs",userRoles)));
+            userService.saveUser(UserConverters.convertUserDTOtoUser(
+                    new UserDTO(null,"johnDoe","john","John","Doe", new HashSet<>())
+            ));
+            userService.saveUser(UserConverters.convertUserDTOtoUser(
+                    new UserDTO(null,"janeDoe","jane","Jane","Doe", new HashSet<>())
+            ));
+        };
+    }
 
 }
