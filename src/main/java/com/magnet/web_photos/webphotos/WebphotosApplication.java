@@ -45,6 +45,8 @@ public class WebphotosApplication {
         source.registerCorsConfiguration("/android/**", config);
         return new CorsFilter(source);
     }
+
+
 //    @Bean
 //    CommandLineRunner initDB(UserService userService){
 //        Role role = new Role();
@@ -54,12 +56,12 @@ public class WebphotosApplication {
 //
 //        return args -> {
 //            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"a","1","Artis","Brizs",userRoles)));
+//                    new UserDTO(null,"admin","root","Artis","Brizs",userRoles)));
 //            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"johnDoe","123","John","Doe", new HashSet<>())
+//                    new UserDTO(null,"johnDoe","john","John","Doe", new HashSet<>())
 //            ));
 //            userService.saveUser(UserConverters.convertUserDTOtoUser(
-//                    new UserDTO(null,"janeDoe","1234","Jane","Doe", new HashSet<>())
+//                    new UserDTO(null,"janeDoe","jane","Jane","Doe", new HashSet<>())
 //            ));
 //        };
 //    }

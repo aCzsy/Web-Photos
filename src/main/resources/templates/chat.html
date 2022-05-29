@@ -207,8 +207,8 @@
 <script>
 
     // Try to set up WebSocket connection with the handshake at "http://localhost:8080/stomp"
-    // let sock = new SockJS("https://final-software-project.herokuapp.com/stomp");
-    let sock = new SockJS("/web/websocket");
+    let sock = new SockJS("https://final-software-project.herokuapp.com/web/websocket");
+    //let sock = new SockJS("/web/websocket");
 
     // Create a new StompClient object with the WebSocket endpoint
     let client = Stomp.over(sock);

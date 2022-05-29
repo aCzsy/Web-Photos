@@ -19,7 +19,7 @@
 -- Table structure for table `album`
 --
 
-use heroku_afec5cee364630c;
+use heroku_de39c73b70f5a3c;
 
 DROP TABLE IF EXISTS `album`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -460,7 +460,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,NULL,'2022-03-23',_binary '','Artis','Brizs','$2a$10$RujiBps6dDpe.YWnUe3mWewb3tRKIQYJ7Iidy3gjpXfkYyByXzpLK',NULL,'a'),(2,NULL,'2022-03-23',_binary '','John','Doe','$2a$10$bdw0SrbP3PCW3K0uWLt0DOze6w1ZTKqcJVRsBzc67u7Ogvn26HEX.',NULL,'johnDoe'),(3,NULL,'2022-03-23',_binary '','Jane','Doe','$2a$10$p5x3boWIjZI1LZKoy1WLsOo6hXXE7e3ZAsxWw/SLbd/RwzlsmIGj6',NULL,'janeDoe');
+INSERT INTO `users` VALUES (1,NULL,'2022-05-29',_binary '','Artis','Brizs','$2a$10$X1pXf0yx9FlWtTv75GtGWeZ1Ivm65EE9tRh.NoAT1QRdyS40.NWQ2',NULL,'admin'),(2,NULL,'2022-05-29',_binary '','John','Doe','$2a$10$2zQQz.jsgEWzsZVWik1ncu4Rt/YHu4srpDlP0zSwFgMc9XPReADnW',NULL,'johnDoe'),(3,NULL,'2022-05-29',_binary '','Jane','Doe','$2a$10$MyjO7QZU.Rdi13Zra2MWpuh5vdxrFwoj5IBwvFPhccrjguRLy6lIi',NULL,'janeDoe');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-24 21:24:35
+-- Dump completed on 2022-05-29 15:47:20
