@@ -115,15 +115,15 @@
         <div class="user-list-labels" th:unless="${#lists.size(friends) == 0}">
             <p class="light-grey-label"><span class="coloured-label" th:text="${number_of_friends} + ' '"></span>friends</p>
             <form action="#" th:object="${sortForm}" method="post" th:action="@{/web/friends/sort-friends}">
-                <label class="light-grey-label" for="sortType">Sort by: </label>
-                <select id="sortType" th:field="*{sortType}">
-                    <option
-                            th:each="type : ${sortTypes}"
-                            th:value="${type}"
-                            th:text="${type}"
-                    >
-                    </option>
-                </select>
+<!--                <label class="light-grey-label" for="sortType">Sort by: </label>-->
+<!--                <select id="sortType" th:field="*{sortType}">-->
+<!--                    <option-->
+<!--                            th:each="type : ${sortTypes}"-->
+<!--                            th:value="${type}"-->
+<!--                            th:text="${type}"-->
+<!--                    >-->
+<!--                    </option>-->
+<!--                </select>-->
                 <!--                <button type="submit" id="submit-text-btn" class="btn btn-success">Submit</button>-->
             </form>
         </div>
@@ -151,9 +151,9 @@
 <!--                </div>-->
                 <div class="people-item-buttons">
                     <a th:href="@{/web/user/user-gallery/(userId=${friend.getId()})}" class="profile-buttons">View Gallery</a>
-<!--                    <form id="friend-request-form" action="#" th:action="@{/people/friend-request/to/(userId=${friend.getId()})}" method="post">-->
-<!--                        <input class="profile-buttons" type="submit" value="Friend request">-->
-<!--                    </form>-->
+                    <form id="friend-request-form" action="#" th:action="@{/web/friends/delete-friend-request/(userId=${friend.getId()})}" method="post">
+                        <input class="red-button" type="submit" value="Remove friend">
+                    </form>
                     <input class="profile-buttons" type="submit" value="Send message">
                     <!--                    <a th:unless="" class="profile-buttons">Request sent</a>-->
                 </div>

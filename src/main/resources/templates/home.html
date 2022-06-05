@@ -48,7 +48,6 @@
             <p id="pre-upload-image-extension"></p>
             <h6>File size</h6>
             <p id="pre-upload-image-size"></p>
-            <h6>Tag friends</h6>
             <h6>Category</h6>
             <select id="category">
                 <option
@@ -59,15 +58,12 @@
                 </option>
             </select>
             <br>
-            <form action="#">
+            <form action="#" class="image_note_form">
                 <label for="image-comment"><h6>Comment</h6></label>
-                <br>
-                <textarea id="image-comment" name="image-comment" rows="2" cols="50" placeholder="Type comment...">
+                <textarea id="image-comment" name="image-comment" placeholder="Type comment...">
 
                     </textarea>
             </form>
-            <br>
-            <h6>Tag friends</h6>
             <br>
             <div class="profile-buttons-container">
                 <button type="button" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;" onclick="uploadFile('uploaded_image','image-upload-form')">Save</button>
@@ -102,15 +98,19 @@
                     >
                     </option>
                 </select>
-                <form action="#">
+                <br>
+                <div class="image_note_form">
                     <label for="image-info-img-comment"><h6>Comment</h6></label>
-                    <br>
-                    <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">
+                    <textarea id="image-info-img-comment" name="image-info-img-comment" placeholder="Type comment..."  th:field="*{imageComment}">
 
                                     </textarea>
-                </form>
-                <br>
-                <h6>Tag friends</h6>
+                </div>
+<!--                <form action="#" class="image_note_form">-->
+<!--                    <label for="image-info-img-comment"><h6>Comment</h6></label>-->
+<!--                    <textarea id="image-info-img-comment" name="image-info-img-comment" placeholder="Type comment..."  th:field="*{imageComment}">-->
+
+<!--                                    </textarea>-->
+<!--                </form>-->
                 <br>
                 <div class="profile-buttons-container">
                     <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>
@@ -124,6 +124,7 @@
 <div id="people_list_bg">
     <div id="people_list_container">
         <div class="container-top">
+            <p id="image_share_success"></p>
             <button type="button" onclick="closeWindow('people_list_bg')" class="edit-cred-btn">Close</button>
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(people)==0}">
@@ -137,7 +138,7 @@
                 <div class="image-outer-area-top-bar">
                     <div class="image-inner-area-top-bar">
                         <img th:if="${registered_user.getUser_image() != null}" class="profile-image"
-                             th:src="@{${'/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
+                             th:src="@{${'/web/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
                         <img th:unless="${registered_user.getUser_image() != null}" class="profile-image"
                              src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" alt="Profile image">
                     </div>
@@ -719,17 +720,29 @@
         imageToShare = imageId;
     }
 
+    let image_share_success = document.getElementById("image_share_success");
+
+    function displaySuccessMsg(){
+        setTimeout(() => {
+            image_share_success.style.display = "none";
+        }, 2000);
+    }
+
     function shareImage(user_id){
         if(imageToShare !== ''){
-            alert(imageToShare + ' ' + user_id);
+            //alert(imageToShare + ' ' + user_id);
             $.ajax({
                 type: "POST",
                 url: '/web/home/share-image/to/?userId=' + user_id + '&imageId=' + imageToShare,
                 contentType : "application/json",
-                dataType: "json",
+                dataType: "text",
                 headers: {"X-CSRF-TOKEN" : token},
                 success: function () {
-                    $('#people_list_container').load(" #people_list_container");
+                    image_share_success.style.display = "block";
+                    image_share_success.innerHTML = "Request successful";
+                    displaySuccessMsg();
+                    location.reload();
+                    //$('#people_list_container').load(" #people_list_container");
                 }
             });
         }

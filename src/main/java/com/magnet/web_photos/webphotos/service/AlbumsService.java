@@ -1,6 +1,8 @@
 package com.magnet.web_photos.webphotos.service;
 
+import com.magnet.web_photos.webphotos.DTOconverters.AlbumAskToShareConverter;
 import com.magnet.web_photos.webphotos.DTOconverters.AlbumConverters;
+import com.magnet.web_photos.webphotos.dto.AlbumAskToShareDTO;
 import com.magnet.web_photos.webphotos.dto.AlbumDTO;
 import com.magnet.web_photos.webphotos.entity.*;
 import com.magnet.web_photos.webphotos.model.AlbumModel;
@@ -23,14 +25,17 @@ public class AlbumsService {
     private ImageRepository imageRepository;
     private ImageCommentsRepository imageCommentsRepository;
     private AlbumSendRepository albumSendRepository;
+    private AlbumAskToShareRepository albumAskToShareRepository;
 
     public AlbumsService(AlbumsRepository albumsRepository, UserRepository userRepository, ImageRepository imageRepository,
-                         ImageCommentsRepository imageCommentsRepository, AlbumSendRepository albumSendRepository) {
+                         ImageCommentsRepository imageCommentsRepository, AlbumSendRepository albumSendRepository,
+                         AlbumAskToShareRepository albumAskToShareRepository) {
         this.albumsRepository = albumsRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.imageCommentsRepository = imageCommentsRepository;
         this.albumSendRepository = albumSendRepository;
+        this.albumAskToShareRepository = albumAskToShareRepository;
     }
 
     public List<AlbumDTO> getUsersAlbums(Long userId){
@@ -159,5 +164,31 @@ public class AlbumsService {
 //        albumSendEntity.setAlbum(album);
         album.addRequest(albumSendEntity);
         albumSendRepository.save(albumSendEntity);
+    }
+
+    public void createAskToShareAlbumRequest(Long requestMakerId, Long ownerId, Long albumId){
+        User requestMaker = Optional.ofNullable(userRepository.findUserById(requestMakerId)).orElseThrow();
+        User owner = Optional.ofNullable(userRepository.findUserById(ownerId)).orElseThrow();
+        Album album = albumsRepository.findAlbumById(albumId);
+
+        AlbumShareRequest albumShareRequest = new AlbumShareRequest();
+        albumShareRequest.setUserMakingRequest(requestMaker);
+        albumShareRequest.setAlbumOwner(owner);
+        albumShareRequest.setAlbum(album);
+
+        albumAskToShareRepository.save(albumShareRequest);
+    }
+
+    public AlbumAskToShareDTO getPendingAlbumShareRequest(Long userId, Long ownerId, Long albumId){
+        User sender = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
+        User receiver = Optional.ofNullable(userRepository.findUserById(ownerId)).orElseThrow();
+        AlbumAskToShareDTO albumAskToShareDTO = new AlbumAskToShareDTO();
+        AlbumShareRequest albumShareRequest = albumAskToShareRepository.getRequestBySenderAndOwnerIds(userId, ownerId, albumId);
+
+        if(albumShareRequest != null){
+            albumAskToShareDTO = AlbumAskToShareConverter.albumAskToShareDTO(albumShareRequest);
+        }
+
+        return albumAskToShareDTO;
     }
 }

@@ -75,6 +75,10 @@
             </div>
         </div>
 
+        <div class="success_message_style" id="successMsg_req_sent">
+            <p id="success_message_text">Friend request has been sent!</p>
+        </div>
+
 
         <!--USER'S GALLERY CONTENT-->
         <div class="main-content-page-container" data-tab="1">
@@ -110,6 +114,16 @@
                 </div>
             </div>
 
+            <div class="error_message" id="errorMsg">
+                <div class="edit-modal-title" id="error-msg-title">
+                    <i id="error-msg-icon" class="fa fa-info edit-form-icons"></i><h5>Restricted access</h5>
+                </div>
+                <p id="error-msg-text"></p>
+                <div id="album_view_buttons">
+                    <button class="home-title-bar-buttons" onclick="closeWindow('errorMsg')">OK</button>
+                </div>
+            </div>
+
             <div th:unless="${#lists.size(userAlbums) == 0}" class="outer-album-container">
                 <div class="album-item" th:each="album : ${userAlbums}">
                     <div class="album-cover" th:if="${#lists.size(album.getAlbum_images()) < 3}">
@@ -132,8 +146,9 @@
                     <div class="album-short-info">
                         <div class="album-menu-options" id="t">
                             <ul>
-                                <li><a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>
-                                <li><a href=""><i class="fas fa-share"></i>Share request</a></li>
+                                <li><a href="#" th:onclick="'checkIfAccessGranted(' + ${user.getId()} + ',' +${album.getId()} + ')'"><i class="far fa-eye"></i>View</a></li>
+<!--                                <li><a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}"><i class="far fa-eye"></i>View</a></li>-->
+                                <li><a href="#" th:onclick="'checkAskedRequest(' + ${user.getId()} + ',' + ${album.getId()} + ')'"><i class="fas fa-share"></i>Share request</a></li>
                             </ul>
                         </div>
                         <div class="album-short-info-div1">
@@ -149,7 +164,8 @@
                         <div class="album-short-info-div2">
                             <span th:text="${album.getAlbumAccessType()}">Public</span>
                             <div class="album-short-info-buttons">
-                                <a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}" type="button">View album</a>
+<!--                                <a th:href="@{/web/user/album-gallery/(userId=${user.getId()}, albumId=${album.getId()})}" type="button">View album</a>-->
+                                <button type="button" th:onclick="'checkIfAccessGranted(' + ${user.getId()} + ',' +${album.getId()} + ')'">View album</button>
                             </div>
                         </div>
                     </div>
@@ -323,33 +339,6 @@
         });
     });
 
-    // function openTab(event, contentName){
-    //     let content_container;
-    //     let nav_tabs;
-    //     let current_tab;
-    //
-    //     content_container = document.getElementsByClassName("main-content-page-container");
-    //     nav_tabs = document.getElementsByClassName("nav-tab");
-    //
-    //     // for(let i = 0;i < content_container.length;i++){
-    //     //     if(content_container[i] === el){
-    //     //         current_tab = content_container[i];
-    //     //     }
-    //     // }
-    //
-    //     for(let i = 0;i < content_container.length;i++){
-    //         content_container[i].style.display = "none";
-    //     }
-    //
-    //     for(let i = 0;i < nav_tabs.length;i++){
-    //         nav_tabs[i].className = nav_tabs[i].className.replace(" active", "");
-    //     }
-    //
-    //     document.getElementById(contentName).style.display = "flex";
-    //     event.currentTarget.className += " active";
-    //
-    // }
-
     let dots = document.getElementsByClassName("album-item-dot-icon");
     let menus = document.getElementsByClassName("album-menu-options");
     let menu;
@@ -507,6 +496,122 @@
 
         comment_index.value = '';
     }
+
+
+    const errorMsgBox = document.getElementById("errorMsg");
+    let errorMsgBoxTest = document.getElementById("error-msg-text");
+    let errorMsg = "";
+    let buttons_holder = document.getElementById("album_view_buttons");
+    let successMsg_ = document.getElementById('successMsg_req_sent');
+
+    function displaySuccessMsg(){
+        setTimeout(() => {
+            successMsg_.style.display = "none";
+        }, 2000);
+    }
+
+    //Button to be created if album access type is Friends only and no friend request has been sent
+    let reqButton = null;
+    function checkIfAccessGranted(userId, albumId){
+        //Request to check friendship status, album access type and if friends request has been sent
+        $.ajax({
+            type: "GET",
+            url: '/web/user/check-access/?userId=' + userId + "&albumId=" + albumId,
+            contentType : "application/json",
+            dataType: "json",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function (data) {
+                //If album access type is Public, access is granted
+                if(data.accessGranted === "true"){
+                    window.location.href = '/web/user/album-gallery/?userId=' + userId + "&albumId=" + albumId
+                }else{
+                    //No access if access type is Private
+                    if(data.accessType === "Private"){
+                        errorMsg = "This album is private!";
+                        errorMsgBox.style.display = "block";
+                    }
+                    if(data.accessType === "Friends only"){
+                        errorMsgBox.style.display = "block";
+                        //If friend request has not been sent yet
+                        if(data.isFriendRequestSent === "false"){
+                            errorMsg = "This album can only be viewed by friends!";
+                            //Button is created which triggers a friend request action
+                            if(reqButton === null){
+                                reqButton = document.createElement('button');
+                                reqButton.className = "home-title-bar-buttons";
+                                reqButton.id = "req_send_button";
+                                reqButton.innerText = "Send friend request";
+                                buttons_holder = document.getElementById("album_view_buttons");
+                                buttons_holder.appendChild(reqButton);
+                                reqButton.onclick = function (){
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '/web/people/friend-request/to/?userId=' + userId,
+                                        contentType : "application/json",
+                                        dataType: "text",
+                                        headers: {"X-CSRF-TOKEN" : token},
+                                        success: function () {
+                                            errorMsgBox.style.display = "none";
+                                            successMsg_.style.display = "flex";
+                                            displaySuccessMsg();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        //If access type is Friends only and friend request has been sent
+                        else if(data.isFriendRequestSent === "true"){
+                            errorMsg = "Friend request has already been sent";
+                            errorMsgBoxTest.innerHTML = errorMsg;
+                            //button is removed
+                            buttons_holder.removeChild(reqButton);
+                        }
+                    }
+                    //Displaying the message depending on a condition
+                    errorMsgBoxTest.innerHTML = errorMsg;
+                }
+            },
+            //If request has not been successful
+            error: function (jqXHR, textStatus, errorThrown){
+                console.log("TEXTSTATUS " + textStatus + " ERROR = " + errorThrown)
+            }
+        });
+    }
+
+    function checkAskedRequest(userId, albumId){
+        $.ajax({
+            type: "GET",
+            url: '/web/user/check-asked-requests/?userId=' + userId + '&albumId=' + albumId,
+            contentType : "application/json",
+            dataType: "json",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function (data) {
+                if(data.isSent === "false"){
+                    errorMsgBox.style.display = "block";
+                    errorMsg = "Either you already have this album or the request has already been sent";
+                    errorMsgBoxTest.innerHTML = errorMsg;
+                } else{
+                    askToShareAlbumRequest(userId,albumId);
+                }
+            }
+        });
+    }
+
+    function askToShareAlbumRequest(userId,albumId){
+        console.log("USERID" + userId);
+        console.log("ALBUMID" + albumId)
+        $.ajax({
+            type: "POST",
+            url: '/web/user/ask-to-share/?userId=' + userId + '&albumId=' + albumId,
+            contentType : "application/json",
+            dataType: "json",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function (data) {
+
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

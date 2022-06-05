@@ -15,6 +15,7 @@ public class FriendRequest {
     private User toUser;
     private boolean isAccepted;
     private boolean isDeclined;
+    private boolean isSent;
 
     public FriendRequest() {
     }
@@ -57,5 +58,13 @@ public class FriendRequest {
 
     public void setDeclined(boolean declined) {
         isDeclined = declined;
+    }
+
+    public boolean isSent() {
+        return isSent;
+    }
+
+    public void setSent(boolean sent) {
+        isSent = sent;
     }
 }

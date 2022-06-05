@@ -57,15 +57,12 @@
                 </option>
             </select>
             <br>
-            <form action="#">
+            <div class="image_note_form">
                 <label for="image-comment"><h6>Comment</h6></label>
-                <br>
-                <textarea id="image-comment" name="image-comment" rows="2" cols="50" placeholder="Type comment...">
+                <textarea id="image-comment" name="image-comment" placeholder="Type comment...">
 
                     </textarea>
-            </form>
-            <br>
-            <h6>Tag friends</h6>
+            </div>
             <br>
             <div class="profile-buttons-container">
                 <button type="button" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;" onclick="uploadFile('uploaded_image','image-upload-form')">Save</button>
@@ -100,20 +97,20 @@
                     >
                     </option>
                 </select>
-                <form action="#">
+                <br>
+                <div class="image_note_form">
                     <label for="image-info-img-comment"><h6>Comment</h6></label>
                     <br>
-                    <textarea id="image-info-img-comment" name="image-info-img-comment" rows="2" cols="50" placeholder="Type comment..."  th:field="*{imageComment}">
+                    <textarea id="image-info-img-comment" name="image-info-img-comment" placeholder="Type comment..."  th:field="*{imageComment}">
 
                                     </textarea>
-                </form>
-                <br>
-                <h6>Tag friends</h6>
+                </div>
                 <br>
                 <div class="profile-buttons-container">
                     <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>
                     <button type="button" class="profile-buttons" onclick="closeWindow('image-info-modal')">Close</button>
                 </div>
+                <br>
             </div>
         </form>
     </div>
@@ -370,7 +367,7 @@
    //showSlide(slideIndex);
 
 
-   console.log(slideIndex);
+   //console.log(slideIndex);
    //Clickable content functionality
 
    function openLightbox() {
@@ -461,7 +458,7 @@
            comment : comment_index.value
        }
 
-       alert(`SLIDEINDEX ${slideIndex}`)
+       //alert(`SLIDEINDEX ${slideIndex}`)
        const com_cont = "#comments_container" + imageId;
 
        event.preventDefault();

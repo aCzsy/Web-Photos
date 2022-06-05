@@ -68,4 +68,5 @@ public class ImageSendEntity {
     public void setDeclined(boolean declined) {
         isDeclined = declined;
     }
+
 }

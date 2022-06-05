@@ -6,10 +6,13 @@ import com.magnet.web_photos.webphotos.model.ImageModel;
 import com.magnet.web_photos.webphotos.model.UserCredentialsModel;
 import com.magnet.web_photos.webphotos.model.UsersAboutInfo;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
+import com.magnet.web_photos.webphotos.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -70,18 +73,31 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void editUser(UserCredentialsModel userCredentialsModel){
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-        String hashedPassword = hashService.getHashedValue(userCredentialsModel.getNewPassword(), encodedSalt);
-        userRepository.findById(userCredentialsModel.getUserId())
-                .map(user -> {
-                    user.setUsername(Optional.ofNullable(userCredentialsModel.getUserName()).orElse(user.getUsername()));
-                    user.setPassword(hashedPassword);
-                    return userRepository.saveAndFlush(user);
-                });
+    @Transactional
+    public int editUser(UserCredentialsModel userCredentialsModel){
+        String newPassword = bCryptPasswordEncoder.encode(userCredentialsModel.getNewPassword());
+        int row = userRepository.updateCredentials(userCredentialsModel.getUserName(), newPassword, userCredentialsModel.getUserId());
+
+        return row;
+
+//        userRepository.findById(userCredentialsModel.getUserId())
+//                .map(user -> {
+//                    user.setUsername(Optional.ofNullable(userCredentialsModel.getUserName()).orElse(user.getUsername()));
+//                    user.setPassword(newPassword);
+//                    return userRepository.saveAndFlush(user);
+//                });
+
+//        SecureRandom random = new SecureRandom();
+//        byte[] salt = new byte[16];
+//        random.nextBytes(salt);
+//        String encodedSalt = Base64.getEncoder().encodeToString(salt);
+//        String hashedPassword = hashService.getHashedValue(userCredentialsModel.getNewPassword(), encodedSalt);
+//        userRepository.findById(userCredentialsModel.getUserId())
+//                .map(user -> {
+//                    user.setUsername(Optional.ofNullable(userCredentialsModel.getUserName()).orElse(user.getUsername()));
+//                    user.setPassword(hashedPassword);
+//                    return userRepository.saveAndFlush(user);
+//                });
     }
 
     public void editUserAboutInfo(UsersAboutInfo usersAboutInfo){

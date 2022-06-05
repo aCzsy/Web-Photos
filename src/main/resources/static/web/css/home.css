@@ -128,7 +128,9 @@ body {
 /*HOME PAGE*/
 .home-title-bar{
     display: flex;
-    position: relative;
+    /*position: relative;*/
+    top:0;
+    position: sticky;
     width: 100%;
     height: 10vh;
     margin: 0;
@@ -157,6 +159,20 @@ body {
     background: #7ce604;
 }
 
+
+#image-comment,
+#image-info-img-comment{
+    resize: none;
+    width: 100%;
+    height: 100%;
+}
+
+.image_note_form{
+    padding:0;
+    margin: 0 0 20px 0;
+    height: 15%;
+}
+
 .image-inner-area-top-bar{
     height: calc(100% - 5px);
     width: calc(100% - 5px);
@@ -168,6 +184,14 @@ body {
     justify-content: flex-end;
     align-items: center;
     padding-right: 20px;
+}
+
+#image_share_success{
+    display: none;
+    color: #7ce604;
+    padding:0;
+    margin: 0;
+    width: 100%;
 }
 
 .success-message,
@@ -193,7 +217,32 @@ body {
     transition: display 0.5s ease-out;
 }
 
-.success-message p{
+.successMessage,
+.errorMessage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    z-index: 1;
+    margin: 0;
+    padding: 5px 0;
+    box-sizing: border-box;
+    background-color: #7ce604;
+    color: #ffffff;
+    border: none;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    transition: display 0.5s ease-out;
+}
+
+.errorMessage{
+    background-color: #ff6666;
+}
+
+.success-message p,
+#success_message_text,
+.successMessage p{
     padding: 0;
     margin: 0;
 }
@@ -247,6 +296,7 @@ body {
     animation-name: showSmoothly;
     animation-duration: 0.4s;
     transition: 0.4s;
+    box-sizing: border-box;
 }
 
 
@@ -285,8 +335,10 @@ body {
 }
 
 .image-info-labels{
+    display: block;
     padding: 5px;
     border-radius: 3px;
+    width: 100%;
 }
 
 .friend-online-container{
@@ -428,6 +480,10 @@ body {
     font-size: 14px;
 }
 
+#requests-content{
+    height: 100%;
+}
+
 .main-content{
     width: 100%;
     height: 100vh;
@@ -436,6 +492,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 5rem;
 }
 
 .image-container{
@@ -1025,13 +1082,40 @@ img.hover-shadow {
     gap: 10px;
 }
 
-.profile-buttons{
+.red-button{
+    background-color:#ff6666;
+    color: #ffffff;
     padding: 8px 25px; !important;
     border: 2px solid #7ce604;
     font-size: 14px;
     border-radius: 3px;
     text-decoration: none;
-    color: #666666;
+    cursor: pointer;
+}
+
+.button-green{
+    background-color:#7ce604;
+    color: #ffffff;
+    padding: 8px 25px; !important;
+    border: 2px solid #7ce604;
+    font-size: 14px;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-green:hover{
+    color: #ffffff;
+}
+
+.profile-buttons{
+    background-color:#7ce604;
+    padding: 8px 25px; !important;
+    border: 2px solid #7ce604;
+    font-size: 14px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #ffffff;
     cursor: pointer;
 }
 
@@ -1063,8 +1147,7 @@ img.hover-shadow {
     transition: 0.4s;
 }
 
-#people_list_container,
-.request-container{
+#people_list_container{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1148,7 +1231,7 @@ img.hover-shadow {
 .user-list-title::after{
     content: "";
     width: 80%;
-    height: 5px;
+    height: 3px;
     position: absolute;
     bottom: -3px;
     left: 0;
@@ -1200,6 +1283,10 @@ img.hover-shadow {
 .people-item-buttons{
     display: flex;
     gap: 15px;
+}
+
+#friend-request-form{
+    background: none;
 }
 
 /*Friends page*/
@@ -1354,6 +1441,46 @@ img.hover-shadow {
     transform: scale(1.05);
 }
 
+#error-msg-title{
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+#error-msg-icon{
+    color: white;
+}
+
+.error_message{
+    display: none;
+    background: #fefefe;
+    position: absolute;
+    max-width: 30%;
+    border-radius: 10px;
+    width: 30%;
+    padding: 2.5rem;
+    top:50%;
+    transform: translate(0, -50%);
+    z-index: 1005;
+}
+
+#error-msg-text{
+    margin-bottom: 30px;
+    color: #595959;
+}
+
+.error_message button{
+    background: #7ce604;
+    padding: 5px 15px 5px 15px;
+    border-radius: 2px;
+}
+
+#album_view_buttons{
+    display: flex;
+    gap: 20px;
+}
+
 #album-create-select-gallery-images-container{
     display: none;
     position: fixed;
@@ -1395,7 +1522,7 @@ img.hover-shadow {
     animation-duration: 0.4s;
 }
 
-#album-create-gallery-image-wrapper{
+.album-create-gallery-image-wrapper{
     display: block;
     position: relative;
     overflow: hidden;
@@ -1408,7 +1535,7 @@ img.hover-shadow {
     cursor: pointer;
 }
 
-#album-create-gallery-image-wrapper:hover{
+.album-create-gallery-image-wrapper:hover{
     box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 5px 13px 0px rgba(0,0,0,0.75);
@@ -1593,6 +1720,7 @@ img.hover-shadow {
     animation-name: showSmoothly;
     animation-duration: 0.4s;
     transition: 0.4s;
+    box-sizing: border-box;
 }
 
 .edit-details-container input[type="text"],
@@ -1700,6 +1828,32 @@ img.hover-shadow {
     width: 18%;
 }
 
+.success_message_style{
+    width: 100%;
+    z-index: 101;
+    margin: 0;
+    padding: 5px 0;
+    box-sizing: border-box;
+    background-color: #7ce604;
+    color: #ffffff;
+    border: none;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    transition: display 0.5s ease-out;
+}
+
+#successMsg_req_sent{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#friend_check_msg{
+    display: none;
+    gap: 10px;
+}
+
 /*OTHER USERS ALBUM GALLERY PAGE*/
 #return-to-user-albums{
     position: absolute;
@@ -1718,9 +1872,21 @@ img.hover-shadow {
 
 /*REQUESTS PAGE*/
 .request-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /*min-height: 30%;*/
+    /*max-height: 70%;*/
+    /*overflow-y: auto;*/
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 5px;
+    /*margin: 0;*/
+    padding: 5px 0 5px 0;
+    animation-name: showSmoothly;
+    animation-duration: 0.4s;
+    transition: 0.4s;
     width: 90%;
-    min-height: 0;
-    max-height: 50%;
     margin-top: 5rem;
 }
 

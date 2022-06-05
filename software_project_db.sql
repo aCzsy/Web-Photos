@@ -429,7 +429,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'USER'),(2,'ADMIN'),(3,'USER'),(4,'USER');
+INSERT INTO `role` VALUES (1,'ADMIN'),(2,'USER'),(3,'USER'),(4,'USER');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,7 +460,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,NULL,'2022-05-29',_binary '','Artis','Brizs','$2a$10$Izhi8DzNd3dk2UvkJjhcEOt71O9.dunA5Xk6fhkDGgrWZBPD6Rfa6',NULL,'admin'),(2,NULL,'2022-05-29',_binary '','John','Doe','$2a$10$QrJwdY1UCKKqwrqi1kEmQuW7skSE3kGtoTjFmB5eBAmPcl0K2Dwk.',NULL,'johnDoe'),(3,NULL,'2022-05-29',_binary '','Jane','Doe','$2a$10$JLtpeA5VmshkDWrKAlKyUO57Eyr2.dcxXg8EkHulfRMULNLFbKTKy',NULL,'janeDoe');
+INSERT INTO `users` VALUES (1,NULL,'2022-05-29',_binary '','Artis','Brizs','$2a$10$aSAIoStHMlEBMTOH5/CCM.e1MyZmmPAFHTHaBO4bFjzY1zvLi/8MG',NULL,'admin'),(2,NULL,'2022-05-29',_binary '','John','Doe','$2a$10$RFl5HtmaqLoeuBryY5nIUecc1pUQL73njEeMvxJJSsB773sS.QKlC',NULL,'johnDoe'),(3,NULL,'2022-05-29',_binary '','Jane','Doe','$2a$10$MyJs23C3jXdE7vlObfJjwuvYUFjISegIqufIMwhyvPCAqsCtrcj6G',NULL,'janeDoe');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-29 22:36:52
+-- Dump completed on 2022-05-29 23:05:04

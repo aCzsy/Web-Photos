@@ -7,6 +7,7 @@ import com.magnet.web_photos.webphotos.model.SortForm;
 import com.magnet.web_photos.webphotos.repository.FriendRequestRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.FriendRequestService;
+import com.magnet.web_photos.webphotos.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +90,15 @@ public class FriendsController {
             successMessage = "Error during request";
         }
         redirectAttrs.addFlashAttribute("successMessage", successMessage);
+        return "redirect:/web/friends";
+    }
+
+    @PostMapping("/web/friends/delete-friend-request")
+    public String deleteFriendRequest(@RequestParam(value = "userId") Long userId, HttpServletRequest request){
+        User authenticatedUser = SessionUtil.getSessionUser(request);
+
+        friendRequestService.deleteFriendRequestByUserIds(authenticatedUser.getId(), userId);
+
         return "redirect:/web/friends";
     }
 

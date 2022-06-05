@@ -1,18 +1,14 @@
 package com.magnet.web_photos.webphotos.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.magnet.web_photos.webphotos.DTOconverters.ImageCommentConverters;
 import com.magnet.web_photos.webphotos.DTOconverters.ImageConvertersAndroid;
 import com.magnet.web_photos.webphotos.dto.ImageCommentDTO;
 import com.magnet.web_photos.webphotos.dto.ImageDTO_Android;
-import com.magnet.web_photos.webphotos.dto.UserDTO;
 import com.magnet.web_photos.webphotos.entity.*;
-import com.magnet.web_photos.webphotos.exception.UserNotFoundException;
 import com.magnet.web_photos.webphotos.model.ImageMessage;
 import com.magnet.web_photos.webphotos.model.ImageModel;
-import com.magnet.web_photos.webphotos.model.ImageShareRequestModel;
 import com.magnet.web_photos.webphotos.repository.ImageCommentsRepository;
 import com.magnet.web_photos.webphotos.repository.ImageRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
@@ -21,15 +17,11 @@ import com.magnet.web_photos.webphotos.service.ImageService;
 import com.magnet.web_photos.webphotos.service.UserService;
 import com.magnet.web_photos.webphotos.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,11 +30,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -77,8 +70,6 @@ public class HomeController {
             response.sendRedirect(request.getContextPath() + "/web/home");
             return null;
         }
-
-
 //        response.sendRedirect(request.getContextPath() + "/web/home");
         return "redirect:/web/home";
     }
@@ -90,9 +81,10 @@ public class HomeController {
 
     @GetMapping("/web/home")
     public String getHomePage(@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication,
-                              Model model, RedirectAttributes redirectAttributes){
-        User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
-//        User foundUser = UserSession.getUserFromSession(request);
+                              Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
+        //User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+        User foundUser = SessionUtil.getSessionUser(request);
+        //System.out.println("SESSION USER= " + sessionUser.getUsername() + " NAME=" + sessionUser.getFirstname());
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));
@@ -179,17 +171,6 @@ public class HomeController {
         return "redirect:/web/home";
     }
 
-//    @RequestParam(value = "imageId") Long imageId
-//@ModelAttribute("comment")ImageMessage imageMessage
-//    @PostMapping(value = "/home/add-comment-to-an-image/{imageId}", produces = "application/json")
-//    public @ResponseBody ImageCommentDTO addComment(@PathVariable("imageId") Long imageId, @RequestBody String comment, Authentication authentication) throws IOException {
-//        ImageMessage imageMessage = objectMapper.readValue(comment,ImageMessage.class);
-//        Comment savedComment = imageService.addComment(imageId, imageMessage, authentication);
-//        ImageCommentDTO imageCommentDTO = ImageCommentConverters.convertCommentToImageCommentDTO(savedComment);
-//        objectMapper.writeValue(new File("target/comment.json"), imageCommentDTO);
-//        return imageCommentDTO;
-//    }
-
     @PostMapping(value = "/web/home/add-comment-to-an-image/{imageId}", produces = "application/json")
     public @ResponseBody ImageCommentDTO addComment(@PathVariable("imageId") Long imageId, @RequestBody String comment, Authentication authentication) throws IOException {
         ImageMessage imageMessage = objectMapper.readValue(comment,ImageMessage.class);
@@ -210,14 +191,6 @@ public class HomeController {
         System.out.println("USER TO ID= " + userId);
         return "redirect:/web/home";
     }
-
-
-//    @GetMapping("/home/get-comments-for-image/{imageId}")
-//    @ResponseBody
-//    public List<ImageCommentDTO> getCommentsForImage(@PathVariable("imageId") Long imageId,Authentication authentication){
-//        User user = userService.getUser(authentication.getName());
-//        return commentsService.getAllCommentsForImage(imageId, user.getId());
-//    }
 
     @ModelAttribute("categories")
     public String[] categories () {

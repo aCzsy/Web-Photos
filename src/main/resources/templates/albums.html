@@ -154,14 +154,15 @@
     </div>
 </div>
 
+<!--IMAGES FROM GALLERY DISPLAYED HERE-->
 <div id="album-create-select-gallery-images-container">
     <div id="album-create-gallery-images-add-btn-container"><button type="submit" class="edit-cred-btn placeholder-create-btn" id="add-gallery-images-btn-album-create">Add selected images</button></div>
     <div th:unless="${#lists.size(images) == 0}" id="album-create-gallery-images">
-        <div id="album-create-gallery-image-wrapper" th:each="img : ${images}">
+        <div class="album-create-gallery-image-wrapper" th:each="img : ${images}">
             <label class="tickLabel" for="tick">
                 <input type="checkbox" class="tick" id="tick" name="tick">
             </label>
-            <img class="display-image gallery-select-image" th:src="@{${'/web/home/image/' + img.getImageId()}}" onclick="albumCreateImageCheck(this)" alt="">
+            <img class="display-image gallery-select-image" th:src="@{${'/web/home/image/' + img.getImageId()}}" alt="">
         </div>
     </div>
 </div>
@@ -169,6 +170,7 @@
 <div id="people_list_bg">
     <div id="people_list_container">
         <div class="container-top">
+            <p id="image_share_success"></p>
             <button type="button" onclick="closeWindow('people_list_bg')" class="edit-cred-btn">Close</button>
         </div>
         <div class="main-content-placeholder" th:if="${#lists.size(people)==0}">
@@ -334,6 +336,7 @@
     const album_create_gallery_preview_bg = document.getElementById("album-create-select-gallery-images-container");
     const album_create_gallery_open = document.getElementById("album-create-gallery-select");
     const album_create_gallery_images = document.getElementById("album-create-gallery-images");
+    let children_gallery_images;
 
     const form_title = document.getElementById("album-create-form-title");
     const form_images = document.getElementById("album-create-form-images");
@@ -359,42 +362,107 @@
     const people_list = document.getElementById("people_list_bg");
     const token = $("meta[name='_csrf']").attr("content");
 
-    //album_create_gallery_open.addEventListener('click', function ()
+    let selected_gallery_images_on_album_create = [];
+    let checked_indexes = [];
 
     $(album_create_gallery_open).on('click', function (){
         album_create_gallery_preview_bg.style.display = "flex";
         album_create_gallery_images.style.display = "flex";
     });
 
-    let selected_gallery_images_on_album_create = [];
+    // $(document).ready(function (){
+    //     $("#album-create-gallery-images div").click(function() {
+    //         let index = $(this).index();
+    //         if(album_image_select_checkbox[index].checked === false){
+    //             album_image_select_checkbox[index].checked = true
+    //             album_create_images_preview_container.appendChild(album_image_select[index]);
+    //             checked_indexes.push(index);
+    //             //selected_gallery_images_on_album_create.push(album_image_select[index]);
+    //         }
+    //         else if(album_image_select_checkbox[index].checked === true){
+    //             let temp_index = checked_indexes.indexOf(index);
+    //             album_image_select_checkbox[index].checked = false
+    //             album_create_images_preview_container.removeChild(album_image_select[index]);
+    //             //selected_gallery_images_on_album_create.splice(temp_index,1);
+    //             checked_indexes.splice(temp_index,1);
+    //         }
+    //     });
+    // })
 
-    function albumCreateImageCheck(img){
-        for(let i = 0;i < album_image_select.length;i++){
-            if(album_image_select[i] === img){
-                album_image_select_checkbox[i].checked ? album_image_select_checkbox[i].checked = false : album_image_select_checkbox[i].checked = true;
-                if(album_image_select_checkbox[i].checked === true){
-                    selected_gallery_images_on_album_create.push(album_image_select[i]);
-                }
+    //This function is executed each time a user clicks on an image when selecting images from a
+    //gallery to add to an album during album creation process
+    $(document).ready(function() {
+        //Captures onclick of each item inside a div with specified id
+        $("#album-create-gallery-images div").click(function() {
+            //Index within a list of child elements
+            let index = $(this).index();
+
+            //If clicked item is not checked, it becomes checked.
+            if(album_image_select_checkbox[index].checked === false){
+                album_image_select_checkbox[index].checked = true
+                //Adding checked image to an array of checked images
+                selected_gallery_images_on_album_create.push(album_image_select[index]);
+                //Adding image index to a separate array
+                checked_indexes.push(index);
+                // console.log(checked_indexes);
+                // console.log("LENGTH INDEXES=" + checked_indexes.length);
+                // console.log("LENGTH=" + selected_gallery_images_on_album_create.length);
             }
-        }
-    }
+            //If clicked item is checked, means user wants to uncheck it
+            else if(album_image_select_checkbox[index].checked === true){
+                //let temp_index = selected_gallery_images_on_album_create.indexOf(album_image_select[index]);
+                //Getting its original index
+                let temp_index = checked_indexes.indexOf(index);
+                //Image gets unchecked
+                album_image_select_checkbox[index].checked = false
+                //And removed from an array of checked iamges
+                selected_gallery_images_on_album_create.splice(temp_index,1);
+                //Index is no longer needed as it is no longer checked
+                checked_indexes.splice(temp_index,1);
+                // console.log(checked_indexes);
+                // console.log("LENGTH INDEXES=" + checked_indexes.length);
+                // console.log("LENGTH=" + selected_gallery_images_on_album_create.length);
+            }
 
+            //console.log("Index " + index + " was clicked")
+        });
+    });
+
+
+    //When user has selected images from a gallery and wished to add them to the album during its creation
     $(add_gallery_images_btn_album_create).on('click', function (){
+        //If user has selected at least 1 image
         if(selected_gallery_images_on_album_create.length > 0){
+            children_gallery_images = album_create_gallery_images.querySelectorAll(".album-create-gallery-image-wrapper");
+            for(let i = 0;i < checked_indexes.length;i++){
+                //Unchecking selected images in case user would want to add more images from gallery
+                album_image_select_checkbox[checked_indexes[i]].checked = false;
+                //And disabling any click events on already selected items
+                children_gallery_images[checked_indexes[i]].style.pointerEvents = "none";
+            }
+            //Showing selected images in separate container
             $(album_create_images_preview_container).css('display', 'flex');
-
+            //For a length of selected items
             for(let i = 0;i < selected_gallery_images_on_album_create.length;i++){
+                //Creating a new div container
                 let img_container = document.createElement('div');
+                //Class is added
                 img_container.className = 'album-image-preview-container';
                 selected_gallery_images_on_album_create[i].className = 'album-image-preview';
                 selected_gallery_images_on_album_create[i].removeAttribute("onclick");
                 img_container.appendChild(selected_gallery_images_on_album_create[i]);
+                //Appending all selected from a gallery images to a preview container
                 album_create_images_preview_container.appendChild(img_container);
             }
         }
+        //Closing a window with gallery images
         album_create_gallery_preview_bg.style.display = "none";
+        //Removing all elements from an array that contained images selected from gallery
+        //as we need an empty array each time a user opens a window
+        //selected_gallery_images_on_album_create.splice(0,selected_gallery_images_on_album_create.length);
     });
 
+    //If user has chosen images from the device
     $(images_selected_during_album_create).on('change', function (event){
         let fragment = document.createDocumentFragment();
         for(let i = 0;i < event.target.files.length;i++){
@@ -428,10 +496,16 @@
         if (event.target === create_album_modal) {
             // album_create_images_preview_container.style.display = "none";
             create_album_modal.style.display = "none";
+            if(selected_gallery_images_on_album_create.length > 0){
+                selected_gallery_images_on_album_create.splice(0,selected_gallery_images_on_album_create.length);
+            }
         }
         if(event.target === album_create_gallery_preview_bg){
             album_create_gallery_preview_bg.style.display = "none";
             album_create_gallery_images.style.display = "none";
+            if(selected_gallery_images_on_album_create.length > 0){
+                selected_gallery_images_on_album_create.splice(0,selected_gallery_images_on_album_create.length);
+            }
         }
     }
 
@@ -479,7 +553,7 @@
         const comment = document.getElementById("album-comment");
         const accessType = document.getElementById("accessType");
         const images = document.getElementById("uploaded_image_to_album").files;
-        console.log('IMAGES ' + images.length);
+        //console.log('IMAGES ' + images.length);
 
         event.preventDefault();
 
@@ -543,6 +617,9 @@
                 data: albumImagesFormData,
                 headers: {"X-CSRF-TOKEN" : token},
                 success: function () {
+                    //Removing all elements from an array that contained images selected from gallery
+                    //as we need an empty array each time a user opens a window
+                    selected_gallery_images_on_album_create.splice(0,selected_gallery_images_on_album_create.length);
                     location.reload();
                     //alert("Album created successfully");
                 }
@@ -602,17 +679,28 @@
         albumToShare = albumId;
     }
 
+    let image_share_success = document.getElementById("image_share_success");
+
+    function displaySuccessMsg(){
+        setTimeout(() => {
+            image_share_success.style.display = "none";
+        }, 2000);
+    }
+
     function shareAlbum(user_id){
         if(albumToShare !== ''){
-            alert(albumToShare + ' ' + user_id);
+            //alert(albumToShare + ' ' + user_id);
             $.ajax({
                 type: "POST",
                 url: '/web/albums/share-album/to/?userId=' + user_id + '&albumId=' + albumToShare,
                 contentType : "application/json",
-                dataType: "json",
+                dataType: "text",
                 headers: {"X-CSRF-TOKEN" : token},
                 success: function () {
-
+                    image_share_success.style.display = "block";
+                    image_share_success.innerHTML = "Request successful";
+                    displaySuccessMsg();
+                    location.reload();
                 }
             });
         }

@@ -18,6 +18,7 @@ public class AlbumShareRequest {
     private Album album;
     private boolean isAccepted;
     private boolean isDeclined;
+    private boolean isSent;
 
     public AlbumShareRequest() {
     }
@@ -68,5 +69,13 @@ public class AlbumShareRequest {
 
     public void setDeclined(boolean declined) {
         isDeclined = declined;
+    }
+
+    public boolean isSent() {
+        return isSent;
+    }
+
+    public void setSent(boolean sent) {
+        isSent = sent;
     }
 }

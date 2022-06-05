@@ -43,9 +43,7 @@
             <h6><i class="fas fa-user edit-form-icons"></i>Username</h6>
             <input type="text" class="image-info-labels" name="user_name" id="user_name" th:field="*{userName}">
             <h6><i class="fas fa-lock edit-form-icons"></i>New password</h6>
-            <input type="text" class="image-info-labels" name="new_password" id="new_password" th:field="*{newPassword}">
-            <h6><i class="fas fa-lock edit-form-icons"></i>Repeat new password</h6>
-            <input type="text" class="image-info-labels" name="repeat_new_password" id="repeat_new_password" th:field="*{repeatNewPassword}">
+            <input type="password" class="image-info-labels" name="new_password" id="new_password" th:field="*{newPassword}">
             <br>
             <div class="profile-buttons-container edit-details-buttons-container">
                 <button type="submit" class="profile-buttons edit-cred-btn" id="album-info-edit-btn" style="padding: 10px 25px;">Save changes</button>
@@ -92,6 +90,17 @@
                 </form>
             </div>
         </div>
+
+        <div class="successMessage" th:if="${successMsg}">
+            <p th:text="${successMsg}">SUCCESS MESSAGE</p>
+        </div>
+        <div class="successMessage errorMessage" th:if="${passwordError}">
+            <p th:text="${passwordError}">ERROR MESSAGE</p>
+        </div>
+        <div class="successMessage errorMessage" th:if="${userNameError}">
+            <p th:text="${userNameError}">ERROR MESSAGE</p>
+        </div>
+
         <div class="profile-outer-container">
             <div class="profile-inner-container">
                 <div class="profile-image-wrapper">
@@ -169,6 +178,8 @@
 
     document.getElementById("userId").value = userId;
     document.getElementById("profile-description").value = aboutInfo;
+    let edit_btn = document.getElementById("album-info-edit-btn");
+
 </script>
 
 <script>

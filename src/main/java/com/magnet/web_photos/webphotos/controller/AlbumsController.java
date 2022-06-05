@@ -10,6 +10,7 @@ import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.AlbumsService;
 import com.magnet.web_photos.webphotos.service.ImageService;
 import com.magnet.web_photos.webphotos.service.UserService;
+import com.magnet.web_photos.webphotos.utils.SessionUtil;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -184,8 +185,10 @@ public class AlbumsController {
     }
 
     @GetMapping("/web/albums/viewAlbum")
-    public String getAlbumsGallery(@RequestParam(value = "albumId") Long albumId,@ModelAttribute("imageModel")ImageModel imageModel, Authentication authentication, Model model){
-        User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+    public String getAlbumsGallery(@RequestParam(value = "albumId") Long albumId,@ModelAttribute("imageModel")ImageModel imageModel,
+                                   Authentication authentication, Model model, HttpServletRequest request){
+        //User user = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+        User user = SessionUtil.getSessionUser(request);
         Album album = Optional.ofNullable(albumsRepository.findAlbumById(albumId)).orElseThrow();
         String user_firstname = user.getFirstname();
         model.addAttribute("album_name", album.getName());

@@ -51,13 +51,14 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 //				.loadUserByUsername(authenticationRequest.getUsername());
 //
 //		final String token = jwtTokenUtil.generateToken(userDetails);
-//		response.addHeader("Authorization", "Bearer " + new JwtResponse(token));
-
-//		return ResponseEntity.ok(new JwtResponse(token));
-
-//		request.getSession().setAttribute("user", user);
+//		response.addHeader("Authorization", "Bearer " + new JwtResponse(token, user.getUsername()));
 //
-//		response.sendRedirect(request.getContextPath() + "/home");
+//		//return ResponseEntity.ok(new JwtResponse(token, user.getUsername()));
+//
+//		System.out.println("SESSION SET");
+//		request.getSession().setAttribute("user", user);
+
+		//response.sendRedirect(request.getContextPath() + "/home");
 	}
 
 

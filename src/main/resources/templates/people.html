@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>People</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" content="${_csrf.token}"/>
     <link rel="shortcut icon" href="../static/web/images/favicon.ico">
     <link rel="icon" type="image/x-icon" href="../static/web/images/favicon.ico">
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
@@ -23,6 +24,10 @@
     <link rel="stylesheet" href="../static/web/css/fontawesome-5.15.4-web/css/solid.css" th:href="@{/web/css/fontawesome-5.15.4-web/css/solid.css}">
     <link rel="stylesheet" type="text/css" href="../static/web/css/home.css"  th:href="@{/web/css/home.css}">
     <script src="../static/web/js/home.js" th:src="@{/web/js/home.js}"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
 </head>
 <body onload="document.body.style.opacity='1'">
 
@@ -83,15 +88,26 @@
                 </form>
             </div>
         </div>
+
+        <div class="error_message" id="friend_check_msg">
+            <div class="edit-modal-title" id="error-msg-title">
+                <h5>Unable to send request</h5>
+            </div>
+            <p id="friend_check_msg_text"></p>
+            <div id="album_view_buttons">
+                <button class="home-title-bar-buttons" onclick="closeWindow('friend_check_msg')">OK</button>
+            </div>
+        </div>
+
         <div class="main-content-placeholder" th:if="${#lists.size(users)==0}">
 <!--            <i class="far fa-images fa-3x"></i>-->
             <img class="placeholder-icon" src="../static/web/images/tag.png" th:src="@{/web/images/tag.png}" alt="Empty state image">
             <p>There are no more registered users</p>
         </div>
 
-        <div class="success-message" id="successMsg" th:if="${successMessage}">
+        <div class="success-message" id="successMsg">
 <!--            <i class="far fa-check-circle fa-4x" style="color: #7ce604;"></i>-->
-            <p th:text="${successMessage}">SUCCESS MESSAGE</p>
+            <p id="friend_req_success">SUCCESS MESSAGE</p>
         </div>
 
         <div class="title-outer-container" style="width: 90%;" th:unless="${#lists.size(users) == 0}">
@@ -102,15 +118,15 @@
         <div class="user-list-labels">
             <p class="light-grey-label"><span class="coloured-label" th:text="${number_of_users} + ' '"></span>users</p>
             <form action="#" th:object="${sortForm}" method="post" th:action="@{/web/people/sort-users}">
-                <label class="light-grey-label" for="sortType">Sort by: </label>
-                <select id="sortType" th:field="*{sortType}">
-                    <option
-                            th:each="type : ${sortTypes}"
-                            th:value="${type}"
-                            th:text="${type}"
-                    >
-                    </option>
-                </select>
+<!--                <label class="light-grey-label" for="sortType">Sort by: </label>-->
+<!--                <select id="sortType" th:field="*{sortType}">-->
+<!--                    <option-->
+<!--                            th:each="type : ${sortTypes}"-->
+<!--                            th:value="${type}"-->
+<!--                            th:text="${type}"-->
+<!--                    >-->
+<!--                    </option>-->
+<!--                </select>-->
 <!--                <button type="submit" id="submit-text-btn" class="btn btn-success">Submit</button>-->
             </form>
         </div>
@@ -138,9 +154,10 @@
                 </div>
                 <div class="people-item-buttons">
                     <a th:href="@{/web/user/user-gallery/(userId=${registered_user.getId()})}" class="profile-buttons">View Gallery</a>
-                    <form id="friend-request-form" action="#" th:action="@{/web/people/friend-request/to/(userId=${registered_user.getId()})}" method="post">
-                        <input class="profile-buttons" type="submit" value="Friend request">
-                    </form>
+                    <button type="button" class="profile-buttons" id="people_friend_req_btn" th:onclick="'checkFriendshipStatus(' + ${registered_user.getId()} + ')'">Friend request</button>
+<!--                    <form id="friend-request-form" action="#" th:action="@{/web/people/friend-request/to/(userId=${registered_user.getId()})}" method="post">-->
+<!--                        <input class="button-green" type="submit" value="Friend request">-->
+<!--                    </form>-->
 <!--                    <a th:unless="" class="profile-buttons">Request sent</a>-->
                 </div>
             </div>
@@ -154,15 +171,60 @@
 <!--        </div>-->
 <!--    </div>-->
 </div>
-<script th:src="@{/web/js/jquery-slim.min.js}"></script>
+<script src="../static/web/js/jquery-3.6.0.js" th:src="@{/web/js/jquery-3.6.0.js}"></script>
 <script th:src="@{/web/js/bootstrap.min.js}"></script>
 <script>
-    setTimeout(() => {
-        const el = document.getElementById('successMsg');
-        //removes element from DOM
-        el.style.display = 'none';
-        el.style.transition = 'all 0.5s';
-    }, 2000);
+    const token = $("meta[name='_csrf']").attr("content");
+    let friend_check_msg = document.getElementById("friend_check_msg");
+    let friend_check_msg_text = document.getElementById("friend_check_msg_text")
+    let successMsg_ = document.getElementById("successMsg");
+    let successMsg_text = document.getElementById("friend_req_success");
+
+    function closeWindow(elementId){
+        document.getElementById(elementId).style.display = "none";
+    }
+
+    function displaySuccessMsg(){
+        setTimeout(() => {
+            successMsg_.style.display = "none";
+        }, 2000);
+    }
+
+    let _people_friend_req_btn = document.getElementById("people_friend_req_btn");
+
+    function checkFriendshipStatus(userId){
+        $.ajax({
+            type: "GET",
+            url: '/web/people/check-requests/?userId=' + userId,
+            contentType : "application/json",
+            dataType: "json",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function (data) {
+                if(data.response === "false"){
+                    sendFriendsReq(userId);
+                    successMsg_.style.display = "flex";
+                    successMsg_text.innerHTML = "Friend request sent";
+                    displaySuccessMsg();
+                } else{
+                    friend_check_msg.style.display = "block";
+                    friend_check_msg_text.innerHTML = "Either you or recipient already sent a friend request"
+                }
+            }
+        });
+    }
+
+    function sendFriendsReq(userId){
+        $.ajax({
+            type: "POST",
+            url: '/web/people/friend-request/to/?userId=' + userId,
+            contentType : "application/json",
+            dataType: "json",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function () {
+
+            }
+        });
+    }
 </script>
 </body>
 </html>

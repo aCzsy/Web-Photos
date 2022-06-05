@@ -12,6 +12,7 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -53,7 +54,6 @@ public class SecurityConfig{
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, UserRepository userRepository){
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
-
     }
 
     @Bean
@@ -216,10 +216,13 @@ public class SecurityConfig{
             .successHandler((request, response, authentication) -> { //new AuthenticationSuccessHandler()
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                 User user = userRepository.getUser(userDetails.getUsername());
-                System.out.println("LOGGED IN");
-                System.out.println("The user " + user.getFirstname() + " " + user.getLastname() + " has logged in.");
+                if(user != null){
+                    request.getSession().setAttribute("user", user);
+                    System.out.println("LOGGED IN");
+                    System.out.println("The user " + user.getFirstname() + " " + user.getLastname() + " has logged in.");
 
-                response.sendRedirect(request.getContextPath() + "/web/home");
+                    response.sendRedirect(request.getContextPath() + "/web/home");
+                }
             });
 
 //            http
@@ -258,6 +261,7 @@ public class SecurityConfig{
                     });
 
         }
+
     }
 
     @Configuration

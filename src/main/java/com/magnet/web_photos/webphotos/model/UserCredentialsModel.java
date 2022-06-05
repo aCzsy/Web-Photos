@@ -4,16 +4,14 @@ public class UserCredentialsModel {
     private Long userId;
     private String userName;
     private String newPassword;
-    private String repeatNewPassword;
 
     public UserCredentialsModel() {
     }
 
-    public UserCredentialsModel(Long userId,String userName, String newPassword, String repeatNewPassword) {
+    public UserCredentialsModel(Long userId,String userName, String newPassword) {
         this.userId = userId;
         this.userName = userName;
         this.newPassword = newPassword;
-        this.repeatNewPassword = repeatNewPassword;
     }
 
     public Long getUserId() {
@@ -30,14 +28,6 @@ public class UserCredentialsModel {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getRepeatNewPassword() {
-        return repeatNewPassword;
-    }
-
-    public void setRepeatNewPassword(String repeatNewPassword) {
-        this.repeatNewPassword = repeatNewPassword;
     }
 
     public String getUserName() {

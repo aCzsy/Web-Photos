@@ -1,5 +1,7 @@
 package com.magnet.web_photos.webphotos.repository;
 
+import com.magnet.web_photos.webphotos.entity.AlbumShareRequest;
+import com.magnet.web_photos.webphotos.entity.ImageSendEntity;
 import com.magnet.web_photos.webphotos.entity.Img;
 import com.magnet.web_photos.webphotos.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

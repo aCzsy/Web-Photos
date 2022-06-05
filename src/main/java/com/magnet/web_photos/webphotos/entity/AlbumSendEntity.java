@@ -68,4 +68,5 @@ public class AlbumSendEntity {
     public void setDeclined(boolean declined) {
         isDeclined = declined;
     }
+
 }

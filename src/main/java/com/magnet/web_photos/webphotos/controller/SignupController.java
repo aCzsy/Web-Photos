@@ -38,6 +38,10 @@ public class SignupController {
             signupError = "Username already exists";
         }
 
+        if(userDTO.getPassword().length() < 4){
+            signupError = "Password length must be greater than 4 characters";
+        }
+
         if (signupError == null) {
             User savedUser = userService.saveUser(user);
             if (savedUser == null ) {

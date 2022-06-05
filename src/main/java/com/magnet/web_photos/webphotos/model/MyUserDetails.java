@@ -35,6 +35,14 @@ public class MyUserDetails implements UserDetails {
         return user.getPassword();
     }
 
+    public void setPassword(String password){
+        user.setPassword(password);
+    }
+
+    public void setUsername(String username){
+        user.setUsername(username);
+    }
+
     @Override
     public String getUsername() {
         return user.getUsername();

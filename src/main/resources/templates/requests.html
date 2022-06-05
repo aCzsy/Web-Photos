@@ -60,7 +60,7 @@
         </ul>
     </div>
 
-    <div class="main-content">
+    <div class="main-content" id="requests-content">
         <div class="home-title-bar sticky-top">
             <div id="home-title-bar-menu">
                 <form action="#" th:action="@{/web/logout}" method="POST">
@@ -73,11 +73,67 @@
             <p id="success-msg-text"></p>
         </div>
 
-        <!--IMAGES SENT BY OTHERS-->
-        <div class="request-container">
-            <div class="container-top">
-                <button type="button" class="edit-cred-btn">Expand</button>
+
+        <!--ALBUM ASK REQUESTS SENT BY OTHERS-->
+        <div class="title-outer-container">
+            <div class="user-list-title">
+                <h6>Other users asked to share your album(s)</h6>
             </div>
+        </div>
+        <div class="request-container">
+            <div class="people-list-container share-request-container">
+                <div class="main-content-placeholder" th:if="${#lists.size(albumsAskedToShareByOthers)==0}">
+                    <img class="placeholder-icon" src="../static/web/images/tag.png" th:src="@{/web/images/tag.png}" alt="Empty state image">
+                    <p>No album share requests yet</p>
+                </div>
+
+                <div class="people-list-container" th:unless="${#lists.size(albumsAskedToShareByOthers) == 0}">
+                    <div class="album-item" th:each="albumRequest : ${albumsAskedToShareByOthers}">
+                        <div class="album-cover" th:if="${#lists.size(albumRequest.getAlbum().getAlbum_images()) < 3}">
+                            <img class="display-image album-cover-main-img" src="../static/web/images/album.jpg" th:src="@{/web/images/album.jpg}" th:if="${#lists.size(albumRequest.getAlbum().getAlbum_images()) == 0}">
+                            <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + albumRequest.getAlbum().getAlbum_images().get(0).getImageId()}}" th:unless="${#lists.size(albumRequest.getAlbum().getAlbum_images()) == 0}">
+                        </div>
+                        <div class="album-cover album-cover-multiple" th:if="${#lists.size(albumRequest.getAlbum().getAlbum_images()) >= 3}">
+                            <div class="album-cover-main-img-container">
+                                <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + albumRequest.getAlbum().getAlbum_images().get(0).getImageId()}}">
+                            </div>
+                            <div class="album-cover-multiple-imgs">
+                                <div class="album-cover-small-img">
+                                    <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + albumRequest.getAlbum().getAlbum_images().get(1).getImageId()}}">
+                                </div>
+                                <div class="album-cover-small-img">
+                                    <img class="display-image album-cover-main-img" th:src="@{${'/web/albums/images/' + albumRequest.getAlbum().getAlbum_images().get(2).getImageId()}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="album-short-info">
+                            <div class="album-short-info-div1">
+                                <div class="album-short-info-details">
+                                    <p th:text="${'Requested by : ' + albumRequest.getUserMakingRequest().firstname + ' ' + albumRequest.getUserMakingRequest().lastname}">User: Undefined</p>
+                                    <p th:text="${'Title: ' + albumRequest.getAlbum().getName()}">Title: Wedding album</p>
+                                    <p th:text="${'Date created: ' + albumRequest.getAlbum().getDate_created()}">Date created: 02/09/2020</p>
+                                    <p th:text="${albumRequest.getAlbum().getAlbum_images().size() + ' images'}">0 images</p>
+                                </div>
+                            </div>
+                            <div class="album-short-info-div2">
+                                <div class="people-item-buttons">
+                                    <input class="profile-buttons" type="submit" th:onclick="'shareAlbum(' +${albumRequest.getUserMakingRequest().getId()} + ',' +  ${albumRequest.getAlbum().getId()} + ',' + ${albumRequest.getAlbumShareRequestId()} + ')'" value="Share">
+                                    <input class="profile-buttons" type="submit" th:onclick="'rejectAndDeleteAlbumRequest(' + ${albumRequest.getAlbumShareRequestId()} + ')'" value="Delete">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--IMAGES SENT BY OTHERS-->
+        <div class="title-outer-container">
+            <div class="user-list-title">
+                <h6>Images shared by other users</h6>
+            </div>
+        </div>
+        <div class="request-container">
             <div id="imagesSentToUser" class="people-list-container share-request-container">
                 <div class="main-content-placeholder" th:if="${#lists.size(imagesSharedByOthers)==0}">
                     <img class="placeholder-icon" src="../static/web/images/tag.png" th:src="@{/web/images/tag.png}" alt="Empty state image">
@@ -118,14 +174,16 @@
         </div>
 
         <!--ALBUMS SENT BY OTHERS-->
-        <div class="request-container">
-            <div class="container-top">
-                <button type="button" class="edit-cred-btn">Expand</button>
+        <div class="title-outer-container">
+            <div class="user-list-title">
+                <h6>Albums shared by other users</h6>
             </div>
+        </div>
+        <div class="request-container">
             <div id="albumsSentToUser" class="people-list-container share-request-container">
                 <div class="main-content-placeholder" th:if="${#lists.size(albumsSharedByOthers)==0}">
                     <img class="placeholder-icon" src="../static/web/images/tag.png" th:src="@{/web/images/tag.png}" alt="Empty state image">
-                    <p>No images were sent to you</p>
+                    <p>No albums were sent to you</p>
                 </div>
 
                 <div class="people-list-container" th:unless="${#lists.size(albumsSharedByOthers) == 0}">
@@ -157,7 +215,7 @@
                             </div>
                             <div class="album-short-info-div2">
                                 <div class="people-item-buttons">
-                                    <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveAlbum(' + ${albumSendRequest.getAlbumToSendRequestId()} + ')'" value="Save image">
+                                    <input class="profile-buttons" type="submit" th:onclick="'acceptAndSaveAlbum(' + ${albumSendRequest.getAlbumToSendRequestId()} + ')'" value="Save album">
                                     <input class="profile-buttons" type="submit" th:onclick="'deleteAlbumShareRequest(' + ${albumSendRequest.getAlbumToSendRequestId()} + ')'" value="Delete">
                                 </div>
                             </div>
@@ -251,6 +309,32 @@
                 successMsgBox.style.display = "flex";
                 successMsgText.innerHTML = "Request has been deleted"
                 showSuccessMsg()
+            }
+        });
+    }
+
+    function shareAlbum(requestMakerId, albumId, requestId){
+        $.ajax({
+            type: "POST",
+            url: '/web/requests/share-album/to/?userId=' + requestMakerId + '&albumId=' + albumId + '&requestId=' + requestId,
+            contentType : "application/json",
+            dataType: "text",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function rejectAndDeleteAlbumRequest(requestId){
+        $.ajax({
+            type: "GET",
+            url: '/web/requests/delete-album-request-asked-by-user/?requestId=' + requestId,
+            contentType : "application/json",
+            dataType: "text",
+            headers: {"X-CSRF-TOKEN" : token},
+            success: function () {
+                location.reload();
             }
         });
     }

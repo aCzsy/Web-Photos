@@ -16,15 +16,17 @@ public class RequestsService {
     private UserRepository userRepository;
     private ImageRepository imageRepository;
     private AlbumsRepository albumsRepository;
+    private AlbumAskToShareRepository albumAskToShareRepository;
 
     @Autowired
     public RequestsService(ImageSendRepository imageSendRepository, UserRepository userRepository, AlbumSendRepository albumSendRepository,
-                           ImageRepository imageRepository, AlbumsRepository albumsRepository) {
+                           ImageRepository imageRepository, AlbumsRepository albumsRepository, AlbumAskToShareRepository albumAskToShareRepository) {
         this.imageSendRepository = imageSendRepository;
         this.userRepository = userRepository;
         this.albumSendRepository = albumSendRepository;
         this.imageRepository = imageRepository;
         this.albumsRepository = albumsRepository;
+        this.albumAskToShareRepository = albumAskToShareRepository;
     }
 
     public List<ImageSendEntity> getImageSendRequestsToUser(Long userId){
@@ -81,5 +83,16 @@ public class RequestsService {
 //        getAllEntities
 //                .forEach(albumSendEntity -> albumsToBeReturned.add(albumSendEntity.getAlbum()));
         return getAllEntities;
+    }
+
+    public List<AlbumShareRequest> getAllRequestsAskedByOthers(Long ownerId){
+        List<AlbumShareRequest> allRequests = albumAskToShareRepository.getAllNotAccepterRequestsForOwner(ownerId);
+
+        return allRequests;
+    }
+
+    public void deleteAskedAlbumRequest(Long requestId){
+        AlbumShareRequest albumShareRequest = albumAskToShareRepository.getById(requestId);
+        albumAskToShareRepository.delete(albumShareRequest);
     }
 }

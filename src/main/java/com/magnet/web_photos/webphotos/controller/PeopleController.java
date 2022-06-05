@@ -1,21 +1,26 @@
 package com.magnet.web_photos.webphotos.controller;
 
+import com.magnet.web_photos.webphotos.DTOconverters.FriendReqConverter;
+import com.magnet.web_photos.webphotos.dto.FriendRequestDTO;
 import com.magnet.web_photos.webphotos.entity.FriendRequest;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.model.SortForm;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
 import com.magnet.web_photos.webphotos.service.FriendRequestService;
 import com.magnet.web_photos.webphotos.service.UserService;
+import com.magnet.web_photos.webphotos.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.OpPlus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -62,18 +67,43 @@ public class PeopleController {
         return "redirect:/web/people";
     }
 
-    @PostMapping("/web/people/friend-request/to/")
-    public String sendFriendRequest(@RequestParam(value = "userId") Long userId, RedirectAttributes redirectAttrs, Authentication authentication){
+//    @PostMapping("/web/people/friend-request/to/")
+//    public String sendFriendRequest(@RequestParam(value = "userId") Long userId, RedirectAttributes redirectAttrs, Authentication authentication){
+//        User authenticatedUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
+//        User receiver = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
+//        FriendRequest friendRequest = new FriendRequest();
+//        friendRequest.setFromUser(authenticatedUser);
+//        friendRequest.setToUser(receiver);
+//        friendRequest.setSent(true);
+//        friendRequestService.createFriendRequest(friendRequest);
+//        redirectAttrs.addFlashAttribute("successMessage", "Friend request sent");
+//
+////        reqSentMsg = "Friend request sent";
+//        return "redirect:/web/people";
+//    }
+
+    @PostMapping(value = "/web/people/friend-request/to/", produces = "application/json")
+    public @ResponseBody
+    FriendRequestDTO sendFriendRequest(@RequestParam(value = "userId") Long userId, RedirectAttributes redirectAttrs, Authentication authentication){
         User authenticatedUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         User receiver = Optional.ofNullable(userRepository.findUserById(userId)).orElseThrow();
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setFromUser(authenticatedUser);
         friendRequest.setToUser(receiver);
+        friendRequest.setSent(true);
         friendRequestService.createFriendRequest(friendRequest);
         redirectAttrs.addFlashAttribute("successMessage", "Friend request sent");
 
-//        reqSentMsg = "Friend request sent";
-        return "redirect:/web/people";
+        return FriendReqConverter.convertFriendReqToDTO(friendRequest);
+    }
+
+    @GetMapping(value = "/web/people/check-requests", produces = "application/json")
+    public @ResponseBody
+    Map<String, String> checkRequests(@RequestParam(value = "userId") Long userId, HttpServletRequest request){
+        User authenticatedUser = SessionUtil.getSessionUser(request);
+        String res = Boolean.toString(friendRequestService.ifBothSentRequests(authenticatedUser.getId(), userId));
+
+        return Collections.singletonMap("response", res);
     }
 
     @ModelAttribute("sortTypes")
