@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 public class ChatMessage {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "chat_id")
     private Long chatId;

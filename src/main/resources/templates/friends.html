@@ -24,7 +24,8 @@
 </head>
 <body onload="document.body.style.opacity='1'">
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Friends</h3>
         </div>
@@ -43,18 +44,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
             <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
             <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="home-title-bar sticky-top">
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
                 <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
@@ -115,16 +117,6 @@
         <div class="user-list-labels" th:unless="${#lists.size(friends) == 0}">
             <p class="light-grey-label"><span class="coloured-label" th:text="${number_of_friends} + ' '"></span>friends</p>
             <form action="#" th:object="${sortForm}" method="post" th:action="@{/web/friends/sort-friends}">
-<!--                <label class="light-grey-label" for="sortType">Sort by: </label>-->
-<!--                <select id="sortType" th:field="*{sortType}">-->
-<!--                    <option-->
-<!--                            th:each="type : ${sortTypes}"-->
-<!--                            th:value="${type}"-->
-<!--                            th:text="${type}"-->
-<!--                    >-->
-<!--                    </option>-->
-<!--                </select>-->
-                <!--                <button type="submit" id="submit-text-btn" class="btn btn-success">Submit</button>-->
             </form>
         </div>
         <div class="users-list-wrapper" th:unless="${#lists.size(friends) == 0}">
@@ -169,6 +161,18 @@
         //removes element from DOM
         el.style.display = 'none';
     }, 2000);
+
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
+    }
 </script>
 </body>
 </html>

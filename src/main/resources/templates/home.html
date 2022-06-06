@@ -105,12 +105,6 @@
 
                                     </textarea>
                 </div>
-<!--                <form action="#" class="image_note_form">-->
-<!--                    <label for="image-info-img-comment"><h6>Comment</h6></label>-->
-<!--                    <textarea id="image-info-img-comment" name="image-info-img-comment" placeholder="Type comment..."  th:field="*{imageComment}">-->
-
-<!--                                    </textarea>-->
-<!--                </form>-->
                 <br>
                 <div class="profile-buttons-container">
                     <button type="submit" class="profile-buttons edit-cred-btn" style="padding: 10px 25px;">Save</button>
@@ -166,26 +160,62 @@
     </div>
 </div>
 
-<div class="friend-online-container" id="friends_online">
-    <div class="friends-online-title">Friends online</div>
-    <a id="close_friends_online_div" href="#">CLOSE</a>
-    <!--        <span id="close-friends-online"><i class="fas fa-times"></i></span>-->
-    <div class="friends-online-content">
-        <h6>FRIEND 1</h6>
-        <h6>FRIEND 2</h6>
-        <h6>FRIEND 3</h6>
-        <h6>FRIEND 4</h6>
-        <h6>FRIEND 5</h6>
-    </div>
-</div>
-
-<!--    <div class="success-message" id="successMsg" th:if="${successMessage}">-->
-<!--            <i class="far fa-check-circle fa-4x" style="color: #7ce604;"></i>-->
-<!--            <p th:text="${successMessage}">SUCCESS MESSAGE</p>-->
-<!--    </div>-->
 
 <div class="content">
-    <div class="side-nav">
+    <!--CHAT START-->
+    <div id="chat-outer-container">
+        <div id="chat-inner-users-list" th:unless="${#lists.size(people) == 0}">
+            <div class="chat-inner-users-list-item" th:onclick="'getChatMessages(' + ${registered_user.getId()} + ',' + ${user.getId()} +  ')'" th:each="registered_user : ${people}">
+                <div class="image-outer-area-top-bar comment-item-profile-image">
+                    <div class="image-inner-area-top-bar">
+                        <img th:if="${registered_user.getUser_image() != null}" class="profile-image"
+                             th:src="@{${'/web/people/getUserProfileImg/' + registered_user.getId()}}" alt="Profile image">
+                        <img th:unless="${registered_user.getUser_image() != null}" class="profile-image"
+                             src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" alt="Profile image">
+                    </div>
+                </div>
+                <p th:text="${registered_user.getFirstname()} + ' ' + ${registered_user.getLastname()}">User</p>
+            </div>
+        </div>
+        <div id="chat-inner-chat-room">
+            <div id="chat-inner-chat-room-chat-with" class="chat-with-header">
+                <span class="close_chat_btn" id="close_chat_btn"><i class="far fa-times-circle"></i></span>
+                <div class="image-outer-area-top-bar comment-item-profile-image">
+                    <div class="image-inner-area-top-bar">
+                        <img th:if="${user.getUser_image() != null}" class="profile-image"
+                             th:src="@{${'/web/people/getUserProfileImg/' + user.getId()}}" alt="Profile image">
+                        <img th:unless="${user.getUser_image() != null}" class="profile-image"
+                             src="../static/web/images/default_profile_pic.png" th:src="@{/web/images/default_profile_pic.png}" alt="Profile image">                     </div>
+                </div>
+                <p th:text="${user.getFirstname()} + ' ' + ${user.getLastname()}">User</p>
+            </div>
+
+            <div id="chat-inner-chat-room-chat-window">
+                <div class="success-message" id="noReceiverMsgBox">
+                    <p id="noReceiverMsg"></p>
+                </div>
+<!--                <div class="chat-message">-->
+<!--                    <p>John Doe</p>-->
+<!--                    <p>Hi my name is John!</p>-->
+<!--                </div>-->
+<!--                <div class="chat-message">-->
+<!--                    <p>John Doe</p>-->
+<!--                    <p>Hi my name is John!</p>-->
+<!--                </div>-->
+            </div>
+            <ul id="message-list"></ul>
+            <div id="chat-inner-chat-room-message-area">
+                <textarea id="message-box" placeholder="Type message..."></textarea>
+                <button onclick="sendMessage()" type="button" id="message-send-btn"><i class="far fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <!--CHAT END-->
+
+
+
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Photos</h3>
         </div>
@@ -204,7 +234,6 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/web/chat}"><i class="far fa-comments side-nav-icons"></i><span>Chat</span></a></li>
             <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
             <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
             <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
@@ -215,15 +244,11 @@
         </ul>
     </div>
     <div class="main-content">
+        <div class="open-chat-button" id="chat_open_btn" onclick="open_chat()">
+            <i class="fas fa-comment-dots"></i>
+        </div>
         <div class="home-title-bar sticky-top">
-            <!--                <div class="nav-search-bar">-->
-            <!--                    <label>-->
-            <!--                        <input type="search" name="search_student" placeholder="Search people">-->
-            <!--                    </label>-->
-            <!--                    <button type="submit" class="btn search-btn text-dark border-0 ml-n5">-->
-            <!--                        <i class="fa fa-search"></i>-->
-            <!--                    </button>-->
-            <!--                </div>-->
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
                 <form id="image-upload-form" action="#" th:action="@{/web/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
@@ -237,14 +262,12 @@
                         </div>
                     </div>
                 </form>
-                <div sec:authorize="hasAnyAuthority('ADMIN')">
-                    <p>STATUS: ADMIN</p>
-                </div>
                 <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
             </div>
         </div>
+
         <div class="main-content-placeholder" th:if="${#lists.size(images)==0}">
             <!--                <i class="far fa-images fa-3x placeholder-icon"></i>-->
             <img class="placeholder-icon" src="../static/web/images/folder_images.png" th:src="@{/web/images/folder_images.png}" alt="Empty state image">
@@ -347,6 +370,8 @@
 </div>
 
 <!--    <script th:src="@{/js/jquery-slim.min.js}"></script>-->
+<script src="../static/web/js/home.js" th:src="@{/web/js/home.js}"></script>
+<script src="../static/web/js/chat.js" th:src="@{/web/js/chat.js}"></script>
 <script src="../static/web/js/jquery-3.6.0.js" th:src="@{/web/js/jquery-3.6.0.js}"></script>
 <script th:src="@{/web/js/bootstrap.min.js}"></script>
 
@@ -389,33 +414,6 @@
     const people_list = document.getElementById("people_list_bg");
     const people_list_container = document.getElementById("people_list_container");
 
-
-    // let friendsDiv = document.getElementById("friends_online");
-    //
-    // // closeFriendsOnline.addEventListener('click', function (){
-    // //     if(closeFriendsOnline.style.display === "block"){
-    // //         closeFriendsOnline.style.display = "none";
-    // //         friendsDiv.style.bottom = "-30%";
-    // //     }
-    // //     // closeFriendsOnline.style.display = "none";
-    // //     // friendsDiv.style.bottom = "-30%";
-    // // })
-    //
-    // friendsDiv.addEventListener('click', function (){
-    //     friendsDiv.style.bottom = "15px";
-    //     document.getElementById("close_friends_online_div").style.visibility = "visible";
-    // })
-
-    // let successMsg = document.getElementById("successMsg");
-    //
-    // function showMsg(){
-    //     let res = window.getComputedStyle(successMsg,'').display;
-    //     if(res === 'none'){
-    //         successMsg.style.display = "none";
-    //     }
-    // }
-
-
     let pre_upload = document.getElementById("pre-upload-image-modal");
 
     function closeWindow(elementId){
@@ -442,15 +440,6 @@
     })
 
 
-    // const previewImage = function (event){
-    //     const output = document.getElementById('pre-upload-image');
-    //     let pre_upload = document.getElementById("pre-upload-image-modal")
-    //     pre_upload.style.display = "block";
-    //     output.src = URL.createObjectURL(event.target.files[0]);
-    //     output.onload = function() {
-    //         URL.revokeObjectURL(output.src) // free memory
-    //     }
-    // };
 
     function uploadFile(inputId,formId){
         let input = document.getElementById(inputId);
@@ -588,75 +577,6 @@
     const image_content_ = document.getElementsByClassName("image-modal-content-comments");
     let opened_image_id;
 
-    // function getComments(imageId){
-    //     $.ajax({
-    //         type: "GET",
-    //         url: '/home/get-comments-for-image/' + imageId,
-    //         success: function (response){
-    //             for (let comment in response) {
-    //                 //console.log(response[comment]);
-    //                 const comment_outer_div = document.createElement('div');
-    //                 const sender_profile_image_div = document.createElement('div');
-    //                 const sender_profile_image_inner_div = document.createElement('div');
-    //                 const comment_bubble_div = document.createElement('div');
-    //                 const sender_profile_img = document.createElement('img');
-    //                 const sender_fullName = document.createElement('p');
-    //                 const sender_comment = document.createElement('p');
-    //
-    //                 const main_outer = document.getElementsByClassName("image-modal-content-comments-container");
-    //                 const gg = document.getElementById("gg");
-    //
-    //                 comment_outer_div.className = "image-modal-content-comment-outer";
-    //                 //const comment_outer_div = document.getElementsByClassName("image-modal-content-comment-outer");
-    //                 sender_profile_image_div.className = "image-outer-area-top-bar comment-item-profile-image";
-    //                 sender_profile_image_inner_div.className = "image-inner-area-top-bar";
-    //                 sender_profile_img.className = "profile-image";
-    //                 comment_bubble_div.className = "image-modal-content-comment-inner";
-    //                 sender_fullName.className = "image-comment-sender-name";
-    //                 sender_comment.className = "image-comment-text";
-    //
-    //                 sender_profile_image_inner_div.appendChild(sender_profile_img);
-    //                 sender_profile_image_div.appendChild(sender_profile_image_inner_div);
-    //                 comment_outer_div.appendChild(sender_profile_image_div);
-    //
-    //                 sender_fullName.innerText = "NAME";
-    //                 sender_comment.innerText = "COMMENT";
-    //                 comment_bubble_div.appendChild(sender_fullName);
-    //                 comment_bubble_div.appendChild(sender_comment);
-    //
-    //                 comment_outer_div.appendChild(comment_bubble_div);
-    //                 //gg.appendChild(comment_outer_div);
-    //                 $('#gg').html(comment_outer_div);
-    //
-    //                 // comment_outer_div[0].appendChild(comment_bubble_div);
-    //                 // $(comment_outer_div[0]).show();
-    //                 //
-    //                 //
-    //                 // gg.appendChild(comment_outer_div);
-    //                 //
-    //                 // $(main_outer[0]).show();
-    //                 // $(sender_fullName).text(data.userFullName);
-    //                 // $(sender_comment).text(data.message);
-    //                 //
-    //                 // sender_fullName.innerText = data.userFullName;
-    //                 // sender_comment.innerText = data.message;
-    //             }
-    //         }
-    //     })
-    //
-    //     opened_image_id = imageId;
-    // }
-
-    // function getComments(imageId, container) {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: '/home/get-comments-for-image/' + imageId,
-    //         success: function (response) {
-    //             $(container).html(response);
-    //         }
-    //     })
-    // }
-
     let comments_container_;
     let comment_btn;
     let image_content;
@@ -689,7 +609,7 @@
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: '/web/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+            url: '/web/home/add-comment-to-an-image/' + imageId,
             contentType : "application/json",
             dataType: "json",
             data: JSON.stringify(image_comment),
@@ -747,6 +667,39 @@
             });
         }
         imageToShare = '';
+    }
+
+    let chat_open_btn = document.getElementById("chat_open_btn");
+    let close_chat_btn = document.getElementById("close_chat_btn");
+    let chat_window = document.getElementById("chat-outer-container");
+
+
+    function open_chat(){
+        //let chat_window = document.getElementById("chat-outer-container");
+        if (chat_window.style.display === "flex") {
+            chat_window.style.display = "none";
+        } else {
+            chat_window.style.display = "flex";
+        }
+    }
+
+    close_chat_btn.addEventListener('click', function (){
+        chat_window.style.display = "none";
+    })
+
+
+    let mobile_menu_btn = document.getElementById("mobile_menu_btn");
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+    let close_mobile_menu_btn = document.getElementById("close_mobile_menu_btn");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
     }
 
 </script>

@@ -114,6 +114,7 @@ CREATE TABLE `album_share_request` (
   `album_share_request_id` bigint NOT NULL AUTO_INCREMENT,
   `is_accepted` bit(1) NOT NULL,
   `is_declined` bit(1) NOT NULL,
+  `is_sent` bit(1) NOT NULL,
   `album_id` bigint DEFAULT NULL,
   `album_owner_id` bigint DEFAULT NULL,
   `requesting_user_id` bigint DEFAULT NULL,
@@ -253,6 +254,7 @@ CREATE TABLE `friend_request` (
   `friend_request_id` bigint NOT NULL AUTO_INCREMENT,
   `is_accepted` bit(1) NOT NULL,
   `is_declined` bit(1) NOT NULL,
+  `is_sent` bit(1) NOT NULL,
   `sender_id` bigint DEFAULT NULL,
   `receiver_id` bigint DEFAULT NULL,
   PRIMARY KEY (`friend_request_id`),
@@ -460,7 +462,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,NULL,'2022-05-29',_binary '','Artis','Brizs','$2a$10$aSAIoStHMlEBMTOH5/CCM.e1MyZmmPAFHTHaBO4bFjzY1zvLi/8MG',NULL,'admin'),(2,NULL,'2022-05-29',_binary '','John','Doe','$2a$10$RFl5HtmaqLoeuBryY5nIUecc1pUQL73njEeMvxJJSsB773sS.QKlC',NULL,'johnDoe'),(3,NULL,'2022-05-29',_binary '','Jane','Doe','$2a$10$MyJs23C3jXdE7vlObfJjwuvYUFjISegIqufIMwhyvPCAqsCtrcj6G',NULL,'janeDoe');
+INSERT INTO `users` VALUES (1,NULL,'2022-06-05',_binary '','Artis','Brizs','$2a$10$vJtQxAU1IH8tP4ZLSDLuMe.gNxIWMaFCAqj2T7eQtqUUu8FaParde',NULL,'admin'),(2,NULL,'2022-06-05',_binary '','John','Doe','$2a$10$6GSEmJ7MACPv7PFs.i7etehtcNuACCFvuW4Ni8QnSgmw1LAGe5QFu',NULL,'johnDoe'),(3,NULL,'2022-06-05',_binary '','Jane','Doe','$2a$10$qBuypysSK70fF6WFAWyQIeu.85/pO5qKbH.gcsPnT3vrg0PrABzYC',NULL,'janeDoe');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +554,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-29 23:05:04
+-- Dump completed on 2022-06-05 17:26:51

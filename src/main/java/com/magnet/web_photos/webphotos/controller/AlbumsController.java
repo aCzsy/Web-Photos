@@ -67,16 +67,6 @@ public class AlbumsController {
         httpServletResponse.getOutputStream().close();
     }
 
-//    @GetMapping("/albums/images/displayImages")
-//    public String displayImages(Model model,Authentication authentication){
-//        List<Img> images = imageService.getAllImages(authentication);
-//        model.addAttribute("images",images);
-//        return "albums";
-//    }
-
-//    @RequestBody MultipartFile[] images
-//@RequestParam MultiValueMap<MultipartFile[],MultipartFile[]> values,
-
     @PostMapping(value = "web/albums/create-album",produces = {"application/json", "multipart/form-data"}, consumes = {"multipart/form-data", "application/json"})
     public String createAlbum(@RequestParam MultiValueMap<String,String> values, MultipartHttpServletRequest request, Authentication authentication, Model model) throws IOException {
         Map <String, MultipartFile> receivedAlbumData;
@@ -117,7 +107,7 @@ public class AlbumsController {
             });
         }
 
-        System.out.println("IMAGES SIZE: " + images.size());
+        //System.out.println("IMAGES SIZE: " + images.size());
 
 
 //        System.out.println("SET SIZE " + imageIds.size());
@@ -135,7 +125,7 @@ public class AlbumsController {
         }
 
 
-        System.out.println("NEW DATA : " + data.toString());
+        //System.out.println("NEW DATA : " + data.toString());
 
         String [] actualData = data.toString().split(",");
 
@@ -150,8 +140,8 @@ public class AlbumsController {
 
         for (Map.Entry<String,MultipartFile> entry : receivedAlbumData.entrySet()){
             selected_images.add(entry.getValue());
-            System.out.println("Key = " + entry.getKey() +
-                    ", Value = " + entry.getValue().getOriginalFilename());
+//            System.out.println("Key = " + entry.getKey() +
+//                    ", Value = " + entry.getValue().getOriginalFilename());
         }
 
         selected_images

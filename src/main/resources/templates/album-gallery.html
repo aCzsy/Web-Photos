@@ -122,7 +122,8 @@
 <!--    </div>-->
 
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Photos</h3>
         </div>
@@ -152,6 +153,7 @@
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
                 <form id="image-upload-form" action="#" th:action="@{/web/albums/add-image-to-album/(albumId=${album_id})}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">
@@ -464,7 +466,7 @@
        event.preventDefault();
        $.ajax({
            type: "POST",
-           url: '/web/home/add-comment-to-an-image/' + imageId,//do not put the full url,you need use an absolute urlcontentType : "application/json",,
+           url: '/web/home/add-comment-to-an-image/' + imageId,
            contentType : "application/json",
            dataType: "json",
            data: JSON.stringify(image_comment),
@@ -479,7 +481,18 @@
        comment_index.value = '';
    }
 
+   let mobile_side_nav = document.getElementById("mobile_side_nav");
+   let close_mobile_menu_btn = document.getElementById("close_mobile_menu_btn");
 
+   function openMobileMenu(){
+       mobile_side_nav.style.marginLeft = "0";
+       mobile_side_nav.style.zIndex = "9999";
+       mobile_side_nav.style.width = "220px";
+   }
+
+   function closeMobileMenu(){
+       mobile_side_nav.style.marginLeft = "-220px";
+   }
 
 </script>
 </body>

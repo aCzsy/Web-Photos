@@ -34,7 +34,8 @@
 <body onload="document.body.style.opacity='1'">
 
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Photos</h3>
         </div>
@@ -64,6 +65,7 @@
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
                 <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
@@ -278,6 +280,18 @@
                 $(menu).toggle( "fast", function() {});
             }
         }
+    }
+
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
     }
 
 </script>

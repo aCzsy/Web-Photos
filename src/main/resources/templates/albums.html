@@ -213,7 +213,8 @@
 </div>
 
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Albums</h3>
         </div>
@@ -232,28 +233,19 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
             <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
             <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="home-title-bar sticky-top">
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
-<!--                <form action="#" th:action="@{/home/upload-image}" th:object="${imageModel}" enctype="multipart/form-data" method="POST">-->
-<!--                    <input type="hidden" name="imageId" id="image-id" th:field="*{imageId}">-->
-<!--                    <div class="home-title-bar-options">-->
-<!--                        <div>-->
-<!--                            <label class="home-title-bar-buttons" for="uploaded_image">Choose image</label>-->
-<!--                            <input style="display: none" type="file" accept="image/*" class="form-control-file" id="uploaded_image" name="uploaded_image" th:field="*{uploaded_image}">-->
-<!--                            <button class="home-title-bar-buttons" type="submit">Upload</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </form>-->
                 <div class="home-title-bar-options">
                     <button type="button" class="home-title-bar-buttons album-create-btns-nav"><i class="fas fa-plus-circle icons"></i>&nbsp;&nbsp;Create album</button>
                 </div>
@@ -369,25 +361,6 @@
         album_create_gallery_preview_bg.style.display = "flex";
         album_create_gallery_images.style.display = "flex";
     });
-
-    // $(document).ready(function (){
-    //     $("#album-create-gallery-images div").click(function() {
-    //         let index = $(this).index();
-    //         if(album_image_select_checkbox[index].checked === false){
-    //             album_image_select_checkbox[index].checked = true
-    //             album_create_images_preview_container.appendChild(album_image_select[index]);
-    //             checked_indexes.push(index);
-    //             //selected_gallery_images_on_album_create.push(album_image_select[index]);
-    //         }
-    //         else if(album_image_select_checkbox[index].checked === true){
-    //             let temp_index = checked_indexes.indexOf(index);
-    //             album_image_select_checkbox[index].checked = false
-    //             album_create_images_preview_container.removeChild(album_image_select[index]);
-    //             //selected_gallery_images_on_album_create.splice(temp_index,1);
-    //             checked_indexes.splice(temp_index,1);
-    //         }
-    //     });
-    // })
 
     //This function is executed each time a user clicks on an image when selecting images from a
     //gallery to add to an album during album creation process
@@ -596,17 +569,6 @@
 
         const token = $("meta[name='_csrf']").attr("content");
 
-        // $.ajax({
-        //     type: "POST",
-        //     contentType : "application/json",
-        //     url: '/albums/create-album',//do not put the full url,you need use an absolute url
-        //     data: JSON.stringify(AlbumModel),
-        //     headers: {"X-CSRF-TOKEN" : token},
-        //     dataType: 'application/json',
-        //     success: function () {
-        //         alert("Album created successfully");
-        //     }
-        //     });
 
             $.ajax({
                 type: "POST",
@@ -705,6 +667,18 @@
             });
         }
         albumToShare = '';
+    }
+
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
     }
 
 </script>

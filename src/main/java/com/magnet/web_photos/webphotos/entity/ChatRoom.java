@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class ChatRoom {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "chat_id")
     private Long chatId;
@@ -15,7 +15,7 @@ public class ChatRoom {
     private Long senderId;
     @Column(name = "receiver_id")
     private Long receiverId;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ChatMessage> messages = new ArrayList<>();
 
     public ChatRoom() {

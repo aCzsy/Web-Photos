@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -54,7 +55,8 @@
 </div>
 
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>Profile</h3>
         </div>
@@ -73,17 +75,21 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
             <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
             <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <div class="main-content" id="profile_content">
         <div class="home-title-bar sticky-top">
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
+            <div sec:authorize="hasAnyAuthority('ADMIN')">
+                <p>STATUS: ADMIN</p>
+            </div>
             <div id="home-title-bar-menu">
                 <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
@@ -149,7 +155,7 @@
                                 <input type="hidden" name="userId" id="userId" th:field="*{userId}">
                                 <label for="profile-description"><h5 th:text="'About ' + ${user.firstname}">About user</h5></label>
                                 <br>
-                                <textarea th:text="${user.getAbout_info()}" id="profile-description" name="profile-description" rows="2" cols="60" placeholder="Paragraph about yourself..." th:field="*{aboutInfo}">
+                                <textarea th:text="${user.getAbout_info()}" id="profile-description" name="profile-description" placeholder="Paragraph about yourself..." th:field="*{aboutInfo}">
 <!--                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.-->
                                     <!--                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,-->
                         </textarea>
@@ -211,6 +217,18 @@
         $('#user-about-info-form').trigger("submit");
     });
 
+
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
+    }
 </script>
 </body>
 </html>

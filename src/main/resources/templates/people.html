@@ -32,7 +32,8 @@
 <body onload="document.body.style.opacity='1'">
 
 <div class="content">
-    <div class="side-nav">
+    <div class="side-nav" id="mobile_side_nav">
+        <span class="mobile_menu" id="close_mobile_menu_btn" onclick="closeMobileMenu()"><i class="fas fa-bars"></i></span>
         <div class="side-nav-title">
             <h3>People</h3>
         </div>
@@ -51,38 +52,20 @@
             </div>
         </div>
         <ul>
-            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i>Photos</a></li>
-            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i>Albums</a></li>
+            <li><a th:href="@{/web/home}"><i class="far fa-images side-nav-icons"></i><span>Photos</span></a></li>
+            <li><a th:href="@{/web/albums}"><i class="far fa-folder-open side-nav-icons"></i><span>Albums</span></a></li>
             <li><a th:href="@{/web/requests}"><i class="far fa-question-circle side-nav-icons"></i><span>Requests</span></a></li>
             <li><a th:href="@{/web/received-files}"><i class="fas fa-share-alt side-nav-icons"></i><span>Received files</span></a></li>
-            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i>Friends</a></li>
-            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i>People</a></li>
-            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i>Profile</a></li>
+            <li><a th:href="@{/web/friends}"><i class="fas fa-user-friends side-nav-icons"></i><span>Friends</span></a></li>
+            <li><a th:href="@{/web/people}"><i class="fas fa-users side-nav-icons"></i><span>People</span></a></li>
+            <li><a th:href="@{/web/profile}"><i class="far fa-address-card side-nav-icons"></i><span>Profile</span></a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="home-title-bar sticky-top">
-            <!--    <div id="title">-->
-            <!--        <h2>Photos</h2>-->
-            <!--    </div>-->
-            <!--    <div class="nav-search-bar">-->
-            <!--        <label>-->
-            <!--            <input type="search" name="search_student" placeholder="Search people">-->
-            <!--        </label>-->
-            <!--        <button type="submit" class="btn search-btn text-dark border-0 ml-n5">-->
-            <!--            <i class="fa fa-search"></i>-->
-            <!--        </button>-->
-            <!--    </div>-->
+            <span class="mobile_menu" id="mobile_menu_btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></span>
             <div id="home-title-bar-menu">
-                <!--        <div class="image-outer-area-top-bar">-->
-                <!--            <div class="image-inner-area-top-bar">-->
-                <!--                <img th:if="${user.getUser_image() != null}" class="profile-image"-->
-                <!--                     th:src="@{'/profile/getUserProfileImg'}" alt="Profile image">-->
-                <!--                <img th:unless="${user.getUser_image() != null}" class="profile-image"-->
-                <!--                     src="../static/images/default_profile_pic.png" th:src="@{/images/default_profile_pic.png}" alt="Profile image">-->
-                <!--            </div>-->
-                <!--        </div>-->
                 <form action="#" th:action="@{/web/logout}" method="POST">
                     <button class="home-title-bar-buttons edit-cred-btn" type="submit" id="logout-btn">Logout</button>
                 </form>
@@ -118,16 +101,6 @@
         <div class="user-list-labels">
             <p class="light-grey-label"><span class="coloured-label" th:text="${number_of_users} + ' '"></span>users</p>
             <form action="#" th:object="${sortForm}" method="post" th:action="@{/web/people/sort-users}">
-<!--                <label class="light-grey-label" for="sortType">Sort by: </label>-->
-<!--                <select id="sortType" th:field="*{sortType}">-->
-<!--                    <option-->
-<!--                            th:each="type : ${sortTypes}"-->
-<!--                            th:value="${type}"-->
-<!--                            th:text="${type}"-->
-<!--                    >-->
-<!--                    </option>-->
-<!--                </select>-->
-<!--                <button type="submit" id="submit-text-btn" class="btn btn-success">Submit</button>-->
             </form>
         </div>
         <div class="users-list-wrapper" th:unless="${#lists.size(users) == 0}">
@@ -155,21 +128,11 @@
                 <div class="people-item-buttons">
                     <a th:href="@{/web/user/user-gallery/(userId=${registered_user.getId()})}" class="profile-buttons">View Gallery</a>
                     <button type="button" class="profile-buttons" id="people_friend_req_btn" th:onclick="'checkFriendshipStatus(' + ${registered_user.getId()} + ')'">Friend request</button>
-<!--                    <form id="friend-request-form" action="#" th:action="@{/web/people/friend-request/to/(userId=${registered_user.getId()})}" method="post">-->
-<!--                        <input class="button-green" type="submit" value="Friend request">-->
-<!--                    </form>-->
-<!--                    <a th:unless="" class="profile-buttons">Request sent</a>-->
                 </div>
             </div>
         </div>
     </div>
 
-<!--    <div class="online-friends-list-container">-->
-<!--        <h5>Friends online</h5>-->
-<!--        <div class="online-friends-list">-->
-<!--            <p>Friend 1</p>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 <script src="../static/web/js/jquery-3.6.0.js" th:src="@{/web/js/jquery-3.6.0.js}"></script>
 <script th:src="@{/web/js/bootstrap.min.js}"></script>
@@ -224,6 +187,18 @@
 
             }
         });
+    }
+
+    let mobile_side_nav = document.getElementById("mobile_side_nav");
+
+    function openMobileMenu(){
+        mobile_side_nav.style.marginLeft = "0";
+        mobile_side_nav.style.zIndex = "9999";
+        mobile_side_nav.style.width = "220px";
+    }
+
+    function closeMobileMenu(){
+        mobile_side_nav.style.marginLeft = "-220px";
     }
 </script>
 </body>

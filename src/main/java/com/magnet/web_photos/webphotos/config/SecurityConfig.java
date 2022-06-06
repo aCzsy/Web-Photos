@@ -100,35 +100,11 @@ public class SecurityConfig{
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            //http.csrf().disable();
-//
-//            http.antMatcher("/authenticate")
-//                    .authorizeRequests().anyRequest().authenticated()
-//                    .and()
-//                    .csrf().disable();
-
 
             http.csrf().disable()
                     .authorizeRequests().antMatchers("/android/**").permitAll()
                     .anyRequest().authenticated();
 
-
-//            http
-//                    .antMatcher("/android/**")
-//                    .authorizeRequests().anyRequest().authenticated()
-//                    .and()
-//                    .csrf().disable();
-
-//            http.authorizeRequests()
-//            .antMatchers("/authenticate").permitAll()
-//            .anyRequest().authenticated()
-//                    .and()
-//                    .csrf().disable();
-
-//            http
-//                    .requestMatchers()
-//                        .antMatchers("/authenticate");
-//            http.authorizeRequests().anyRequest().authenticated();
 
             // Set unauthorized requests exception handler
             http
@@ -141,7 +117,7 @@ public class SecurityConfig{
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and();
 
-            // Add JWT token filter
+            // Adding JWT token filter
             http.addFilterBefore(
                     jwtRequestFilter,
                     UsernamePasswordAuthenticationFilter.class
@@ -155,44 +131,10 @@ public class SecurityConfig{
         @Autowired
         DaoAuthenticationProvider authenticationProvider;
 
-//        @Bean
-//        public CorsConfigurationSource corsConfigurationSource() {
-//            final CorsConfiguration config = new CorsConfiguration();
-//
-//            config.setAllowedOrigins(Arrays.asList("http://localhost:8080/web"));
-//            config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
-//            config.setAllowCredentials(true);
-//            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//
-//            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//            source.registerCorsConfiguration("/web/**", config);
-//
-//            return source;
-//        }
-//        @Bean
-//        @Override
-//        public AuthenticationManager authenticationManagerBean() throws Exception {
-//            return super.authenticationManagerBean();
-//        }
-
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(authenticationProvider());
         }
-//        @Bean
-//        public WebMvcConfigurer corsConfigurer() {
-//            return new WebMvcConfigurer() {
-//                @Override
-//                public void addCorsMappings(CorsRegistry registry) {
-//                    registry.addMapping("/web/**");
-//                }
-//            };
-//        }
-
-//        @Override
-//        public void addCorsMappings(CorsRegistry registry) {
-//            registry.addMapping("/**");
-//        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -224,25 +166,6 @@ public class SecurityConfig{
                     response.sendRedirect(request.getContextPath() + "/web/home");
                 }
             });
-
-//            http
-//                    .authorizeRequests()
-//                    .antMatchers("/login", "/signup", "/css/**", "/js/**").permitAll()
-//                    .anyRequest().authenticated()
-//                    .and()
-//                    .csrf().disable().cors();
-//
-//            http.formLogin()
-//                    .loginPage("/login")
-//                    .permitAll()
-//                    .successHandler((request, response, authentication) -> { //new AuthenticationSuccessHandler()
-//                        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//                        User user = userRepository.getUser(userDetails.getUsername());
-//                        System.out.println("LOGGED IN");
-//                        System.out.println("The user " + user.getFirstname() + " " + user.getLastname() + " has logged in.");
-//
-//                        response.sendRedirect(request.getContextPath() + "/home");
-//                    });
 
 
             http.logout()
