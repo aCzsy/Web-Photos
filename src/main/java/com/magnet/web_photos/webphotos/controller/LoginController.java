@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping
+@RequestMapping()
 public class LoginController {
     private UserRepository userRepository;
     private UserService userService;

@@ -84,7 +84,6 @@ public class HomeController {
                               Model model, RedirectAttributes redirectAttributes, HttpServletRequest request){
         //User foundUser = Optional.ofNullable(userRepository.getUser(authentication.getName())).orElseThrow();
         User foundUser = SessionUtil.getSessionUser(request);
-        //System.out.println("SESSION USER= " + sessionUser.getUsername() + " NAME=" + sessionUser.getFirstname());
         String user_firstname = foundUser.getFirstname();
         model.addAttribute("users_name", user_firstname);
         model.addAttribute("images",imageService.getAllImages(authentication));

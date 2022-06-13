@@ -12,4 +12,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("select c from ChatRoom c where c.senderId = :userId1 and c.receiverId = :userId2")
     public ChatRoom getChatMessages(Long userId1, Long userId2);
 
+
+
 }

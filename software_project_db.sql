@@ -145,7 +145,7 @@ DROP TABLE IF EXISTS `chat_message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `chat_message` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `chat_id` bigint DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   `receiver_id` bigint DEFAULT NULL,
@@ -174,7 +174,7 @@ DROP TABLE IF EXISTS `chat_room`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `chat_room` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `chat_id` bigint DEFAULT NULL,
   `receiver_id` bigint DEFAULT NULL,
   `sender_id` bigint DEFAULT NULL,
@@ -462,7 +462,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,NULL,'2022-06-05',_binary '','Artis','Brizs','$2a$10$vJtQxAU1IH8tP4ZLSDLuMe.gNxIWMaFCAqj2T7eQtqUUu8FaParde',NULL,'admin'),(2,NULL,'2022-06-05',_binary '','John','Doe','$2a$10$6GSEmJ7MACPv7PFs.i7etehtcNuACCFvuW4Ni8QnSgmw1LAGe5QFu',NULL,'johnDoe'),(3,NULL,'2022-06-05',_binary '','Jane','Doe','$2a$10$qBuypysSK70fF6WFAWyQIeu.85/pO5qKbH.gcsPnT3vrg0PrABzYC',NULL,'janeDoe');
+INSERT INTO `users` VALUES (1,NULL,'2022-06-06',_binary '','Artis','Brizs','$2a$10$wx9hPZfigy5YmLz9UmpBYuFgm5yMwwrajTTdTKy0NVmXttZk1iUIq',NULL,'admin'),(2,NULL,'2022-06-06',_binary '','John','Doe','$2a$10$As3BPF3qiLDtV4S0Uh6H4.Pm5AzaY0D1GRwqNIqMtos2Y5d/Vh7iO',NULL,'johnDoe'),(3,NULL,'2022-06-06',_binary '','Jane','Doe','$2a$10$eztI7A6/nGgOugcpu36u6ueMPx6s6LX1UPDC0E7ErFQGaeE3C3vLa',NULL,'janeDoe');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -554,4 +554,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-05 17:26:51
+-- Dump completed on 2022-06-06 16:32:37

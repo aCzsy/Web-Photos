@@ -5,6 +5,7 @@ import com.magnet.web_photos.webphotos.entity.ChatMessage;
 import com.magnet.web_photos.webphotos.entity.ChatRoom;
 import com.magnet.web_photos.webphotos.entity.User;
 import com.magnet.web_photos.webphotos.model.FullChatMessage;
+import com.magnet.web_photos.webphotos.model.ReturnChatMessage;
 import com.magnet.web_photos.webphotos.repository.ChatMessageRepository;
 import com.magnet.web_photos.webphotos.repository.ChatRoomRepository;
 import com.magnet.web_photos.webphotos.repository.UserRepository;
@@ -16,12 +17,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
 @Controller
 public class ChatMessageController {
+    private SimpMessagingTemplate simpMessagingTemplate;
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
     private ChatMessageService chatMessageService;
@@ -30,13 +33,16 @@ public class ChatMessageController {
     private ChatRoomService chatRoomService;
 
     @Autowired
-    public ChatMessageController(ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository, ChatMessageService chatMessageService, UserRepository userRepository, UserService userService, ChatRoomService chatRoomService) {
+    public ChatMessageController(ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository,
+                                 ChatMessageService chatMessageService, UserRepository userRepository, UserService userService,
+                                 ChatRoomService chatRoomService, SimpMessagingTemplate simpMessagingTemplate) {
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.chatMessageService = chatMessageService;
         this.userRepository = userRepository;
         this.userService = userService;
         this.chatRoomService = chatRoomService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     // Handles messages from /app/chat. (Note:Spring adds the /app prefix itself).
@@ -61,16 +67,27 @@ public class ChatMessageController {
 
         chatRoomRepository.save(chatRoom);
 
+        ReturnChatMessage returnChatMessage = new ReturnChatMessage();
+        returnChatMessage.setSenderName(userRepository.findUserById(Long.parseLong(fullChatMessage.getSenderId())).getFirstname() +
+                " " + userRepository.findUserById(Long.parseLong(fullChatMessage.getSenderId())).getLastname());
+        returnChatMessage.setMessage(fullChatMessage.getMessage());
+        returnChatMessage.setSenderId(fullChatMessage.getSenderId());
+
+        simpMessagingTemplate.convertAndSend("/web/topic/messages", returnChatMessage);
+
+        //getMessages(fullChatMessage);
+
         //chatMessageRepository.save(chatMessage);
     }
 
     // Sends the return value of this method to /topic/messages
-    @SendTo("/web/topic/messages")
+    //@SendTo("/web/topic/messages")
 //    public ChatMessageDTO getMessages(ChatMessageDTO chatMessageDTO){
 //        return chatMessageDTO;
 //    }
-    public FullChatMessage getMessages(FullChatMessage fullChatMessage){
-        return fullChatMessage;
-    }
+//    public FullChatMessage getMessages(FullChatMessage fullChatMessage){
+//        System.out.println(fullChatMessage.getMessage());
+//        return fullChatMessage;
+//    }
 
 }

@@ -24,7 +24,6 @@ public class ChatController {
 //    public String getChatPage(){
 //        return "chat";
 //    }
-
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
     private ChatMessageService chatMessageService;
@@ -50,13 +49,36 @@ public class ChatController {
         User user = SessionUtil.getSessionUser(request);
 
         ChatRoom chatRoom = chatRoomService.getMessagesForUsers(user.getId(), userId);
-        if(chatRoom == null){
+        ChatRoom chatRoom_for_receiver = chatRoomService.getMessagesForUsers(userId, user.getId());
+        ChatRoom chatRoomToReturn = null;
+
+        if(chatRoom != null){
+            return chatRoom;
+        }
+        else if(chatRoom_for_receiver != null){
+            return chatRoom_for_receiver;
+        }
+        else{
             ChatRoom newChatRoom = new ChatRoom();
             newChatRoom.setSenderId(user.getId());
             newChatRoom.setReceiverId(userId);
-            chatRoomRepository.save(newChatRoom);
+            return chatRoomRepository.save(newChatRoom);
         }
 
-        return chatRoomService.getMessagesForUsers(user.getId(), userId);
+        //return chatRoom;
+
+//        if(chatRoom == null){
+//            ChatRoom newChatRoom = new ChatRoom();
+//            newChatRoom.setSenderId(user.getId());
+//            newChatRoom.setReceiverId(userId);
+//            chatRoomRepository.save(newChatRoom);
+//        }
+//        else{
+//            if(chatRoom_for_receiver != null){
+//                return chatRoom_for_receiver;
+//            }
+//        }
+//
+//        return chatRoom;
     }
 }

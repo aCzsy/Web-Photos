@@ -30,6 +30,9 @@ public class ChatRoomService {
     }
 
     public ChatRoom getMessagesForUsers(Long userId, Long userId2){
+        if(chatRoomRepository.getChatMessages(userId,userId2) == null){
+            return chatRoomRepository.getChatMessages(userId2,userId);
+        }
         return chatRoomRepository.getChatMessages(userId,userId2);
     }
 }
